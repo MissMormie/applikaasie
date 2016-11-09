@@ -5,35 +5,22 @@
  */
 package com.boerpiet.cheeseapp.Artikel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.boerpiet.cheeseapp.MySQLConnection;
+import com.boerpiet.domeinapp.ArtikelModel;
+import java.sql.*;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Peaq
  */
-public class ArtikelDao {
-    private Connector conn = new Connector();
+public class ArtikelDao extends SuperArtikelDao {
     
-    void create (Article article) {
-        String insertString = "INSERT INTO Artikel"+ "(Naam, Prijs, Voorraad, Deleted) VALUES"
-                + "(?,?,?,?)";
-        try (Connection artikelCon = conn.getConnection();
-                PreparedStatement prepStatement = artikelCon.prepareStatement(insertString)){
-            prepStatement.setInt(1, a.id);   //heeft Article instantie (constructor
-                                            // met vier parameters en user input) nodig
-            prepStatement.setString(2, a.naam);
-            prepStatement.setDouble(3, a.prijs);
-            prepStatement.setInt (4, a.voorraad);
-            prepStatement.setBoolean(5, false);
-            prepStatement.executeUpdate();        
-    }
-    catch (SQLException |ClassNotFoundException e) {
-    e.printStackTrace();
-    }
-    }
+    //try (Connection artikelCon = conn.getConnection();
+    //     PreparedStatement prepStatement = artikelCon.prepareStatement(insertString)){
+    
     Article read (int id) {
         //class die ReadArticleDao.getArticle aanroept moet (scanner)input
         //toekennen aan id paramater van deze methode
@@ -90,5 +77,46 @@ public class ArtikelDao {
                 ex.printStackTrace();
                 }
         }
+
+    @Override
+    public boolean createArtikel(ArtikelModel artikel) {
+        String sql = "INSERT INTO Artikel (id, naam, prijs, voorraad, deleted)"
+                + " VALUES ("
+                        + "'" + artikel.getId () + "',"
+                        + "'" + artikel.getNaam () + "',"
+                        + "'" + artikel.getPrijs () + "',"
+                        + "'" + artikel.getVoorraad () + "',"
+                        + "'" + artikel.isDeleted () + "',";
+        try { MySQLConnection.getMySQLConnection().getResult(sql);
+        } catch (Exception ex) {
+            Logger.getLogger(ArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            MySQLConnection.getMySQLConnection().close();
+            // is dit de goede plek om de connectie te sluiten?
+            // zo ja, hoe een singleton connectie te coderen in try-with-resources?
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateArtikel (ArtikelModel artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deleteArtikel (ArtikelModel artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isValidLogin (ArtikelModel artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArtikelModel getArtikel (int artikelId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
-}
+
