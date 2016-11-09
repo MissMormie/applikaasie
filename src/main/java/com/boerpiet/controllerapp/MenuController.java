@@ -6,7 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.*;
-import com.boerpiet.cheeseapp.MenuModel;
+import com.boerpiet.domeinapp.MenuModel;
 import java.util.Scanner;
 import com.boerpiet.viewapp.MenuView;
 /**
