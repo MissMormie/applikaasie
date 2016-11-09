@@ -14,27 +14,27 @@ import com.boerpiet.domeinapp.AccountModel;
 public class FirebirdAccountDAO extends AccountDAO {
 
     @Override
-    boolean createAccount(AccountModel model) {
+    public boolean createAccount(AccountModel model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    boolean updateAccount(AccountModel model) {
+    public boolean updateAccount(AccountModel model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    boolean deleteAccount(AccountModel model) {
+    public boolean deleteAccount(AccountModel model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    boolean isValidLogin(AccountModel model) {
+    public boolean isValidLogin(AccountModel model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    AccountModel getAccount(int accountId) {
+    public AccountModel getAccount(int accountId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

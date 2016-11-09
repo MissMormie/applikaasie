@@ -62,7 +62,7 @@ public class MySQLAccountDAO extends AccountDAO {
     }
 
     @Override
-    boolean deleteAccount(AccountModel model) {
+    public boolean deleteAccount(AccountModel model) {
                 String sql = "UPDATE Artikel SET "
                         + "Gebruikersnaam='" +  model.getGebruikersnaam()   + "',"
                         + "Wachtwoord='"     +  model.getWachtwoord()       + "',"
@@ -79,16 +79,15 @@ public class MySQLAccountDAO extends AccountDAO {
         }
         
         return true;        
+    }
+
+    @Override
+    public boolean isValidLogin(AccountModel model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    boolean isValidLogin(AccountModel model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    AccountModel getAccount(int accountId) {
+    public AccountModel getAccount(int accountId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
