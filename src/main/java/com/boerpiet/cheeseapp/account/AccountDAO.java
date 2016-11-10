@@ -6,8 +6,8 @@
 package com.boerpiet.cheeseapp.account;
 
 
-import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.AccountPojo;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,6 +30,10 @@ public abstract class AccountDAO {
     
     public abstract AccountPojo getAccountByID(int accountId);
 
-    public abstract boolean getAccountByUsernamePassword(AccountPojo model);
+    // TODO Change return type to AccountPojo
+    public abstract boolean fillAccountPojoByUsernamePassword(AccountPojo model);
 
+    public abstract ArrayList<AccountPojo> getAllAccounts();
+
+    public abstract boolean deleteAccountById(int id);
 }

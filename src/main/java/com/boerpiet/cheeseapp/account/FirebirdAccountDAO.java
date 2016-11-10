@@ -6,6 +6,7 @@
 package com.boerpiet.cheeseapp.account;
 
 import com.boerpiet.domeinapp.AccountPojo;
+import java.util.ArrayList;
 
 /**
  *
@@ -35,6 +36,21 @@ public class FirebirdAccountDAO extends AccountDAO {
 
     @Override
     public AccountPojo getAccountByID(int accountId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean fillAccountPojoByUsernamePassword(AccountPojo model) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<AccountPojo> getAllAccounts() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deleteAccountById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -21,7 +21,8 @@ public class MenuView {
         } else if (currentMenu == 2) {
             System.out.println(   "1 Maak nieuw account\n"
                                 + "2 Zoek account om te wijzigen\n"
-                                + "3 Terug naar hoofdmenu");
+                                + "3 Zoek account om te verwijderen\n"
+                                + "4 Terug naar hoofdmenu");
 
         } else if (currentMenu == 3) {
             System.out.println(   "1 Voeg nieuwe klant toe\n"

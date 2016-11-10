@@ -36,7 +36,6 @@ public class AccountPojo {
         this.datum_aanmaak = datum_aanmaak;
         this.klantId = klantId;
         this.deleted = deleted;
-        
     }
 
     public AccountPojo(String gebruikersnaam, String plainTextWachtwoord) {
@@ -44,6 +43,9 @@ public class AccountPojo {
         this.setWachtwoordPlainText(plainTextWachtwoord);
     }
     
+    public AccountPojo() {
+        
+    }
     // -------------- Getters and Setters ----------------
     
     public void setWachtwoordHash(String wachtwoord) {
@@ -73,8 +75,6 @@ public class AccountPojo {
     public void setGebruikersnaam(String gebruikersnaam) {
         this.gebruikersnaam = gebruikersnaam;
     }
-
-
     
     public String getAccountStatus() {
         return accountStatus;

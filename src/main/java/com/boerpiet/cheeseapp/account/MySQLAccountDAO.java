@@ -9,8 +9,7 @@ import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.cheeseapp.MySQLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,16 +26,17 @@ public class MySQLAccountDAO extends AccountDAO {
     }
     
     private boolean createWorkerAccount(AccountPojo model) {
+        
+        String deleted = model.isDeleted() ? "1" : "0";
         String sql      = "INSERT INTO Account (Gebruikersnaam, Wachtwoord, AccountStatus, Datum_Aanmaak, deleted) VALUES ("
                         + "'" + model.getGebruikersnaam()   + "',"
-                        + "'" + model.getWachtwoordHash()       + "',"
+                        + "'" + model.getWachtwoordHash()   + "',"
                         + "'" + model.getAccountStatus()    + "',"
                         + "'" + model.getDatum_aanmaak()    + "',"
-                        + "'" + model.isDeleted()           + "');";
+                        + "'" + deleted                     + "');";
 
         System.out.println(sql);
-        MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
-        return true;
+        return MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
     }    
     
     private boolean createCustomerAccount(AccountPojo model) {
@@ -75,9 +75,7 @@ public class MySQLAccountDAO extends AccountDAO {
 
     @Override
     public boolean deleteAccount(AccountPojo accountPojo) {
-        String sql = "DELETE FROM Account + WHERE idAccount=" + accountPojo.getIdAccount() + ";";
-        
-        return MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
+        return deleteAccountById(accountPojo.getIdAccount());
     }
 
     // TODO Decide if we need a specific class for valid login or if getAccountByID
@@ -99,7 +97,8 @@ public class MySQLAccountDAO extends AccountDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
   
-    public boolean getAccountByUsernamePassword(AccountPojo accountPojo) {        
+    @Override
+    public boolean fillAccountPojoByUsernamePassword(AccountPojo accountPojo) {        
         String sql =  "SELECT * FROM Account WHERE "
                     + "Gebruikersnaam='" + accountPojo.getGebruikersnaam() + "' "
                     + "AND Wachtwoord='" + accountPojo.getWachtwoordHash() + "';";
@@ -129,6 +128,36 @@ public class MySQLAccountDAO extends AccountDAO {
         accountPojo.setDeleted(result.getBoolean("Deleted"));
         accountPojo.setDatum_aanmaak(result.getDate("Datum_Aanmaak"));       
     }
-    
-    
+
+    @Override
+    public ArrayList<AccountPojo> getAllAccounts() {
+        String sql =  "SELECT * FROM Account WHERE Deleted = 0";
+        ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
+        
+        ArrayList<AccountPojo> list = new ArrayList<AccountPojo>();
+
+        // Check if there was no result for this query, should never happen.
+        if (result == null) {
+            System.out.print(result);
+        }
+        
+        try {
+            while(result.next()) {
+                AccountPojo ap = new AccountPojo(); 
+                fillPojo(result, ap);
+                list.add(ap);
+            }
+             
+        } catch (SQLException ex) { 
+            // TODO logger
+            System.out.println("SQL Exception: " + ex);
+        }
+        return list;
+    }
+
+    @Override
+    public boolean deleteAccountById(int id) {
+        String sql = "DELETE FROM Account + WHERE idAccount=" + id + ";";
+        return MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
+    }
 }
