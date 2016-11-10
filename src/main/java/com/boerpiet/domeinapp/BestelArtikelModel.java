@@ -28,7 +28,9 @@ public class BestelArtikelModel {
     public int getId () {
         return id;
     }
-    
+    public void setId (int id) {
+        this.id = id;
+    }
     public int getAantal () {
         return aantal;
     }
@@ -38,8 +40,14 @@ public class BestelArtikelModel {
     public int getBestelId () {
         return bestelId;
     }
+    public void setBestelId (int bestelId) {
+        this.bestelId = bestelId;
+    }
     public int getArtikelId () {
         return artikelId;
+    }
+    public void setArtikelId (int artikelId) {
+        this.artikelId = artikelId;
     }
     public boolean isDeleted () {
         return deleted;

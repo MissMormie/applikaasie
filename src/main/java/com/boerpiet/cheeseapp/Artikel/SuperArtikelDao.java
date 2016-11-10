@@ -12,15 +12,15 @@ import com.boerpiet.domeinapp.ArtikelModel;
  * @author Peaq
  */
 public abstract class SuperArtikelDao {
+    
     public abstract boolean createArtikel (ArtikelModel artikel);
+    
+    public abstract ArtikelModel getArtikel (int artikelId);
     
     public abstract boolean updateArtikel (ArtikelModel artikel);
 
     public abstract boolean deleteArtikel (ArtikelModel artikel);
 
     public abstract boolean isValidLogin(ArtikelModel artikel);
-
-    public abstract ArtikelModel getArtikel (int artikelId);
-
     
 }
