@@ -5,8 +5,10 @@
  */
 package com.boerpiet.cheeseapp;
 
-
+import com.boerpiet.cheeseapp.account.MySQLAccountDAO;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Singleton die MySQL connectie opent en andere klassen in staat stelt hier gebruik van te maken.
@@ -41,13 +43,25 @@ public class MySQLConnection {
         return mysqlConnection;
     }
     
-    public ResultSet read(String sql) throws Exception {
-        ResultSet resultSet = statement.executeQuery(sql);
-        return resultSet;
+    public ResultSet read(String sql) {
+        ResultSet result = null;
+        try {
+            result = statement.executeQuery(sql);
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return result;
+        }
+        return result;        
     }
     
-    public void createUpdateDelete(String sql) throws Exception {
-        statement.executeUpdate(sql);
+    public boolean createUpdateDelete(String sql) {
+        try {
+            statement.executeUpdate(sql);
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;             
     }
         
     public void close() {

@@ -5,10 +5,45 @@
  */
 package com.boerpiet.controllerapp;
 
+import com.boerpiet.domeinapp.AccountModel;
+import com.boerpiet.domeinapp.MenuModel;
+import com.boerpiet.viewapp.LoginView;
+import com.boerpiet.viewapp.MenuView;
+import java.util.Scanner;
+
 /**
  *
  * @author Sonja
  */
 public class LoginController {
+    AccountModel accountModel;
+    LoginView loginView;
+    Scanner input = new Scanner(System.in);
+
+    public LoginController(AccountModel accountModel, LoginView loginView) {
+        this.accountModel = accountModel;
+        this.loginView = loginView;
+        login();
+    }
     
+    private void login() {
+        loginView.showLogin();
+        if (accountModel.validateLogin(listenForLogin())) {
+            loginView.showLoginSuccess();
+            new MenuController(new MenuModel(), new MenuView());
+        } else {
+            loginView.showLoginFailed();
+            login();
+        }
+        
+    }
+    
+    private String listenForLogin() {
+        String usernamePassword = "";
+        if (input.hasNext()) {
+            usernamePassword = input.nextLine();
+        }
+        
+        return usernamePassword;
+    }
 }

@@ -7,7 +7,7 @@ package com.boerpiet.cheeseapp.account;
 
 
 import com.boerpiet.cheeseapp.MySQLConnection;
-import com.boerpiet.domeinapp.AccountModel;
+import com.boerpiet.domeinapp.AccountPojo;
 
 /**
  *
@@ -17,17 +17,19 @@ public abstract class AccountDAO {
     
     /**
      * 
-     * @param model AccountModel
+     * @param model AccountPojo
      * @return Boolean true on success
      */
-    public abstract boolean createAccount(AccountModel model);
+    public abstract boolean createAccount(AccountPojo model);
     
-    public abstract boolean updateAccount(AccountModel model);
+    public abstract boolean updateAccount(AccountPojo model);
 
-    public abstract boolean deleteAccount(AccountModel model);
+    public abstract boolean deleteAccount(AccountPojo model);
 
-    public abstract boolean isValidLogin(AccountModel model);
+    public abstract boolean isValidLogin(AccountPojo model);
+    
+    public abstract AccountPojo getAccountByID(int accountId);
 
-    public abstract AccountModel getAccount(int accountId);
+    public abstract boolean getAccountByUsernamePassword(AccountPojo model);
 
 }

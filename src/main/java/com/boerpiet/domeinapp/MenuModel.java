@@ -24,19 +24,21 @@ public class MenuModel {
 		if (currentMenu ==  1) { 		// Kazen
 			pickFromCheeseMenu(changeMenu);
 
-		} else if (currentMenu ==2 ){	// Account
+		} else if (currentMenu ==2 ){           // Account
 			pickFromAccountMenu(changeMenu);		
 
-		} else if (currentMenu == 3) {	// Klanten
+		} else if (currentMenu == 3) {          // Klanten
 			pickFromKlantenMenu(changeMenu);		
 			
-		} else if (currentMenu == 4) { 	// Bestelling
+		} else if (currentMenu == 4) {          // Bestelling
 			pickFromBestellingMenu(changeMenu);		
 			
-		} else {						// Main menu
+		} else {                                // Main menu
 			if (changeMenu >= 1 && changeMenu <= 4) {
 				currentMenu = changeMenu;
-			}
+			} else if (changeMenu == 5) {   // Afsluiten
+                            System.exit(0);
+                        }
 		}		
 	}
 	
