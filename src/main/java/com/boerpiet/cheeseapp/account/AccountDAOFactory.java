@@ -8,6 +8,8 @@ package com.boerpiet.cheeseapp.account;
 /**
  *
  * @author Sonja
+ * UsageExample: AccountDAO dao = AccountDAOFactory.getAccountDAO("MySQL");
+ * 
  */
 public class AccountDAOFactory {
     public static AccountDAO getAccountDAO(String type){
