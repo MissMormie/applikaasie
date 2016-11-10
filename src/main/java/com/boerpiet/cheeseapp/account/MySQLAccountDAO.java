@@ -7,6 +7,7 @@ package com.boerpiet.cheeseapp.account;
 
 import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.cheeseapp.MySQLConnection;
+import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,20 +18,16 @@ import java.util.logging.Logger;
 public class MySQLAccountDAO extends AccountDAO {
     @Override
     public boolean createAccount(AccountModel model) {
-        String sql = "INSERT INTO Artikel (Voornaam, Achternaam, Tussenvoegsel, Telefoonnummer, EmailAdres, deleted) VALUES ("
+        String sql      = "INSERT INTO Artikel (Voornaam, Achternaam, Tussenvoegsel, Telefoonnummer, EmailAdres, deleted) VALUES ("
                         + "'" + model.getGebruikersnaam()   + "',"
                         + "'" + model.getWachtwoord()       + "',"
                         + "'" + model.getAccountStatus()    + "',"
                         + "'" + model.getDatum_aanmaak()    + "',"
                         + "'" + model.getKlantId()          + "',"
                         + "'" + model.isDeleted()           + "');";
-        try {
-            MySQLConnection.getMySQLConnection().getResult(sql);
-        } catch (Exception ex) {
-            Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-        
+
+        System.out.println(sql);
+        createUpdateDeleteSQL(sql);
         return true;
     }    
 
@@ -43,7 +40,7 @@ public class MySQLAccountDAO extends AccountDAO {
      */
     @Override
     public boolean updateAccount(AccountModel model) {
-                String sql = "UPDATE Artikel SET "
+        String sql      = "UPDATE Artikel SET "
                         + "Gebruikersnaam='" +  model.getGebruikersnaam()   + "',"
                         + "Wachtwoord='"     +  model.getWachtwoord()       + "',"
                         + "AccountStatus='"  +  model.getAccountStatus()    + "',"
@@ -52,33 +49,21 @@ public class MySQLAccountDAO extends AccountDAO {
                         + "Deleted='"        +  model.isDeleted()           + "'"
                         + "WHERE idAccount=" +  model.getIdAccount()        + ";";
         try {
-            MySQLConnection.getMySQLConnection().getResult(sql);
+            createUpdateDeleteSQL(sql);
         } catch (Exception ex) {
             Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            return false;            
         }
         
         return true;
+
     }
 
     @Override
     public boolean deleteAccount(AccountModel model) {
-                String sql = "UPDATE Artikel SET "
-                        + "Gebruikersnaam='" +  model.getGebruikersnaam()   + "',"
-                        + "Wachtwoord='"     +  model.getWachtwoord()       + "',"
-                        + "AccountStatus='"  +  model.getAccountStatus()    + "',"
-                        + "Datum_Aanmaak='"  +  model.getDatum_aanmaak()    + "',"
-                        + "KlantID='"        +  model.getKlantId()          + "',"
-                        + "Deleted='"        +  model.isDeleted()           + "'"
-                        + "WHERE idAccount=" +  model.getIdAccount()        + ";";
-        try {
-            MySQLConnection.getMySQLConnection().getResult(sql);
-        } catch (Exception ex) {
-            Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+        String sql = "DELETE FROM Artikel + WHERE idAccount=" + model.getIdAccount() + ";";
         
-        return true;        
+        return createUpdateDeleteSQL(sql);
     }
 
     @Override
@@ -88,6 +73,30 @@ public class MySQLAccountDAO extends AccountDAO {
 
     @Override
     public AccountModel getAccount(int accountId) {
+        String sql = "SELECT * FROM Artikel + WHERE idAccount=" + accountId + ";";
+        
+        readSQL(sql);
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private ResultSet readSQL(String sql) {
+        ResultSet result = null;
+        try {
+            result = MySQLConnection.getMySQLConnection().read(sql);
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return result;
+        }
+        return result;
+    }    
+    
+    private boolean createUpdateDeleteSQL(String sql) {
+        try {
+            MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;        
     }
 }

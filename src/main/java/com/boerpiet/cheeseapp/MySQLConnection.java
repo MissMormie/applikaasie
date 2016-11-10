@@ -41,11 +41,15 @@ public class MySQLConnection {
         return mysqlConnection;
     }
     
-    public ResultSet getResult(String sql) throws Exception {
+    public ResultSet read(String sql) throws Exception {
         ResultSet resultSet = statement.executeQuery(sql);
         return resultSet;
     }
     
+    public void createUpdateDelete(String sql) throws Exception {
+        statement.executeUpdate(sql);
+    }
+        
     public void close() {
         try {   
             connection.close();
