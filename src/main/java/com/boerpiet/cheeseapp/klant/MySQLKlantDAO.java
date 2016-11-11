@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.boerpiet.cheeseapp.klant2;
+package com.boerpiet.cheeseapp.klant;
 
 import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.KlantPojo;
