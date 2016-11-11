@@ -5,7 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.Klant.KlantDAOFactory;
+import com.boerpiet.cheeseapp.klant2.KlantDAOFactory;
 import java.util.ArrayList;
 /**
  *
