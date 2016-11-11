@@ -20,7 +20,7 @@ public class FirebirdAccountDAO extends AccountDAO {
     }
 
     @Override
-    public boolean updateAccount(AccountPojo model) {
+    public boolean updateAccountById(AccountPojo model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -35,7 +35,7 @@ public class FirebirdAccountDAO extends AccountDAO {
     }
 
     @Override
-    public AccountPojo getAccountByID(int accountId) {
+    public AccountPojo getAccountById(int accountId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

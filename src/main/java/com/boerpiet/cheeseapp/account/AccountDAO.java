@@ -22,15 +22,23 @@ public abstract class AccountDAO {
      */
     public abstract boolean createAccount(AccountPojo model);
     
-    public abstract boolean updateAccount(AccountPojo model);
+    /**
+     * 
+     * @param accountPojo AccountPojo
+     * @return true on success 
+     * Based on the idAccount in the AccountPojo the account in the database is updated.
+     * if klantId in model is 0, no klantId is given to the db.
+     */
+    public abstract boolean updateAccountById(AccountPojo accountPojo);
 
     public abstract boolean deleteAccount(AccountPojo model);
 
     public abstract boolean isValidLogin(AccountPojo model);
     
-    public abstract AccountPojo getAccountByID(int accountId);
+    // Returns null if no account with that id is found.
+    public abstract AccountPojo getAccountById(int accountId);
 
-    // TODO Change return type to AccountPojo
+    // TODO Change return type to AccountPojo? 
     public abstract boolean fillAccountPojoByUsernamePassword(AccountPojo model);
 
     public abstract ArrayList<AccountPojo> getAllAccounts();

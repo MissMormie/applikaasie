@@ -21,14 +21,14 @@ public class AccountPojo {
     private String gebruikersnaam;
     private String wachtwoordHash; // moet deze hierin? Slaan we dit ooit middellange termijn op?
     private String accountStatus = "customer";
-    private Date datum_aanmaak = new Date();
+    private GregorianCalendar datum_aanmaak = new GregorianCalendar();
     private int klantId = 0;
     private boolean deleted = false;
 
     
     // -------------- Constructor ----------------
 
-    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoordHash, String accountStatus, Date datum_aanmaak, int klantId, boolean deleted) {
+    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoordHash, String accountStatus, GregorianCalendar datum_aanmaak, int klantId, boolean deleted) {
         this.idAccount = idAccount;
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoordHash = wachtwoordHash;
@@ -85,11 +85,11 @@ public class AccountPojo {
     }
 
     //TODO
-    public String getDatum_aanmaak() {
-        return "2016-11-09";
+    public GregorianCalendar getDatum_aanmaak() {
+        return datum_aanmaak;
     }
 
-    public void setDatum_aanmaak(Date Datum_aanmaak) {
+    public void setDatum_aanmaak(GregorianCalendar Datum_aanmaak) {
         this.datum_aanmaak = Datum_aanmaak;
     }
 

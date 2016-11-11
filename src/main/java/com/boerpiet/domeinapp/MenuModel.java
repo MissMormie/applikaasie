@@ -65,11 +65,12 @@ public class MenuModel {
                 break;
             case 2: // Change Account
                 ac = new AccountController(new AccountModel(), new AccountView());
-                ac.changeAccount();
+                ac.selectAccountToModify();
                 break;
             case 3: // Delete Account
                 ac = new AccountController(new AccountModel(), new AccountView());
                 ac.deleteAccount();
+                break;
             case 4:
                 currentMenu = 0;
                 break;

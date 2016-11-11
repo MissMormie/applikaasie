@@ -6,6 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AccountModel;
+import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.viewapp.AccountView;
 import java.util.Scanner;
 
@@ -28,38 +29,51 @@ public class AccountController {
         newAccountListener();
     }
     
-    
+    // TODO write comments
     private void newAccountListener() {
         String usernamePasswordType = "";
-        try {
-            usernamePasswordType = input.nextLine();
-            
-            // Check if input is N, if so, stop with new account
-            if(usernamePasswordType.compareToIgnoreCase("N") == 0) 
-                return;
+        usernamePasswordType = input.nextLine();
 
-            // Dit deel van functie over zetten naar methode validate input?
-            String[] parts = usernamePasswordType.split(" ");
-            if (parts.length < 3) {
-                accountView.showWrongInput();
-                newAccount();
-                return;
-            }
-            
-            if(accountModel.createAccount(parts[0], parts[1], parts[2])) {
-                accountView.showNewAccountSuccess();
-            } else {
-                accountView.showNewAccountFailed();
-                newAccount();
-            }   
-        } catch (Exception ex) {
+        // Check if input is N, if so, stop with new account
+        if(usernamePasswordType.compareToIgnoreCase("n") == 0) 
+            return;
+
+        // Controleer of er minimaal 3 strings zijn
+        String[] parts = usernamePasswordType.split(" ");
+        if (parts.length < 3) {
+            accountView.showWrongInput();
             newAccount();
+            return;
         }
+
+        // Make new account met parts[0] username, parts[1] wachtwoord, parts[2] klantID
+        if(accountModel.createAccount(parts[0], parts[1], Integer.parseInt(parts[2]))) {
+            accountView.showNewAccountSuccess();
+        } else {
+            accountView.showNewAccountFailed();
+            newAccount();
+        }         
     }
 
-    // TODO finish changeAccount
-    public void changeAccount() {
+    // TODO finish selectAccountToModify
+    public void selectAccountToModify() {
         accountView.showAccountList(accountModel.fetchAccountList());
+        accountView.showSelectAccountToModify();
+        selectAccountToModifyListener();
+    }
+
+    private void selectAccountToModifyListener() {
+        String in = input.nextLine();
+
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        int id = Integer.parseInt(in);
+        // validate id
+        AccountPojo account = accountModel.getAccountById(id);
+        if (account == null)
+            selectAccountToModify();
+        else 
+            modifyAccount(account);
     }
 
     public void deleteAccount() {
@@ -68,8 +82,6 @@ public class AccountController {
         deleteAccountListener();
     }
 
-    
-    // Why doesn't it wait for NextLine? 
     private void deleteAccountListener() {
         String in = input.nextLine();
         if (in.equalsIgnoreCase("n")) 
@@ -80,6 +92,119 @@ public class AccountController {
         } else {
             accountView.showDeleteAccountFail();
             deleteAccount();
+        }
+    }
+
+    private void modifyAccount(AccountPojo account) {
+        accountView.showModifyAccount(account);
+        modifyAccountListener(account);
+    }
+
+    // Listen for account update options 
+    // based on choice select correct modify function.
+    private void modifyAccountListener(AccountPojo account) {
+        String in = input.nextLine();
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        
+        int id = Integer.parseInt(in);
+        switch(id) {
+            case 1: 
+                accountView.showModifyUsername(account);
+                modifyUsernameListener(account);
+                break;
+            case 2: 
+                accountView.showModifyPassword(account);
+                modifyPasswordListener(account);
+                break;
+            case 3: 
+                accountView.showModifyAccountStatus(account);
+                modifyAccountStatusListener(account);
+                break;
+            case 4: 
+                accountView.showModifyKlantId(account);
+                modifyKlantIdListener(account);
+                break;
+            default:
+                modifyAccount(account);
+        }
+    }
+
+    // Listen for new Username and pass this to model for update
+    // Show success or fail message, on fail ask for new Username.
+    private void modifyUsernameListener(AccountPojo account) {
+        String in = input.nextLine();
+
+        // check if user wants to go back
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        
+        //  Check if update username successful
+        if (accountModel.updateUsername(account, in)) { 
+            accountView.showUpdateSuccess();
+        } else {
+            accountView.showUpdateFailed();
+            accountView.showModifyUsername(account);
+            modifyUsernameListener(account);
+        }
+    }
+
+    // Listen for new Accountstatus and pass this to model for update
+    // Show success or fail message, on fail ask for new Accountstatus.
+    private void modifyPasswordListener(AccountPojo account) {
+        String in = input.nextLine();
+        
+        // check if user wants to go back
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        
+        //  Check if update password successful
+        if (accountModel.updatePassword(account, in)) { 
+            accountView.showUpdateSuccess();
+        } else {
+            accountView.showUpdateFailed();
+            accountView.showModifyPassword(account);
+            modifyPasswordListener(account);
+        }
+    }
+
+    // Listen for new Accountstatus and pass this to model for update
+    // Show success or fail message, on fail ask for new Accountstatus.
+    private void modifyAccountStatusListener(AccountPojo account) {
+        String in = input.nextLine();
+        
+        // check if user wants to go back
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        
+        //  Check if update password successful
+        if (accountModel.updateAccountStatus(account, in)) { 
+            accountView.showUpdateSuccess();
+        } else {
+            accountView.showUpdateFailed();
+            accountView.showModifyAccountStatus(account);
+            modifyAccountStatusListener(account);
+        }
+    }
+
+    // Listen for new KlantId and pass this to model for update
+    // Show success or fail message, on fail ask for new klantId.
+    private void modifyKlantIdListener(AccountPojo account) {
+        String in = input.nextLine();
+        
+        // check if user wants to go back
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        
+        int id = Integer.parseInt(in);
+        
+        //  Check if update password successful
+        if (accountModel.updateKlantId(account, id)) { 
+            accountView.showUpdateSuccess();
+        } else {
+            accountView.showUpdateFailed();
+            accountView.showModifyKlantId(account);
+            modifyKlantIdListener(account);
         }
     }
    
