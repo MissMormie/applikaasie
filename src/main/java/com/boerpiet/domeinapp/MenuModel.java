@@ -6,7 +6,9 @@
 package com.boerpiet.domeinapp;
 
 import com.boerpiet.controllerapp.AccountController;
+import com.boerpiet.controllerapp.KlantController;
 import com.boerpiet.viewapp.AccountView;
+import com.boerpiet.viewapp.KlantView;
 
 /**
  *
@@ -71,19 +73,29 @@ public class MenuModel {
                 ac = new AccountController(new AccountModel(), new AccountView());
                 ac.deleteAccount();
                 break;
-            case 4:
+            case 4: // Return to menu
                 currentMenu = 0;
                 break;
         }
     }
 
     private void pickFromKlantenMenu(int changeMenu) {
-        if (changeMenu == 1) {
-
-        } else if (changeMenu == 2) {
-
-        } else if (changeMenu == 3) {
-            currentMenu = 0;
+        KlantController kc;
+        switch(changeMenu) {
+            case 1: // new Klant
+                kc = new KlantController(new KlantModel(), new KlantView());
+                kc.newKlant();
+                break;
+            case 2: // Modify klant
+                kc = new KlantController(new KlantModel(), new KlantView());
+                kc.selectKlantToModify();
+                break;
+            case 3: // Delete Klant
+                kc = new KlantController(new KlantModel(), new KlantView());
+                kc.selectKlantToDelete();                
+                break;
+            case 4: // Return to menu
+                currentMenu = 0;
         }
     }
 

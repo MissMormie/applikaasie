@@ -73,9 +73,8 @@ public class AccountModel {
         return updateAccountById(account);
     }
 
-    public boolean updateKlantId(AccountPojo account, int in) {
-        account.setKlantId(in);
+    public boolean updateAccountKlantId(AccountPojo account, int id) {
+        account.setKlantId(id);
         return updateAccountById(account);
     }
-
 }

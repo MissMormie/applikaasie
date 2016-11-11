@@ -12,6 +12,14 @@ package com.boerpiet.cheeseapp.account;
  * 
  */
 public class AccountDAOFactory {
+    // Todo make this settable and generic.
+    private static final String type = "MySQL";
+    
+    /**
+     * @deprecated Use getAccountDAO() instead
+     * @param type
+     * @return 
+     */
     public static AccountDAO getAccountDAO(String type){
             if (type.equals("MySQL")) {
                     return new MySQLAccountDAO();
@@ -19,7 +27,19 @@ public class AccountDAOFactory {
                     return new FirebirdAccountDAO();
             } 
             return new MySQLAccountDAO();
+    }   
+    
+    public static AccountDAO getAccountDAO(){
+            if (type.equals("MySQL")) {
+                    return new MySQLAccountDAO();
+            } else if (type.equals("Firebird")) {
+                    return new FirebirdAccountDAO();
+            } 
+            return new MySQLAccountDAO();
     }    
+    
+    
+    
     
     
 }

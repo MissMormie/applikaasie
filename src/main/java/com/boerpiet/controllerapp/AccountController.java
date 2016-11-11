@@ -199,7 +199,7 @@ public class AccountController {
         int id = Integer.parseInt(in);
         
         //  Check if update password successful
-        if (accountModel.updateKlantId(account, id)) { 
+        if (accountModel.updateAccountKlantId(account, id)) { 
             accountView.showUpdateSuccess();
         } else {
             accountView.showUpdateFailed();

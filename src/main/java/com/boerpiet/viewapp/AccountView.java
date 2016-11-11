@@ -92,9 +92,9 @@ public class AccountView {
     }
 
     public void showDivider() {
-        System.out.println("\n------------------------------------------------------------------------");
-        
+        System.out.println("\n------------------------------------------------------------------------");        
     }
+    
     public void showModifyAccount(AccountPojo account) {
         showDivider();
         showAccountListHeader();

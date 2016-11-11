@@ -41,9 +41,7 @@ public class MySQLAccountDAO extends AccountDAO {
                     + "'" + model.getWachtwoordHash()                      + "',"
                     + "'" + model.getAccountStatus()                       + "',"
                     + "'" + createCalendarString(model.getDatum_aanmaak()) + "',"
-                    + "'" + deleted                                        + "');";
-
-        System.out.println(sql);
+                    + "'" + deleted                                        + "');";                
         return MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
     }
     
@@ -71,20 +69,23 @@ public class MySQLAccountDAO extends AccountDAO {
 
 
     @Override
-    public boolean updateAccountById(AccountPojo model) {
-        String deleted = model.isDeleted() ? "1" : "0";
+    public boolean updateAccountById(AccountPojo account) {
+        if (account.getIdAccount() == 0)
+            return false;
+        
+        String deleted = account.isDeleted() ? "1" : "0";
         String klantId = "";
-        if(model.getKlantId() != 0)
-            klantId =     " KlantId='"        +  model.getKlantId()          + "',";
+        if(account.getKlantId() != 0)
+            klantId =     " KlantId='"        +  account.getKlantId()          + "',";
 
-        String sql      = "UPDATE Account SET "
-                        + " Gebruikersnaam='" +  model.getGebruikersnaam()   + "',"
-                        + " Wachtwoord='"     +  model.getWachtwoordHash()   + "',"
-                        + " AccountStatus='"  +  model.getAccountStatus()    + "',"
-                        + " Datum_Aanmaak='"  +  createCalendarString(model.getDatum_aanmaak()) + "',"
-                        + klantId
-                        + " Deleted='"        +  deleted                     + "'"
-                        + " WHERE idAccount=" +  model.getIdAccount()        + ";";
+        String sql  = "UPDATE Account SET "
+                    + " Gebruikersnaam='" +  account.getGebruikersnaam()   + "',"
+                    + " Wachtwoord='"     +  account.getWachtwoordHash()   + "',"
+                    + " AccountStatus='"  +  account.getAccountStatus()    + "',"
+                    + " Datum_Aanmaak='"  +  createCalendarString(account.getDatum_aanmaak()) + "',"
+                    + klantId
+                    + " Deleted='"        +  deleted                     + "'"
+                    + " WHERE idAccount=" +  account.getIdAccount()        + ";";
         return MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
        
     }
@@ -169,6 +170,7 @@ public class MySQLAccountDAO extends AccountDAO {
         ArrayList<AccountPojo> list = new ArrayList<AccountPojo>();
 
         // Check if there was no result for this query, should never happen.
+        // TODO what happens then? should this code even be here?
         if (result == null) {
             System.out.print(result);
         }

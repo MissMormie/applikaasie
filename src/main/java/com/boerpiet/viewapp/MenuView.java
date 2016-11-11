@@ -27,7 +27,8 @@ public class MenuView {
         } else if (currentMenu == 3) {
             System.out.println(   "1 Voeg nieuwe klant toe\n"
                                 + "2 Zoek klant om te wijzigen\n"
-                                + "3 Terug naar hoofdmenu");
+                                + "3 Zoek een klant om te verwijderen\n"
+                                + "4 Terug naar hoofdmenu");
 
         } else if (currentMenu == 4) {
             System.out.println(   "1 Voeg nieuwe bestelling toe\n"
