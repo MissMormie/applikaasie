@@ -8,7 +8,9 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.domeinapp.BestelArtikelModel;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
+import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.viewapp.BestellingView;
 import java.time.LocalDate;
@@ -22,12 +24,12 @@ import java.util.Scanner;
 public class BestellingController {
     private final Scanner input = new Scanner (System.in);
     private final BestellingView bestellingView;
-    private final BestellingPojo bestellingModel;
-    private final BestelArtikelPojo bestelArtikelModel;
+    private final BestellingModel bestellingModel;
+    private final BestelArtikelModel bestelArtikelModel;
     private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("dd-MM-yyyy");
     
-    public BestellingController (BestellingPojo bestellingModel, BestellingView bestellingView,
-            BestelArtikelPojo bestelArtikelModel) {
+    public BestellingController (BestellingModel bestellingModel, BestellingView bestellingView,
+            BestelArtikelModel bestelArtikelModel) {
         this.bestellingModel = bestellingModel;
         this.bestellingView = bestellingView;
         this.bestelArtikelModel = bestelArtikelModel;
