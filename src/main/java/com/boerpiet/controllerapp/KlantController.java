@@ -5,8 +5,8 @@
  */
 package com.boerpiet.controllerapp;
 
+import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.viewapp.KlantView;
 import java.util.Scanner;
 
@@ -18,7 +18,8 @@ public class KlantController {
     private final KlantModel klantModel;
     private final KlantView klantView;
     private final Scanner input = new Scanner(System.in);
-    
+
+
     public KlantController(KlantModel klantModel, KlantView klantView) {
         this.klantModel = klantModel;
         this.klantView = klantView;
@@ -40,6 +41,8 @@ public class KlantController {
         String telefoonnummer = input.nextLine();
         klantView.showEmailAdres();
         String emailadres = input.nextLine();
+        
+        sameAdres();
          
         if(klantModel.createKlant(voornaam, achternaam, tussenvoegsel, telefoonnummer, emailadres)) 
             klantView.showCreationSuccess();
@@ -48,40 +51,47 @@ public class KlantController {
             newKlant();
         }
     }
+    
+    public void sameAdres() {
+        klantView.showAskSameAdres();
+        String sameAdres = input.nextLine();
+        if(sameAdres.equalsIgnoreCase("j")) {
+            klantView.showSameAdres();
+            adresListener("Same");
+        } else if (sameAdres.equalsIgnoreCase("n")) {
+            klantView.showPostAdres();
+            adresListener("PostAdres");
+            klantView.showFactuurAdres();
+            adresListener("FactuurAdres");
+            klantView.showBezorgAdres();
+            adresListener("BezorgAdres");
+        } else {
+            sameAdres();
+        }
+    }
+    
+    private void adresListener(String type) {
+        klantView.showStraat();
+        String straat = input.nextLine();
+        klantView.showHuisnummer();
+        int huisnummer = Integer.parseInt(input.nextLine());
+        klantView.showToevoeging();
+        String toevoeging = input.nextLine();
+        klantView.showWoonplaats();
+        String woonplaats = input.nextLine();      
+        
+        AdresPojo adres = new AdresPojo(0, straat, huisnummer, toevoeging, 
+                                        woonplaats, false, type);
+        klantModel.setAdres(adres);
+    }
+    
 
-
-    public void selectKlantToModify() {
-        klantView.showKlantList(klantModel.fetchKlantList());
-        klantView.showSelectKlantToModify();
-        selectKlantToModifyListener();
+    public void modifyKlant() {
+        klantView.showModifyKlant(klantModel);
+        modifyKlantListener();
     }
 
-    public void selectKlantToDelete() {
-        klantView.showKlantList(klantModel.fetchKlantList());
-        klantView.showSelectKlantToDelete();
-        selectKlantToDeleteListener();
-    }
-
-    private void selectKlantToModifyListener() {
-        String in = input.nextLine();
-
-        if (in.equalsIgnoreCase("n")) 
-            return;
-        int id = Integer.parseInt(in);
-        // validate id
-        KlantPojo klant = klantModel.getAccountById(id);
-        if (klant == null)
-            selectKlantToModify();
-        else 
-            modifyKlant(klant);        
-    }
-
-    private void modifyKlant(KlantPojo klant) {
-        klantView.showModifyKlant(klant);
-        modifyKlantListener(klant);
-    }
-
-    private void modifyKlantListener(KlantPojo klant) {
+    private void modifyKlantListener() {
         String in = input.nextLine();
         if (in.equalsIgnoreCase("n")) 
             return;
@@ -89,33 +99,32 @@ public class KlantController {
         int id = Integer.parseInt(in);
         switch(id) {
             case 1: // Voornaam
-                klantView.showModifyVoornaam(klant);
-                modifyVoornaamListener(klant);
+                klantView.showModifyVoornaam(klantModel);
+                modifyVoornaamListener();
                 break;
             case 2: // Tussenvoegsel
-                klantView.showModifyTussenvoegsel(klant);
-                modifyTussenvoegselListener(klant);
+                klantView.showModifyTussenvoegsel(klantModel);
+                modifyTussenvoegselListener();
                 break;
             case 3: // Achternaam
-                klantView.showModifyAchternaam(klant);
-                modifyAchternaamListener(klant);
+                klantView.showModifyAchternaam(klantModel);
+                modifyAchternaamListener();
                 break;
             case 4: // telefoonnummer
-                klantView.showModifyTelefoonnummer(klant);
-                modifyTelefoonnummerListener(klant);
+                klantView.showModifyTelefoonnummer(klantModel);
+                modifyTelefoonnummerListener();
                 break;
             case 5: 
-                klantView.showModifyEmailadres(klant);
-                modifyEmailadresListener(klant);
+                klantView.showModifyEmailadres(klantModel);
+                modifyEmailadresListener();
                 break;
             default:
-                modifyKlant(klant);
+                modifyKlant();
                         
     }
-
 }
 
-    private void modifyVoornaamListener(KlantPojo klant) {
+    private void modifyVoornaamListener() {
         String in = input.nextLine();
 
         // check if user wants to go back
@@ -123,16 +132,16 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateVoornaam(klant, in)) { 
-            klantView.showUpdateSuccess();
+        if (klantModel.updateVoornaam(in)) { 
+            klantView.showUpdateSuccess(klantModel);
         } else {
-            klantView.showUpdateFailed();
-            klantView.showModifyVoornaam(klant);
-            modifyVoornaamListener(klant);
+            klantView.showUpdateFailed(klantModel);
+            klantView.showModifyVoornaam(klantModel);
+            modifyVoornaamListener();
         }
     }
 
-    private void modifyTussenvoegselListener(KlantPojo klant) {
+    private void modifyTussenvoegselListener() {
         String in = input.nextLine();
 
         // check if user wants to go back
@@ -140,16 +149,16 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateTussenvoegsel(klant, in)) { 
-            klantView.showUpdateSuccess();
+        if (klantModel.updateTussenvoegsel(in)) { 
+            klantView.showUpdateSuccess(klantModel);
         } else {
-            klantView.showUpdateFailed();
-            klantView.showModifyTussenvoegsel(klant);
-            modifyTussenvoegselListener(klant);
+            klantView.showUpdateFailed(klantModel);
+            klantView.showModifyTussenvoegsel(klantModel);
+            modifyTussenvoegselListener();
         }    
     }
 
-    private void modifyAchternaamListener(KlantPojo klant) {
+    private void modifyAchternaamListener() {
         String in = input.nextLine();
 
         // check if user wants to go back
@@ -157,16 +166,16 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateAchternaam(klant, in)) { 
-            klantView.showUpdateSuccess();
+        if (klantModel.updateAchternaam(in)) { 
+            klantView.showUpdateSuccess(klantModel);
         } else {
-            klantView.showUpdateFailed();
-            klantView.showModifyAchternaam(klant);
-            modifyAchternaamListener(klant);
+            klantView.showUpdateFailed(klantModel);
+            klantView.showModifyAchternaam(klantModel);
+            modifyAchternaamListener();
         }    
     }
 
-    private void modifyTelefoonnummerListener(KlantPojo klant) {
+    private void modifyTelefoonnummerListener() {
         String in = input.nextLine();
 
         // check if user wants to go back
@@ -174,16 +183,16 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateTelefoonnummer(klant, in)) { 
-            klantView.showUpdateSuccess();
+        if (klantModel.updateTelefoonnummer(in)) { 
+            klantView.showUpdateSuccess(klantModel);
         } else {
-            klantView.showUpdateFailed();
-            klantView.showModifyTelefoonnummer(klant);
-            modifyTelefoonnummerListener(klant);
+            klantView.showUpdateFailed(klantModel);
+            klantView.showModifyTelefoonnummer(klantModel);
+            modifyTelefoonnummerListener();
         }    
     }
 
-    private void modifyEmailadresListener(KlantPojo klant) {
+    private void modifyEmailadresListener() {
         String in = input.nextLine();
 
         // check if user wants to go back
@@ -191,25 +200,32 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateEmailadres(klant, in)) { 
-            klantView.showUpdateSuccess();
+        if (klantModel.updateEmailadres(in)) { 
+            klantView.showUpdateSuccess(klantModel);
         } else {
-            klantView.showUpdateFailed();
-            klantView.showModifyEmailadres(klant);
-            modifyEmailadresListener(klant);
-        }        
-    }
-
-    private void selectKlantToDeleteListener() {
-        String in = input.nextLine();
-        if (in.equalsIgnoreCase("n")) 
-            return;
-        int id = Integer.parseInt(in);
-        if (klantModel.deleteKlantById(id)) {
-            klantView.showDeleteKlantSuccess();
-        } else {
-            klantView.showDeleteKlantFail();
-            selectKlantToDelete();
+            klantView.showUpdateFailed(klantModel);
+            klantView.showModifyEmailadres(klantModel);
+            modifyEmailadresListener();
         }
+    }
+    
+    public void deleteKlant() {
+        klantView.showDeleteSure(klantModel);
+        deleteSureListener();
+    }
+    
+    private void deleteSureListener() {
+        String in = input.nextLine();
+
+        if (in.equalsIgnoreCase("n")) 
+            return;
+        if (in.equalsIgnoreCase("j")) {
+            klantModel.delete();
+
+            // TODO delete klant en adressen etc.
+        } else {
+            deleteKlant();
+        }
+        
     }
 }

@@ -8,7 +8,7 @@ package com.boerpiet.cheeseapp.klant;
 /**
  *
  * @author Sonja UsageExample: AccountDAO dao =
- * KlantDAOFactory.getKlantDAO("MySQL");
+ * KlantDAOFactory.getKlantDAO();
  */
 public class KlantDAOFactory {
     // TODO get this variable from console input or config.

@@ -6,6 +6,7 @@
 package com.boerpiet.cheeseapp.klant;
 
 import com.boerpiet.domeinapp.KlantPojo;
+import com.boerpiet.domeinapp.KlantModel;
 import java.util.ArrayList;
 
 /**
@@ -14,7 +15,12 @@ import java.util.ArrayList;
  */
 public abstract class KlantDAO {
 
-    public abstract boolean createKlant(KlantPojo klant);    
+    /**
+     *
+     * @param klant KlantModel
+     * @return boolean true on successful creation
+     */
+    public abstract boolean createKlant(KlantModel klant);    
 
     public abstract ArrayList<KlantPojo> getAllKlanten();
 
@@ -23,9 +29,11 @@ public abstract class KlantDAO {
      * @param id
      * @return
      */
-    public abstract KlantPojo getKlantById(int id); 
+    public abstract KlantModel getKlantById(int id); 
 
     public abstract boolean updateKlantById(KlantPojo klant); 
 
-    public abstract boolean deleteKlantByID(int id);
+    public abstract boolean deleteKlantById(int id);
+    
+    public abstract boolean deleteKlant(KlantModel klant);
 }

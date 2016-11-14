@@ -16,23 +16,19 @@ import com.boerpiet.viewapp.MenuView;
  */
 public class MenuController {
 
-    MenuModel menuPojo;
+    MenuModel menuModel;
     MenuView menuView;
     Scanner input = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        new MenuController(new MenuModel(), new MenuView());
-    }
-
     public MenuController(MenuModel menuPojo, MenuView menuView) {
-        this.menuPojo = menuPojo;
+        this.menuModel = menuPojo;
         this.menuView = menuView;
         showMenu();
     }
 
     private void showMenu() {
-        menuView.showCurrentMenu(menuPojo.getCurrentMenu());
-        menuPojo.changeCurrentMenu(listenForMenuInput());
+        menuView.showCurrentMenu(menuModel.getCurrentMenu());
+        menuModel.changeCurrentMenu(listenForMenuInput());
         showMenu();
     }
 
@@ -42,7 +38,7 @@ public class MenuController {
         try {
             menuChoice = input.nextInt();
         } catch (Exception ex) {
-            menuChoice = menuPojo.getCurrentMenu();
+            menuChoice = menuModel.getCurrentMenu();
         }
         return menuChoice;
     }

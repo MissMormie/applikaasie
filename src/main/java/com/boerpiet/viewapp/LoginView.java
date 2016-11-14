@@ -21,5 +21,4 @@ public class LoginView {
     public void showLoginSuccess() {
         System.out.println("Login succesfull");
     }
-    
 }

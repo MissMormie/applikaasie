@@ -6,6 +6,7 @@
 package com.boerpiet.cheeseapp.klant;
 
 import com.boerpiet.domeinapp.KlantPojo;
+import com.boerpiet.domeinapp.KlantModel;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public class FirebirdKlantDAO extends KlantDAO {
 
     @Override
-    public boolean createKlant(KlantPojo klant) {
+    public boolean createKlant(KlantModel klant) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -25,7 +26,7 @@ public class FirebirdKlantDAO extends KlantDAO {
     }
 
     @Override
-    public KlantPojo getKlantById(int id) {
+    public KlantModel getKlantById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -35,7 +36,12 @@ public class FirebirdKlantDAO extends KlantDAO {
     }
 
     @Override
-    public boolean deleteKlantByID(int id) {
+    public boolean deleteKlantById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deleteKlant(KlantModel klant) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

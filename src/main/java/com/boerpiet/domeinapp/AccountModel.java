@@ -15,13 +15,14 @@ import java.util.ArrayList;
  */
 public class AccountModel {
     
+    // TODO niet als 1 string meegeven maar in controller splitsen.
     public boolean validateLogin(String usernamePassword) {
         String[] parts = usernamePassword.split(" ");
         if (parts.length < 2) {
             return false;
         }
         AccountPojo login = new AccountPojo(parts[0], parts[1]);
-        return AccountDAOFactory.getAccountDAO("MySQL").fillAccountPojoByUsernamePassword(login);
+        return AccountDAOFactory.getAccountDAO().fillAccountPojoByUsernamePassword(login);
     }
     
     // TODO create an create account with account status.

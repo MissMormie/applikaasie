@@ -35,7 +35,6 @@ public class LoginController {
             loginView.showLoginFailed();
             login();
         }
-        
     }
     
     private String listenForLogin() {

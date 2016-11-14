@@ -6,8 +6,10 @@
 package com.boerpiet.domeinapp;
 
 import com.boerpiet.controllerapp.AccountController;
+import com.boerpiet.controllerapp.KlantenController;
 import com.boerpiet.controllerapp.KlantController;
 import com.boerpiet.viewapp.AccountView;
+import com.boerpiet.viewapp.KlantenView;
 import com.boerpiet.viewapp.KlantView;
 
 /**
@@ -80,18 +82,18 @@ public class MenuModel {
     }
 
     private void pickFromKlantenMenu(int changeMenu) {
-        KlantController kc;
+        KlantenController kc;
         switch(changeMenu) {
             case 1: // new Klant
-                kc = new KlantController(new KlantModel(), new KlantView());
-                kc.newKlant();
+                KlantController skc = new KlantController(new KlantModel(), new KlantView());
+                skc.newKlant();
                 break;
             case 2: // Modify klant
-                kc = new KlantController(new KlantModel(), new KlantView());
+                kc = new KlantenController(new KlantenModel(), new KlantenView());
                 kc.selectKlantToModify();
                 break;
             case 3: // Delete Klant
-                kc = new KlantController(new KlantModel(), new KlantView());
+                kc = new KlantenController(new KlantenModel(), new KlantenView());
                 kc.selectKlantToDelete();                
                 break;
             case 4: // Return to menu
