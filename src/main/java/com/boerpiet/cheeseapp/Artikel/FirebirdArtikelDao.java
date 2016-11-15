@@ -5,7 +5,8 @@
  */
 package com.boerpiet.cheeseapp.Artikel;
 
-import com.boerpiet.domeinapp.ArtikelModel;
+import com.boerpiet.domeinapp.ArtikelPojo;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,28 +15,37 @@ import com.boerpiet.domeinapp.ArtikelModel;
 public class FirebirdArtikelDao extends SuperArtikelDao {
 
     @Override
-    public boolean createArtikel(ArtikelModel artikel) {
+    public boolean createArtikel(ArtikelPojo artikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ArtikelModel getArtikel(int artikelId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean updateArtikel(ArtikelModel artikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean deleteArtikel(ArtikelModel artikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isValidLogin(ArtikelModel artikel) {
+    public ArtikelPojo getArtikelById (int artikelId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
+    public boolean findArtikelId (int artikelId) {
+        throw new UnsupportedOperationException("Not supported yet");
+    }
+
+    @Override
+    public boolean updateArtikel(ArtikelPojo artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deleteArtikel(ArtikelPojo artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isValidLogin(ArtikelPojo artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public ArrayList <ArtikelPojo> getAllArticles(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

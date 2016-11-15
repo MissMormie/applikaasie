@@ -5,7 +5,7 @@
  */
 package com.boerpiet.cheeseapp.BestelArtikel;
 
-import com.boerpiet.domeinapp.BestelArtikelModel;
+import com.boerpiet.domeinapp.BestelArtikelPojo;
 
 /**
  *
@@ -14,27 +14,27 @@ import com.boerpiet.domeinapp.BestelArtikelModel;
 public class FirebirdBestelArtikelDao extends SuperBestelArtikelDao {
 
     @Override
-    public boolean createBestelArtikel(BestelArtikelModel bArtikel) {
+    public boolean createBestelArtikel(BestelArtikelPojo bArtikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public BestelArtikelModel getBestelArtikel(int bArtikelId) {
+    public BestelArtikelPojo getBestelArtikelById (int bArtikelId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean updateBestelArtikel(BestelArtikelModel bArtikel) {
+    public boolean updateBestelArtikel(BestelArtikelPojo bArtikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean deleteBestelArtikel(BestelArtikelModel bArtikel) {
+    public boolean deleteBestelArtikel(BestelArtikelPojo bArtikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean isValidLogin(BestelArtikelModel bArtikel) {
+    public boolean isValidLogin(BestelArtikelPojo bArtikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

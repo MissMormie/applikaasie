@@ -5,7 +5,7 @@
  */
 package com.boerpiet.cheeseapp.Bestelling;
 
-import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
 
 /**
  *
@@ -14,27 +14,32 @@ import com.boerpiet.domeinapp.BestellingModel;
 public class FirebirdBestellingDao extends SuperBestellingDao {
 
     @Override
-    public boolean createBestelling(BestellingModel bestelling) {
+    public boolean createBestelling(BestellingPojo bestelling) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public BestellingModel getBestelling(int idBestelling) {
+    public BestellingPojo getBestellingById (int idBestelling) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public BestellingPojo getBestellingByKlantId (int klantId) {
+        throw new UnsupportedOperationException ("Not supported yet");
+    }
+
+    @Override
+    public boolean updateBestelling(BestellingPojo bestelling) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean updateBestelling(BestellingModel bestelling) {
+    public boolean deleteBestelling(BestellingPojo bestelling) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean deleteBestelling(BestellingModel bestelling) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isValidLogin(BestellingModel bestelling) {
+    public boolean isValidLogin(BestellingPojo bestelling) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

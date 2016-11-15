@@ -6,7 +6,7 @@
 package com.boerpiet.cheeseapp.BestelArtikel;
 
 import com.boerpiet.cheeseapp.MySQLConnection;
-import com.boerpiet.domeinapp.BestelArtikelModel;
+import com.boerpiet.domeinapp.BestelArtikelPojo;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,15 +18,14 @@ import java.util.logging.Logger;
 public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
 
     @Override
-    public boolean createBestelArtikel(BestelArtikelModel bArtikel) {
-        String sql = "INSERT INTO Artikel (id, aantal, bestelId, artikelId, deleted)"
+    public boolean createBestelArtikel(BestelArtikelPojo bArtikel) {
+        String sql = "INSERT INTO BestelArtikel (BestellingId, ArtikelId, Aantal)"
                 + " VALUES ("
-                        + "'" + bArtikel.getId () + "',"
-                        + "'" + bArtikel.getAantal () + "',"
-                        + "'" + bArtikel.getBestelId () + "',"
-                        + "'" + bArtikel.getArtikelId () + "',"
-                        + "'" + bArtikel.isDeleted () + "',";
-        try { MySQLConnection.getMySQLConnection().getResult(sql);
+                        + "'" + bArtikel.getBestelId    () + "',"
+                        + "'" + bArtikel.getArtikelId   () + "',"
+                        + "'" + bArtikel.getAantal      () + "');";
+                        //+ "'" + bArtikel.isDeleted  () + "');";
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
             } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -35,15 +34,15 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     }
     
     @Override
-    public BestelArtikelModel getBestelArtikel(int bArtikelId) {
-        BestelArtikelModel ba = new BestelArtikelModel ();
-        String sql = "SELECT * FROM BestelArtikel" + "WHERE idBestelArtikel = "+bArtikelId;
-        try { ResultSet rs = MySQLConnection.getMySQLConnection().getResult(sql);
+    public BestelArtikelPojo getBestelArtikelById (int bArtikelId) {
+        BestelArtikelPojo ba = new BestelArtikelPojo ();
+        String sql = "SELECT * FROM BestelArtikel" + " WHERE idBestelArtikel = "+bArtikelId;
+        try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
         ba.setId (rs.getInt(1));
         ba.setAantal(rs.getInt(2));
         ba.setBestelId (rs.getInt(3));
         ba.setArtikelId(rs.getInt(4));
-        ba.setDeleted (rs.getBoolean(5));       
+        //ba.setDeleted (rs.getBoolean(5));       
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -52,15 +51,15 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     }
 
     @Override
-    public boolean updateBestelArtikel(BestelArtikelModel bArtikel) {
+    public boolean updateBestelArtikel(BestelArtikelPojo bArtikel) {
         String sql = "UPDATE Artikel SET (id, aantal, bestelId, artikelId, deleted)"
                 + " VALUES ("
-                        + "'" + bArtikel.getId () + "',"
+                        + "'" + bArtikel.getId () + "'"
                         + "'" + bArtikel.getAantal () + "',"
                         + "'" + bArtikel.getBestelId () + "',"
                         + "'" + bArtikel.getArtikelId () + "',"
-                        + "'" + bArtikel.isDeleted () + "',";
-        try { MySQLConnection.getMySQLConnection().getResult(sql);
+                        + "'" + bArtikel.isDeleted () + "');";
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -69,9 +68,9 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     }
 
     @Override
-    public boolean deleteBestelArtikel(BestelArtikelModel bArtikel) {
-        String sql = "DELETE * FROM BestelArtikel" + "WHERE idBestelArtikel = "+bArtikel.getId ();
-        try { MySQLConnection.getMySQLConnection().getResult(sql);
+    public boolean deleteBestelArtikel(BestelArtikelPojo bArtikel) {
+        String sql = "DELETE * FROM BestelArtikel" + " WHERE idBestelArtikel = "+bArtikel.getId ();
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -80,7 +79,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     }
 
     @Override
-    public boolean isValidLogin (BestelArtikelModel bArtikel) {
+    public boolean isValidLogin (BestelArtikelPojo bArtikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
