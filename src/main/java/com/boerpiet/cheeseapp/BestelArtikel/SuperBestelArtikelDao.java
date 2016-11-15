@@ -5,7 +5,7 @@
  */
 package com.boerpiet.cheeseapp.BestelArtikel;
 
-import com.boerpiet.domeinapp.BestelArtikelModel;
+import com.boerpiet.domeinapp.BestelArtikelPojo;
 
 /**
  *
@@ -13,14 +13,14 @@ import com.boerpiet.domeinapp.BestelArtikelModel;
  */
 public abstract class SuperBestelArtikelDao {
     
-    public abstract boolean createBestelArtikel (BestelArtikelModel bArtikel);
+    public abstract boolean createBestelArtikel (BestelArtikelPojo bArtikel);
     
-    public abstract BestelArtikelModel getBestelArtikel (int bArtikelId);
+    public abstract BestelArtikelPojo getBestelArtikelById (int bArtikelId);
     
-    public abstract boolean updateBestelArtikel (BestelArtikelModel bArtikel);
+    public abstract boolean updateBestelArtikel (BestelArtikelPojo bArtikel);
 
-    public abstract boolean deleteBestelArtikel (BestelArtikelModel bArtikel);
+    public abstract boolean deleteBestelArtikel (BestelArtikelPojo bArtikel);
 
-    public abstract boolean isValidLogin(BestelArtikelModel bArtikel);
+    public abstract boolean isValidLogin(BestelArtikelPojo bArtikel);
     
 }

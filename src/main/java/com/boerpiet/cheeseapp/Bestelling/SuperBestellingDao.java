@@ -5,7 +5,7 @@
  */
 package com.boerpiet.cheeseapp.Bestelling;
 
-import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
 
 /**
  *
@@ -13,14 +13,16 @@ import com.boerpiet.domeinapp.BestellingModel;
  */
 public abstract class SuperBestellingDao {
     
-    public abstract boolean createBestelling (BestellingModel bestelling);
+    public abstract boolean createBestelling (BestellingPojo bestelling);
     
-    public abstract BestellingModel getBestelling (int idBestelling);
+    public abstract BestellingPojo getBestellingById (int idBestelling);
     
-    public abstract boolean updateBestelling (BestellingModel bestelling);
+    public abstract BestellingPojo getBestellingByKlantId (int klantId);
+        
+    public abstract boolean updateBestelling (BestellingPojo bestelling);
 
-    public abstract boolean deleteBestelling (BestellingModel bestelling);
+    public abstract boolean deleteBestelling (BestellingPojo bestelling);
 
-    public abstract boolean isValidLogin(BestellingModel bestelling);
+    public abstract boolean isValidLogin(BestellingPojo bestelling);
     
 }

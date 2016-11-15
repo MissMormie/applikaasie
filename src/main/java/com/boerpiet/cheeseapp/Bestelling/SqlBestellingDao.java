@@ -6,7 +6,7 @@
 package com.boerpiet.cheeseapp.Bestelling;
 
 import com.boerpiet.cheeseapp.MySQLConnection;
-import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,15 +18,13 @@ import java.util.logging.Logger;
 public class SqlBestellingDao extends SuperBestellingDao {
 
     @Override
-    public boolean createBestelling (BestellingModel bestelling) {
-        String sql = "INSERT INTO Bestelling (id, klantKey, bestelDatum, accountKey, deleted)"
+    public boolean createBestelling (BestellingPojo bestelling) {
+        String sql = "INSERT INTO Bestelling (KlantKey, BestelDatum, AccountKey)"
                 + " VALUES ("
-                        + "'" + bestelling.getId () + "',"
                         + "'" + bestelling.getKlantKey () + "',"
                         + "'" + bestelling.getBestelDatum() + "',"
-                        + "'" + bestelling.getAccountKey() + "',"
-                        + "'" + bestelling.isDeleted () + "',";
-        try { MySQLConnection.getMySQLConnection().getResult(sql);
+                        + "'" + bestelling.getAccountKey() + "')";
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
             } catch (Exception ex) {
             Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -35,13 +33,13 @@ public class SqlBestellingDao extends SuperBestellingDao {
     }
 
     @Override
-    public BestellingModel getBestelling (int idBestelling) {
-        BestellingModel b = new BestellingModel ();
-        String sql = "SELECT * FROM Bestelling" + "WHERE idBesteling = "+idBestelling;
-        try { ResultSet rs = MySQLConnection.getMySQLConnection().getResult(sql);
+    public BestellingPojo getBestellingById (int idBestelling) {
+        BestellingPojo b = new BestellingPojo ();
+        String sql = "SELECT * FROM Bestelling" + " WHERE idBestelling = "+idBestelling;
+        try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
         b.setId (rs.getInt(1));
         b.setKlantKey (rs.getInt(2));
-        b.setBestelDatum (rs.getDate(3).toLocalDate());
+        b.setBestelDatum (rs.getDate(3));
         b.setAccountKey (rs.getInt(4));
         b.setDeleted (rs.getBoolean(5));       
         } catch (Exception ex) {
@@ -50,17 +48,32 @@ public class SqlBestellingDao extends SuperBestellingDao {
         }
         return b;
     }
+    
+    @Override
+    public BestellingPojo getBestellingByKlantId (int klantId) {
+        BestellingPojo b = new BestellingPojo ();
+        String sql = "SELECT idBestelling FROM Bestelling "+ " WHERE KlantKey = "+klantId;
+        try {ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
+        if (rs.next()) {
+            b.setId (rs.getInt(1));
+        }
+        } catch (Exception ex) {
+            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        return b;
+    }
 
     @Override
-    public boolean updateBestelling (BestellingModel bestelling) {
-        String sql = "UPDATE Artikel SET (id, aantal, bestelId, artikelId, deleted)"
+    public boolean updateBestelling (BestellingPojo bestelling) {
+        String sql = "UPDATE Bestelling SET (idBestelling, KlantKey, BestelDatum, AccountKey, Deleted)"
                 + " VALUES ("
                         + "'" + bestelling.getId () + "',"
                         + "'" + bestelling.getKlantKey () + "',"
                         + "'" + bestelling.getBestelDatum() + "',"
                         + "'" + bestelling.getAccountKey() + "',"
-                        + "'" + bestelling.isDeleted () + "',";
-        try { MySQLConnection.getMySQLConnection().getResult(sql);
+                        + "'" + bestelling.isDeleted () + "')";
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -69,9 +82,9 @@ public class SqlBestellingDao extends SuperBestellingDao {
     }
 
     @Override
-    public boolean deleteBestelling(BestellingModel bestelling) {
-        String sql = "DELETE * FROM Besteling" + "WHERE idBestelArtikel = "+bestelling.getId ();
-        try { MySQLConnection.getMySQLConnection().getResult(sql);
+    public boolean deleteBestelling(BestellingPojo bestelling) {
+        String sql = "DELETE * FROM Bestelling" + " WHERE idBestelArtikel = "+bestelling.getId ();
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -80,7 +93,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
     }
 
     @Override
-    public boolean isValidLogin(BestellingModel bestelling) {
+    public boolean isValidLogin(BestellingPojo bestelling) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

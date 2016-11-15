@@ -8,13 +8,15 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
-import com.boerpiet.domeinapp.BestelArtikelModel;
+import com.boerpiet.domeinapp.ArtikelPojo;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
-import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.BestellingPojo;
+import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestellingView;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -24,24 +26,23 @@ import java.util.Scanner;
 public class BestellingController {
     private final Scanner input = new Scanner (System.in);
     private final BestellingView bestellingView;
-    private final BestellingModel bestellingModel;
-    private final BestelArtikelModel bestelArtikelModel;
-    private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("dd-MM-yyyy");
+    private final BestellingPojo bestellingPojo;
+    private final BestelArtikelPojo bestelArtikelPojo;
+    private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
-    public BestellingController (BestellingModel bestellingModel, BestellingView bestellingView,
-            BestelArtikelModel bestelArtikelModel) {
-        this.bestellingModel = bestellingModel;
+    public BestellingController (BestellingPojo bestellingPojo, BestellingView bestellingView,
+            BestelArtikelPojo bestelArtikelPojo) {
+        this.bestellingPojo = bestellingPojo;
         this.bestellingView = bestellingView;
-        this.bestelArtikelModel = bestelArtikelModel;
+        this.bestelArtikelPojo = bestelArtikelPojo;
     }
-    
+        
     public void newOrderInput () {
         bestellingView.showNewBestelling();
         makeNewOrder();
         
     }
-    public void makeNewOrder () {
-        //DateTimeFormatter format = DateTimeFormatter.ofPattern ("dd-MM-yyyy");
+    private void makeNewOrder () {
         String begin = input.nextLine();
         
         if (begin.compareToIgnoreCase("N")==0) {
@@ -50,31 +51,37 @@ public class BestellingController {
         
         System.out.println("Geef klantid (0 voor medewerkers):");
         int klantId = Integer.parseInt(input.nextLine());
-        System.out.println("Geef besteldatum (dd-mm-yyyy):");
+        
+        System.out.println("Geef besteldatum (yyyy-mm-dd):");
         LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
+        Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
+        
         System.out.println("Geef accountid:");
         int accountId = Integer.parseInt(input.nextLine());
-        System.out.println (ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles());
+        
+        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
+        ArtikelView artList = new ArtikelView();
+        artList.showArtikelList(aList);
         System.out.println("Welke kaas wil je bestellen? Voer id in:");
         int artikelId = Integer.parseInt(input.nextLine());
+        
         System.out.println("Hoeveel wil je bestellen?");
         int aantal = Integer.parseInt(input.nextLine());
-        //if idArtikel is in database maak nieuwe bestelling met klantId, besteldatum en accountkey
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(klantId)) {
-        bestellingModel.setKlantKey (klantId);
-        bestellingModel.setBestelDatum (bestelDatum);
-        bestellingModel.setAccountKey (accountId);
 
-        //BestellingPojo bestelling = new BestellingPojo (klantId, bestelDatum, accountId);
+        if (ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(klantId)) {
+        bestellingPojo.setKlantKey (klantId);
+        bestellingPojo.setBestelDatum (sqlDatum);
+        bestellingPojo.setAccountKey (accountId);
         
-        BestellingDaoFactory.getBestellingDAO("MySQL").createBestelling(bestellingModel);
+        BestellingDaoFactory.getBestellingDAO("MySQL").createBestelling(bestellingPojo);
         
-        //assign bestelling to object besteling2 to get bestelId for BestelArtikel
-        BestellingPojo bestelling2 = new BestellingPojo ();
-        bestelling2 = BestellingDaoFactory.getBestellingDAO("MySQL").
+        BestellingPojo bestelling2 = BestellingDaoFactory.getBestellingDAO("MySQL").
                 getBestellingByKlantId(klantId);
         
-        BestelArtikelPojo bestelregel = new BestelArtikelPojo (artikelId, bestelling2.getId(), aantal);
+        int bestelId = bestelling2.getId();//krijg niet de laatst ingevoerde idBestelling
+                                           //maar de eerst ingevoerde die hoort bij opgegeven klantId
+        
+        BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
         
         BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel);
         bestellingView.showNewBestellingSucces();
@@ -82,5 +89,25 @@ public class BestellingController {
             bestellingView.showNewBestellingFailure ();
             makeNewOrder();
         }
+    }
+    
+    public void modifyOrder () {
+        
+        bestellingView.startModifyOrder ();
+        int keuze = Integer.parseInt(input.nextLine());
+        
+        switch(keuze){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                modifyOrder(); //wil hier andere menu-optie, hoofdmenu bestelling (nieuwe, wijzig, verwijder)
+                break;
+            default:
+                modifyOrder();
+                break;
+        }
+        
     }
 }
