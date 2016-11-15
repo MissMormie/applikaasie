@@ -63,9 +63,39 @@ public class MySQLConnection {
         }
         return true;             
     }
+
+    /**
+     * 
+     * @param sql String
+     * @return int 0 means no record was saved
+     */
+    public int createAndReturnID(String sql) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql, 
+                Statement.RETURN_GENERATED_KEYS);
+
+            int affectedRows = statement.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Creating adres failed, no rows affected.");
+            }
+       
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+         } catch (Exception ex) {
+            Logger.getLogger(MySQLConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
         
     public void close() {
-        try {   
+        try {
             connection.close();
         } catch (SQLException ex) {
             System.out.print(ex);
