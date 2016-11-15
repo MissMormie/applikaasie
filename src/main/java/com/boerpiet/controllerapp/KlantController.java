@@ -7,6 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
+import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.viewapp.KlantView;
 import java.util.Scanner;
 
@@ -15,22 +16,57 @@ import java.util.Scanner;
  * @author Sonja
  */
 public class KlantController {
-    private final KlantModel klantModel;
-    private final KlantView klantView;
+    // ------------ VARIABLES ---------------------------------
+
+    private final KlantModel klantModel; // MVC model
+    private final KlantView klantView;   // MVC view
     private final Scanner input = new Scanner(System.in);
 
+    // ------------ CONSTRUCTORS ---------------------------------
 
+    /**
+     * Initiates the KlantController as part of the MVC design pattern
+     * 
+     * @param klantModel the {@link KlantModel}
+     * @param klantView  the {@link KlantView} 
+     */
     public KlantController(KlantModel klantModel, KlantView klantView) {
         this.klantModel = klantModel;
         this.klantView = klantView;
     }
 
+    // ------------ PUBLIC FUNCTIONS ---------------------------------
+
+    /**
+     * Starts sequence of methods that ends in generating a new Klant
+     * unless the user aborts the creation.
+     */
     public void newKlant() {
         klantView.showNewKlant();
         newKlantListener();
     }
+
+    /**
+     * Starts sequence of methods that ends in deleteing the klant in klantModel
+     * unless the user aborts the deletion.
+     */    
+    public void deleteKlant() {
+        klantView.showDeleteSure(klantModel);
+        deleteSureListener();
+    }
+
+    /**
+     * Starts sequence of methods that allows the user to modify attributes of 
+     * the klant in klantModel, unless the user aborts.
+     */
+    public void modifyKlant() {
+        klantView.showModifyKlant(klantModel);
+        modifyKlantListener();
+    }
     
-    // New klantListener cycles
+    // ------------ PRIVATE FUNCTIONS ---------------------------------
+
+    /** New klantListener cycles through the various attributes of a new klant */
     private void newKlantListener() {
         String voornaam = input.nextLine();
         klantView.showAchternaam();
@@ -43,8 +79,12 @@ public class KlantController {
         String emailadres = input.nextLine();
         
         sameAdres();
+        
+        KlantPojo klantPojo = new KlantPojo(voornaam, achternaam, tussenvoegsel, 
+                                        telefoonnummer, emailadres, false);
+        klantModel.setKlantPojo(klantPojo);
          
-        if(klantModel.createKlant(voornaam, achternaam, tussenvoegsel, telefoonnummer, emailadres)) 
+        if(klantModel.createKlant()) 
             klantView.showCreationSuccess();
         else {
             klantView.showCreationFail();
@@ -52,7 +92,12 @@ public class KlantController {
         }
     }
     
-    public void sameAdres() {
+    /**
+    * Asks if user wants to use the same address voor all addresstypes
+    * Calls single adresListener if same adress is to be used.
+    * Calls adresListener 3 times in succession for different addresses.
+    */
+    private void sameAdres() {
         klantView.showAskSameAdres();
         String sameAdres = input.nextLine();
         if(sameAdres.equalsIgnoreCase("j")) {
@@ -60,15 +105,16 @@ public class KlantController {
             adresListener("Same");
         } else if (sameAdres.equalsIgnoreCase("n")) {
             klantView.showPostAdres();
-            adresListener("PostAdres");
+            adresListener("Postadres");
             klantView.showFactuurAdres();
-            adresListener("FactuurAdres");
+            adresListener("Factuuradres");
             klantView.showBezorgAdres();
-            adresListener("BezorgAdres");
+            adresListener("Bezorgadres");
         } else {
             sameAdres();
         }
     }
+    
     
     private void adresListener(String type) {
         klantView.showStraat();
@@ -78,17 +124,11 @@ public class KlantController {
         klantView.showToevoeging();
         String toevoeging = input.nextLine();
         klantView.showWoonplaats();
-        String woonplaats = input.nextLine();      
+        String woonplaats = input.nextLine(); 
         
-        AdresPojo adres = new AdresPojo(0, straat, huisnummer, toevoeging, 
-                                        woonplaats, false, type);
+        AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
+                straat, huisnummer, toevoeging, woonplaats, false, type);
         klantModel.setAdres(adres);
-    }
-    
-
-    public void modifyKlant() {
-        klantView.showModifyKlant(klantModel);
-        modifyKlantListener();
     }
 
     private void modifyKlantListener() {
@@ -118,12 +158,38 @@ public class KlantController {
                 klantView.showModifyEmailadres(klantModel);
                 modifyEmailadresListener();
                 break;
+            case 6: 
+                klantView.showPostAdres();
+                modifyAdresListener("Postadres");
+                break;
+            case 7: 
+                klantView.showBezorgAdres();
+                modifyAdresListener("Bezorgadres");
+                break;
+            case 8: 
+                klantView.showFactuurAdres();
+                modifyAdresListener("Factuuradres");
+                break;
+            case 9: 
+                klantView.showSameAdres();
+                modifyAdresListener("Same");
+                break;
+                
             default:
-                modifyKlant();
-                        
+                modifyKlant();               
+        }
     }
-}
 
+    private void modifyAdresListener(String type) {
+        adresListener(type);
+        if(klantModel.updateAdres(type)) 
+            klantView.showUpdateSuccess(klantModel); 
+        else {
+            klantView.showUpdateFailed(klantModel);
+            modifyAdresListener(type);
+        }
+    }
+    
     private void modifyVoornaamListener() {
         String in = input.nextLine();
 
@@ -209,20 +275,17 @@ public class KlantController {
         }
     }
     
-    public void deleteKlant() {
-        klantView.showDeleteSure(klantModel);
-        deleteSureListener();
-    }
-    
     private void deleteSureListener() {
         String in = input.nextLine();
 
         if (in.equalsIgnoreCase("n")) 
             return;
         if (in.equalsIgnoreCase("j")) {
-            klantModel.delete();
-
-            // TODO delete klant en adressen etc.
+            if(klantModel.delete())
+                klantView.showDeleteSuccess();
+            else {
+                klantView.showDeleteFailed();
+            }         
         } else {
             deleteKlant();
         }

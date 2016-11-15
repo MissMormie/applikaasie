@@ -10,6 +10,8 @@ package com.boerpiet.domeinapp;
  * @author Sonja
  */
 public class KlantPojo {
+    
+    // ------------ VARIABLES ---------------------------------
     private int id = 0;
     private String voornaam;
     private String achternaam;
@@ -17,19 +19,24 @@ public class KlantPojo {
     private String telefoonnummer;
     private String emailadres;
     private boolean deleted = false;
+
+    // ------------ CONSTRUCTORS ---------------------------------
     
-    public KlantPojo() {
-        
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    /**
+     * Initates empty KlantPojo
+     */
+    public KlantPojo() { }
+    
+    /**
+     * Initiates KlantPojo with:
+     * 
+     * @param voornaam String
+     * @param achternaam String
+     * @param tussenvoegsel String
+     * @param telefoonnummer String
+     * @param emailadres String
+     * @param deleted Boolean
+     */
     public KlantPojo(String voornaam, String achternaam, String tussenvoegsel, String telefoonnummer, String emailadres, boolean deleted) {
         this.voornaam = voornaam;
         this.achternaam = achternaam;
@@ -37,6 +44,16 @@ public class KlantPojo {
         this.telefoonnummer = telefoonnummer;
         this.emailadres = emailadres;
         this.deleted = deleted;
+    }    
+
+    // ------------ Getters and Setters ---------------------------------
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getVoornaam() {

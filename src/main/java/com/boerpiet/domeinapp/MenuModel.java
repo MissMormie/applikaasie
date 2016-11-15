@@ -18,8 +18,12 @@ import com.boerpiet.viewapp.KlantView;
  */
 public class MenuModel {
 
+    // ------------ VARIABLES ---------------------------------
+
     int currentMenu = -1;
 
+    // ------------ Getters and Setters ---------------------------------
+       
     public int getCurrentMenu() {
         return currentMenu;
     }
@@ -27,6 +31,8 @@ public class MenuModel {
     public void setCurrentMenu(int currentMenu) {
         this.currentMenu = currentMenu;
     }
+    
+    // ------------ PUBLIC FUNCTIONS ---------------------------------
 
     public void changeCurrentMenu(int changeMenu) {
         switch(currentMenu) {
@@ -48,6 +54,8 @@ public class MenuModel {
                 currentMenu = changeMenu;
         }
     }
+    
+    // ------------ PRIVATE FUNCTIONS ---------------------------------    
 
     private void pickFromCheeseMenu(int changeMenu) {
         switch (changeMenu) {

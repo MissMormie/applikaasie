@@ -13,6 +13,8 @@ import java.util.logging.Logger;
  * @author Sonja
  */
 public class AdresPojo implements Cloneable {
+
+    // ------------ VARIABLES ---------------------------------
     private int idAdres;
     private String straat;
     private int huisnummer;
@@ -21,7 +23,17 @@ public class AdresPojo implements Cloneable {
     private boolean deleted;
     private String adresType; // Deze staat niet direct in deze database tabel maar hoort hier wel bij. Eigenlijk zou adres_type tabel bij adres moeten en niet bij klant heeft adres omdat het iets zegt over het type adres niet over de relatie met klant. 
 
-
+    // ------------ CONSTRUCTORS ---------------------------------
+    /**
+     * Initiates AdresPojo with:
+     * @param idAdres int
+     * @param straat String
+     * @param huisnummer int
+     * @param toevoeging String
+     * @param woonplaats String
+     * @param deleted boolean
+     * @param adresType enum 
+     */
     public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String woonplaats, boolean deleted, String adresType) {
         this.idAdres = idAdres;
         this.straat = straat;
@@ -31,10 +43,8 @@ public class AdresPojo implements Cloneable {
         this.deleted = deleted;
         this.adresType = adresType;
     }
-
-    public AdresPojo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
+    // ------------ Getters and Setters ---------------------------------
 
     public int getIdAdres() {
         return idAdres;
@@ -92,6 +102,13 @@ public class AdresPojo implements Cloneable {
         this.adresType = adresType;
     }
     
+    
+    // ------------ PUBLIC FUNCTIONS ---------------------------------
+
+    /**
+     * Clones the currentAdresPojo and returns a new instance
+     * @return AdresPojo 
+     */
     @Override
     public AdresPojo clone() {
         try {
