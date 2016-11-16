@@ -16,9 +16,13 @@ import com.boerpiet.viewapp.MenuView;
  */
 public class MenuController {
 
+    // ------------ VARIABLES ---------------------------------
+
     MenuModel menuModel;
     MenuView menuView;
     Scanner input = new Scanner(System.in);
+
+    // ------------ CONSTRUCTORS ---------------------------------
 
     public MenuController(MenuModel menuPojo, MenuView menuView) {
         this.menuModel = menuPojo;
@@ -26,6 +30,8 @@ public class MenuController {
         showMenu();
     }
 
+    // ------------ PRIVATE FUNCTIONS ---------------------------------
+    
     private void showMenu() {
         menuView.showCurrentMenu(menuModel.getCurrentMenu());
         menuModel.changeCurrentMenu(listenForMenuInput());

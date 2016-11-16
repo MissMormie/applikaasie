@@ -5,6 +5,7 @@
  */
 package com.boerpiet.viewapp;
 
+import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantPojo;
 
@@ -41,7 +42,7 @@ public class KlantView {
     }
     
     public void showAskSameAdres() {
-        System.out.println("Zijn het post, factuur en bezorgadres gelijk?");
+        System.out.println("Zijn het post, factuur en bezorgadres gelijk? J/N");
     }
 
     public void showCreationFail() {
@@ -65,6 +66,10 @@ public class KlantView {
                          + "3 Achternaam\n"
                          + "4 Telefoonnummer\n"
                          + "5 Emailadres\n"
+                         + "6 PostAdres\n"
+                         + "7 BezorgAdres\n"
+                         + "8 FactuurAdres\n"
+                         + "9 Alle adressen\n"
                          + "Of type N om terug te gaan naar het menu.");
     }
 
@@ -133,6 +138,14 @@ public class KlantView {
         System.out.println(klant.getKlantPojo().getId() + " " + klant.getKlantPojo().getVoornaam() + " " +  
                 klant.getKlantPojo().getTussenvoegsel() + " " + klant.getKlantPojo().getAchternaam() + " " +
                 klant.getKlantPojo().getTelefoonnummer() + " " + klant.getKlantPojo().getEmailadres());
+        showAdres(klant.getBezorgAdresPojo());
+        showAdres(klant.getFactuurAdresPojo());
+        showAdres(klant.getPostAdresPojo());
+    }
+    
+    private void showAdres(AdresPojo adres) {
+        System.out.println( adres.getAdresType() + ": " + adres.getStraat() + " " + adres.getHuisnummer() +
+                            adres.getToevoeging() + " " + adres.getWoonplaats());
     }
     
     public void showPostAdres() {
@@ -170,6 +183,15 @@ public class KlantView {
     public void showWoonplaats() {
         System.out.println("Woonplaats");
     }
-    
-    
+
+    public void showDeleteSuccess() {
+        showDivider();
+        System.out.println("Klant succesvol verwijderd.");
+    }
+
+    public void showDeleteFailed() {
+        showDivider();
+        System.out.println("Klant verwijderen mislukt, probeer het nogmaal.\n "
+                + "Blijft het probleem zich voordoen neem contact op met IT.");
+    }
 }

@@ -5,6 +5,7 @@
  */
 package com.boerpiet.cheeseapp.klant;
 
+import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import java.util.ArrayList;
@@ -44,5 +45,10 @@ public class FirebirdKlantDAO extends KlantDAO {
     public boolean deleteKlant(KlantModel klant) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public boolean updateAdres(AdresPojo adres) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
