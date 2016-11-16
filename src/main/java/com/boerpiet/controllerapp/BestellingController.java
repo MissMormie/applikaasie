@@ -73,15 +73,9 @@ public class BestellingController {
         bestellingPojo.setBestelDatum (sqlDatum);
         bestellingPojo.setAccountKey (accountId);
         
-        BestellingDaoFactory.getBestellingDAO("MySQL").createBestelling(bestellingPojo);
+        int id = BestellingDaoFactory.getBestellingDAO("MySQL").createBestellingWithReturnId(bestellingPojo);
         
-        BestellingPojo bestelling2 = BestellingDaoFactory.getBestellingDAO("MySQL").
-                getBestellingByKlantId(klantId);
-        
-        int bestelId = bestelling2.getId();//krijg niet de laatst ingevoerde idBestelling
-                                           //maar de eerst ingevoerde die hoort bij opgegeven klantId
-        
-        BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
+        BestelArtikelPojo bestelregel = new BestelArtikelPojo (id, artikelId, aantal);
         
         BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel);
         bestellingView.showNewBestellingSucces();
@@ -91,44 +85,6 @@ public class BestellingController {
         }
     }
     
-    public void modifyOrder () {
-        
-        bestellingView.startModifyOrder ();
-        
-        int keuze = Integer.parseInt(input.nextLine());
-        
-        switch(keuze){
-            case 1:
-                System.out.println("Geef klantId:");
-                int klantId = Integer.parseInt (input.nextLine());
-                ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
-                ArtikelView artList = new ArtikelView();
-                artList.showArtikelList(aList);
-                
-                BestellingPojo bestelling2 = BestellingDaoFactory.getBestellingDAO("MySQL").
-                getBestellingByKlantId(klantId);
-                int bestelId = bestelling2.getId();
-                
-                BestelArtikelPojo ba1 = 
-                        BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").getBestelArtikelByBestelId(bestelId);
-                System.out.println("Bestelregelid           aantal\n"+
-                                    ba1.getId() +"         " +ba1.getAantal());//moet hier eerst waarden toekennen
-                //laat twee lijsten zien, besteld en artikelen
-                //input keuze voor wijziging artikelid
-                //wijzigen bestelArtikel
-                //vragen of aantal ook nog veranderd moet worden, zo ja wijzigen
-                //zo nee terug naar hoofdmenu
-                break;
-            case 2://methode:
-                //laat twee lijsten zien, besteld aantal +id, en naam artikel +id
-                
-                break;
-            case 3:
-                modifyOrder(); //wil hier andere menu-optie, hoofdmenu bestelling (nieuwe, wijzig, verwijder)
-                break;
-            default:
-                modifyOrder();
-                break;
-        }
-    }
 }
+    
+    
