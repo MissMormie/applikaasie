@@ -45,7 +45,7 @@ public class BestellingController {
     private void makeNewOrder () {
         String begin = input.nextLine();
         
-        if (begin.compareToIgnoreCase("N")==0) {
+        if (begin.equalsIgnoreCase("N")) {
             return;
         }
         
@@ -73,15 +73,9 @@ public class BestellingController {
         bestellingPojo.setBestelDatum (sqlDatum);
         bestellingPojo.setAccountKey (accountId);
         
-        BestellingDaoFactory.getBestellingDAO("MySQL").createBestelling(bestellingPojo);
+        int id = BestellingDaoFactory.getBestellingDAO("MySQL").createBestellingWithReturnId(bestellingPojo);
         
-        BestellingPojo bestelling2 = BestellingDaoFactory.getBestellingDAO("MySQL").
-                getBestellingByKlantId(klantId);
-        
-        int bestelId = bestelling2.getId();//krijg niet de laatst ingevoerde idBestelling
-                                           //maar de eerst ingevoerde die hoort bij opgegeven klantId
-        
-        BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
+        BestelArtikelPojo bestelregel = new BestelArtikelPojo (id, artikelId, aantal);
         
         BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel);
         bestellingView.showNewBestellingSucces();
@@ -91,23 +85,6 @@ public class BestellingController {
         }
     }
     
-    public void modifyOrder () {
-        
-        bestellingView.startModifyOrder ();
-        int keuze = Integer.parseInt(input.nextLine());
-        
-        switch(keuze){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                modifyOrder(); //wil hier andere menu-optie, hoofdmenu bestelling (nieuwe, wijzig, verwijder)
-                break;
-            default:
-                modifyOrder();
-                break;
-        }
-        
-    }
 }
+    
+    
