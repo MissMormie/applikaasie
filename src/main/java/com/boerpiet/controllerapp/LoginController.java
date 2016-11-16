@@ -30,7 +30,7 @@ public class LoginController {
         loginView.showLogin();
         if (accountModel.validateLogin(listenForLogin())) {
             loginView.showLoginSuccess();
-            new MenuController(new MenuModel(), new MenuView());
+            new MenuController(new MenuModel(accountModel.getLogin()), new MenuView());
         } else {
             loginView.showLoginFailed();
             login();
