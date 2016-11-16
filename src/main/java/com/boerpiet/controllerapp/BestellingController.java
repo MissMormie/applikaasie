@@ -45,7 +45,7 @@ public class BestellingController {
     private void makeNewOrder () {
         String begin = input.nextLine();
         
-        if (begin.compareToIgnoreCase("N")==0) {
+        if (begin.equalsIgnoreCase("N")) {
             return;
         }
         
@@ -94,12 +94,34 @@ public class BestellingController {
     public void modifyOrder () {
         
         bestellingView.startModifyOrder ();
+        
         int keuze = Integer.parseInt(input.nextLine());
         
         switch(keuze){
             case 1:
+                System.out.println("Geef klantId:");
+                int klantId = Integer.parseInt (input.nextLine());
+                ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
+                ArtikelView artList = new ArtikelView();
+                artList.showArtikelList(aList);
+                
+                BestellingPojo bestelling2 = BestellingDaoFactory.getBestellingDAO("MySQL").
+                getBestellingByKlantId(klantId);
+                int bestelId = bestelling2.getId();
+                
+                BestelArtikelPojo ba1 = 
+                        BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").getBestelArtikelByBestelId(bestelId);
+                System.out.println("Bestelregelid           aantal\n"+
+                                    ba1.getId() +"         " +ba1.getAantal());//moet hier eerst waarden toekennen
+                //laat twee lijsten zien, besteld en artikelen
+                //input keuze voor wijziging artikelid
+                //wijzigen bestelArtikel
+                //vragen of aantal ook nog veranderd moet worden, zo ja wijzigen
+                //zo nee terug naar hoofdmenu
                 break;
-            case 2:
+            case 2://methode:
+                //laat twee lijsten zien, besteld aantal +id, en naam artikel +id
+                
                 break;
             case 3:
                 modifyOrder(); //wil hier andere menu-optie, hoofdmenu bestelling (nieuwe, wijzig, verwijder)
@@ -108,6 +130,5 @@ public class BestellingController {
                 modifyOrder();
                 break;
         }
-        
     }
 }
