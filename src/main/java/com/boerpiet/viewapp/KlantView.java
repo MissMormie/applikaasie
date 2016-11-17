@@ -129,7 +129,7 @@ public class KlantView {
     public void showDeleteSure(KlantModel klant) {
         showDivider();
         showKlant(klant);
-        System.out.println("Weet je zeker dat je deze klant wilt verwijderen?\n"
+        System.out.println("\nWeet je zeker dat je deze klant wilt verwijderen?\n"
                 + "Type J voor ja of N voor nee.");
     }
     
@@ -144,6 +144,7 @@ public class KlantView {
     }
     
     private void showAdres(AdresPojo adres) {
+        if(adres != null)
         System.out.println( adres.getAdresType() + ": " + adres.getStraat() + " " + adres.getHuisnummer() +
                             adres.getToevoeging() + " " + adres.getWoonplaats());
     }

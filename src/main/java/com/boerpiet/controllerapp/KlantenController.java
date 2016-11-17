@@ -37,6 +37,12 @@ public class KlantenController {
         klantView.showSelectKlantToDelete();
         selectKlantToDeleteListener();
     }
+    
+    public KlantModel selectKlant() {
+        klantView.showKlantList(klantModel.fetchKlantList());
+        klantView.showSelectKlant();        
+        return selectKlantListener();
+    }
 
     private void selectKlantToModifyListener() {
         String in = input.nextLine();
@@ -45,13 +51,25 @@ public class KlantenController {
             return;
         int id = Integer.parseInt(in);
         // validate id
-        KlantModel klant = klantModel.getSingleKlantById(id);
-        if (klant == null)
+        KlantModel klant = klantModel.getKlantById(id);
+        if (klant == null) {
+            klantView.showSelectKlantfailed();
             selectKlantToModify();
+        }
         else {
             KlantController skc = new KlantController(klant, new KlantView());
             skc.modifyKlant();        
         }
+    }
+    
+    private KlantModel selectKlantListener() {
+        String in = input.nextLine();
+        if (in.equalsIgnoreCase("n")) 
+            return null;
+        int id = Integer.parseInt(in);
+
+        KlantModel klant = klantModel.getKlantById(id);
+        return klant;
     }
 
     private void selectKlantToDeleteListener() {
@@ -60,7 +78,7 @@ public class KlantenController {
             return;
         int id = Integer.parseInt(in);
 
-        KlantModel klant = klantModel.getSingleKlantById(id);
+        KlantModel klant = klantModel.getKlantById(id);
         if (klant == null) {
             selectKlantToDelete();
         } else {

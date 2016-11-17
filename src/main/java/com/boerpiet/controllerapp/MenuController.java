@@ -27,45 +27,27 @@ public class MenuController {
     public MenuController(MenuModel menuPojo, MenuView menuView) {
         this.menuModel = menuPojo;
         this.menuView = menuView;
-        // showMenu();
-        
-        showXmlMenu();
     }
 
     // ------------ PRIVATE FUNCTIONS ---------------------------------
     
-    private void showXmlMenu() {
+    public void showMenu() {
         menuView.showMenu(menuModel.getMenuNode());
         listenForXMLMenuInput();
     }
-    /*
-    private void showMenu() {
-        menuView.showCurrentMenu(menuModel.getCurrentMenu());
-        menuModel.changeCurrentMenu(listenForMenuInput());
-        showMenu();
-    }
-*/
+
     private void listenForXMLMenuInput() {
-        int menuChoice;
+        String menuChoice = input.nextLine();
+        int menu;
         try {
-            menuChoice = input.nextInt();
+            menu = Integer.parseInt(menuChoice);
         } catch (Exception ex) {
+            showMenu();
             return;
         }
-        menuModel.chooseMenuItem(menuChoice);
+        
+        menuModel.chooseMenuItem(menu);
         if (menuModel.isLoggedIn() == true)
-            showXmlMenu();
+            showMenu();
     }
-    /*
-    // todo catch exception for wrong input
-    private int listenForMenuInput() {
-        int menuChoice;
-        try {
-            menuChoice = input.nextInt();
-        } catch (Exception ex) {
-            menuChoice = menuModel.getCurrentMenu();
-        }
-        return menuChoice;
-    }
-*/
 }

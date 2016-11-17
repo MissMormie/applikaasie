@@ -7,7 +7,9 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.domeinapp.AccountPojo;
+import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.viewapp.AccountView;
+import com.boerpiet.viewapp.KlantenView;
 import java.util.Scanner;
 
 /**
@@ -24,13 +26,23 @@ public class AccountController {
         this.accountView = accountView;
     }
     
-    public void newAccount() {
+    public void newKlantAccount() {
+        KlantenController kc = new KlantenController(new KlantenModel(), new KlantenView());
+        int id = kc.selectKlant().getKlantPojo().getId();
+        newAccount(id);
+    }
+    
+    public void newMedewerkerAccount() {
+        newAccount(0);
+    }
+    
+    private void newAccount(int id) {
         accountView.showNewAccount();
-        newAccountListener();
+        newAccountListener(id);
     }
     
     // TODO write comments
-    private void newAccountListener() {
+    private void newAccountListener(int klantId) {
         String usernamePasswordType = "";
         usernamePasswordType = input.nextLine();
 
@@ -40,19 +52,19 @@ public class AccountController {
 
         // Controleer of er minimaal 3 strings zijn
         String[] parts = usernamePasswordType.split(" ");
-        if (parts.length < 3) {
+        if (parts.length < 2) {
             accountView.showWrongInput();
-            newAccount();
+            newAccount(klantId);
             return;
         }
 
         // Make new account met parts[0] username, parts[1] wachtwoord, parts[2] klantID
-        if(accountModel.createAccount(parts[0], parts[1], Integer.parseInt(parts[2]))) {
+        if(accountModel.createAccount(parts[0], parts[1], klantId)) {
             accountView.showNewAccountSuccess();
         } else {
             accountView.showNewAccountFailed();
-            newAccount();
-        }         
+            newAccount(klantId);
+        }
     }
 
     // TODO finish selectAccountToModify
