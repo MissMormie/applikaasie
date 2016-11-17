@@ -6,6 +6,8 @@
 package com.boerpiet.cheeseapp.BestelArtikel;
 
 import com.boerpiet.domeinapp.BestelArtikelPojo;
+import com.boerpiet.domeinapp.BestellingModel;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,7 +21,9 @@ public abstract class SuperBestelArtikelDao {
     
     public abstract BestelArtikelPojo getBestelArtikelByBestelId (int bestelId);
     
-    public abstract boolean updateBestelArtikel (BestelArtikelPojo bArtikel);
+    public abstract ArrayList <BestelArtikelPojo> getBestelLijstByBestelId (int bestelId);
+    
+    public abstract boolean updateBestelArtikel (BestelArtikelPojo bArtikel, int regelId);
 
     public abstract boolean deleteBestelArtikel (BestelArtikelPojo bArtikel);
 

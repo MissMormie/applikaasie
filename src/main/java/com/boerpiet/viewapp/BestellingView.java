@@ -5,6 +5,13 @@
  */
 package com.boerpiet.viewapp;
 
+import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
+import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.domeinapp.BestelArtikelPojo;
+import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
+import java.util.ArrayList;
+
 /**
  *
  * @author Peaq
@@ -27,8 +34,69 @@ public class BestellingView {
     public void startModifyOrder() {
         System.out.println("Je bent nu in het bestelling-wijzigingsmenu.");
         System.out.println("Wat wil je doen:\n"
-                +"1. Soort bestelde kaas wijzigen \n"
-                +"2. Aantal bestelde kazen wijzigen \n"
+                +"1. Artikelen toevoegen aan bestelling \n"
+                +"2. Artikelen wijzigen in bestelling \n"
                 +"3. Terug naar het menu");
+        //+ status bestelling veranderen (afgehandeld op true zetten)   later toevoegen?
+        
+    }
+    public void showBestellingListByKlantId (ArrayList<BestellingPojo>bestelList) {
+        showDivider();
+        showBestelListHeader();
+        for (BestellingPojo bp : bestelList) {
+            showBestelListItem(bp);
+        }
+        System.out.println();
+    }
+    
+    public void showDivider() {
+        System.out.println("\n--------------------------------------------------------");        
+    }
+    
+    private void showBestelListHeader() {
+        System.out.printf("%-3s %-15s \n",
+                "id",
+                "besteldatum");
+    }
+
+    private void showBestelListItem(BestellingPojo bp) {
+        System.out.printf("%-3s %-15s \n", 
+                bp.getId(),
+                bp.getBestelDatum());
+    }
+    public void showAllOrdersByKlantId (int klantId) {
+        ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
+        BestellingView bvList = new BestellingView();
+        bvList.showBestellingListByKlantId(bList);
+    }
+    
+    public void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
+        showDivider();
+        showBestelLijstByBestelIdHeader ();
+        for (BestelArtikelPojo ba : bestelList) {
+            showBestelLijstByBestelIdItem (ba);
+        }
+        System.out.println ();
+        }
+
+    private void showBestelLijstByBestelIdHeader() {
+        System.out.printf("%-15s %-15s %-13s \n",
+                        "Bestelregelid",
+                        "Artikelid",
+                        "Aantal besteld");                
+    }
+
+    private void showBestelLijstByBestelIdItem(BestelArtikelPojo ba) {
+        System.out.printf("%-15s %-15s %-13s \n",
+                ba.getId(),
+                ba.getArtikelId(),
+                ba.getAantal());
+    }
+    
+    public void showAllBestelRegelsByBestelId (int bestelId) {
+        ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId(bestelId);
+        BestellingView bvList = new BestellingView();
+        bvList.showBestelLijstByBestelId(baList);
     }
 }

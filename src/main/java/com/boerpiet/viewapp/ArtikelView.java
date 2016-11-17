@@ -5,6 +5,7 @@
  */
 package com.boerpiet.viewapp;
 
+import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import java.util.ArrayList;
@@ -25,7 +26,11 @@ public class ArtikelView {
     }
 
     private void showArtikelListHeader() {
-         System.out.println("id  naam             prijs  voorraad");
+        System.out.printf("%-3s %-15s %-10s %s \n",
+                "id",
+                "naam",
+                "prijs",
+                "voorraad");
     }
     
     private void showArtikelListItem(ArtikelPojo ap) {
@@ -38,5 +43,10 @@ public class ArtikelView {
     
     public void showDivider() {
         System.out.println("\n-----------------------------------------------");        
+    }
+    public void showAllArticles () {
+        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
+        ArtikelView artList = new ArtikelView();
+        artList.showArtikelList(aList);
     }
 }

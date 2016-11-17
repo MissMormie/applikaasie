@@ -6,6 +6,8 @@
 package com.boerpiet.cheeseapp.BestelArtikel;
 
 import com.boerpiet.domeinapp.BestelArtikelPojo;
+import com.boerpiet.domeinapp.BestellingModel;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,9 +29,14 @@ public class FirebirdBestelArtikelDao extends SuperBestelArtikelDao {
     public BestelArtikelPojo getBestelArtikelByBestelId (int bestelId) {
         throw new UnsupportedOperationException ("Not supported yet.");
     }
+    
+    @Override
+    public ArrayList <BestelArtikelPojo> getBestelLijstByBestelId (int bestelId) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.  
+    }
 
     @Override
-    public boolean updateBestelArtikel(BestelArtikelPojo bArtikel) {
+    public boolean updateBestelArtikel(BestelArtikelPojo bArtikel, int regelId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

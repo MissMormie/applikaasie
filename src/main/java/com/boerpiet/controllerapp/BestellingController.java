@@ -25,16 +25,18 @@ import java.util.Scanner;
  */
 public class BestellingController {
     private final Scanner input = new Scanner (System.in);
-    private final BestellingView bestellingView;
     private final BestellingPojo bestellingPojo;
+    private final BestellingView bestellingView;
     private final BestelArtikelPojo bestelArtikelPojo;
+    private final ArtikelView artikelView;
     private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
     public BestellingController (BestellingPojo bestellingPojo, BestellingView bestellingView,
-            BestelArtikelPojo bestelArtikelPojo) {
+            BestelArtikelPojo bestelArtikelPojo, ArtikelView artikelView) {
         this.bestellingPojo = bestellingPojo;
         this.bestellingView = bestellingView;
         this.bestelArtikelPojo = bestelArtikelPojo;
+        this.artikelView = artikelView;
     }
         
     public void newOrderInput () {
@@ -59,9 +61,8 @@ public class BestellingController {
         System.out.println("Geef accountid:");
         int accountId = Integer.parseInt(input.nextLine());
         
-        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
-        ArtikelView artList = new ArtikelView();
-        artList.showArtikelList(aList);
+        artikelView.showAllArticles();
+        
         System.out.println("Welke kaas wil je bestellen? Voer id in:");
         int artikelId = Integer.parseInt(input.nextLine());
         
@@ -84,7 +85,88 @@ public class BestellingController {
             makeNewOrder();
         }
     }
+    public void modifyOrder () {
+        
+        bestellingView.startModifyOrder ();
+        
+        int keuze = Integer.parseInt(input.nextLine());
+        
+        switch(keuze){
+            case 1: addArticleToOrder();
+                    modifyOrder();
+                break;
+            case 2: modifyArticleFromOrder();
+                    modifyOrder();
+                break;
+            case 3:
+                return;
+                //of logout
+            default:
+                modifyOrder();
+                break;
+        }        
+    }
     
+    public void addArticleToOrder () {
+        System.out.println("Geef klantid:");
+        int klantId = Integer.parseInt(input.nextLine());
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef bestelid waar je artikelen aan wilt toe voegen:");
+        int bestelId = Integer.parseInt(input.nextLine());
+        artikelView.showAllArticles();
+        System.out.println("Welk artikel wil je toevoegen? Geef artikelid:");
+        int artikelId = Integer.parseInt(input.nextLine());
+        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
+        int aantal = Integer.parseInt(input.nextLine());
+        
+        createArticleToAddToOrder (bestelId, artikelId, aantal);        
+    }
+    
+    public void createArticleToAddToOrder (int bestelId, int artikelId, int aantal) {
+        
+        BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
+        if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel)) {
+            System.out.println("Artikel is toegevoegd aan bestelling met id: "+bestelId);
+        }else {
+            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            addArticleToOrder();
+        }
+    }
+    
+    public void modifyArticleFromOrder () {
+        System.out.println("Geef klantid:");
+        int klantId = Integer.parseInt(input.nextLine());
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef bestelid waar je artikelen wilt wijzigen:");
+        int bestelId = Integer.parseInt(input.nextLine());
+        bestellingView.showAllBestelRegelsByBestelId(bestelId);
+        System.out.println("Geef bestelregelid voor wijziging:");
+        int regelId = Integer.parseInt(input.nextLine());
+        System.out.println("Geef artikelid voor wijziging:");
+        int artikelId = Integer.parseInt(input.nextLine());
+        artikelView.showAllArticles();
+        System.out.println("Geef artikelid om te bestellen:");
+        int modifiedArtikelId = Integer.parseInt(input.nextLine());
+        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
+        int aantal = Integer.parseInt(input.nextLine());
+        modifyArticle (regelId, modifiedArtikelId, aantal);
+        
+        System.out.println("Dit is de gewijzigde bestelling.");
+        bestellingView.showAllBestelRegelsByBestelId(bestelId);
+    }
+    
+    public void modifyArticle (int regelId, int artikelId, int aantal) {
+        BestelArtikelPojo ba = new BestelArtikelPojo ();
+        //ba.setId(regelId);
+        ba.setArtikelId(artikelId);
+        ba.setAantal(aantal);
+        if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").updateBestelArtikel(ba, regelId)) {
+            System.out.println("Bestelling is nu gewijzigd.");
+        } else {
+            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            modifyArticleFromOrder();
+        }        
+    }
 }
     
     

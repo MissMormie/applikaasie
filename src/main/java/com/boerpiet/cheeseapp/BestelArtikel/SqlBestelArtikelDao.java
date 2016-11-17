@@ -7,7 +7,10 @@ package com.boerpiet.cheeseapp.BestelArtikel;
 
 import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
+import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,16 +67,50 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
         }
         return ba;
     }
+    
+    @Override
+    public ArrayList <BestelArtikelPojo> getBestelLijstByBestelId (int bestelId) {
+        String sql = "SELECT BestelArtikel.idBestelArtikel, BestelArtikel.ArtikelId, BestelArtikel.Aantal "
+                + "FROM BestelArtikel "
+                + "INNER JOIN Artikel ON BestelArtikel.ArtikelId = Artikel.idArtikel "
+                + "WHERE BestelArtikel.Bezorgd = 0 AND BestelArtikel.BestellingId = "+ bestelId;
+                //+ "AND SELECT Artikel.Naam FROM Artikel "
+                //+ "INNER JOIN BestelArtikel ON Artikel.Id = BestelArtikel.ArtikelId "
+                //+ "WHERE BestelArtikel.Bezorgd = 0 AND BestelArtikel.BestellingId = "+ bestelId;
+        ResultSet result  = MySQLConnection.getMySQLConnection().read(sql);//sql syntax error
+        ArrayList <BestelArtikelPojo> list = new ArrayList<>();
+        if (result==null) {
+          System.out.println("Kan de gevraagde selectie niet vinden.");
+        }
+        try {
+            while (result.next()) {
+                BestelArtikelPojo ba = new BestelArtikelPojo();
+                fillModelBestelId (result, ba);
+                list.add(ba);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+    
+    private void fillModelBestelId (ResultSet rs, BestelArtikelPojo ba) throws SQLException {
+        //bm.getArtikelPojo().setNaam (rs.getString("Naam"));
+        ba.setId(rs.getInt("idBestelArtikel"));
+        ba.setArtikelId(rs.getInt("ArtikelId"));
+        ba.setAantal(rs.getInt("Aantal"));
+       // bm.getArtikelPojo().setNaam(rs.getString("Naam"));
+        
+    }
 
     @Override
-    public boolean updateBestelArtikel(BestelArtikelPojo bArtikel) {
-        String sql = "UPDATE BestelArtikel SET (BestellingId, ArtikelId, aantal)"
-                + " VALUES ("
-                        //+ "'" + bArtikel.getId () + "'"
-                        + "'" + bArtikel.getBestelId () + "',"
-                        + "'" + bArtikel.getArtikelId () + "',"
-                        + "'" + bArtikel.getAantal () + "');";
-                        //+ "'" + bArtikel.isDeleted () + "');";
+    public boolean updateBestelArtikel(BestelArtikelPojo bArtikel, int regelId) {
+                
+        String sql = "UPDATE BestelArtikel SET "
+                        + "ArtikelId = '" + bArtikel.getArtikelId() + "', "
+                        + "Aantal = '" + bArtikel.getAantal() + "'"
+                        + "WHERE idBestelArtikel = " + regelId;
+                        //+ "Bezorgd = '" +bArtikel.isBezorgd() + "';";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,7 +129,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
         }
         return true;
     }
-
+    
     @Override
     public boolean isValidLogin (BestelArtikelPojo bArtikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
