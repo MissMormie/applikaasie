@@ -7,6 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.*;
 import com.boerpiet.domeinapp.MenuModel;
+import com.boerpiet.domeinapp.Validator;
 import java.util.Scanner;
 import com.boerpiet.viewapp.MenuView;
 
@@ -37,17 +38,19 @@ public class MenuController {
     }
 
     private void listenForXMLMenuInput() {
-        String menuChoice = input.nextLine();
-        int menu;
-        try {
-            menu = Integer.parseInt(menuChoice);
-        } catch (Exception ex) {
-            showMenu();
-            return;
-        }
+        int menu = numberListener();
         
         menuModel.chooseMenuItem(menu);
         if (menuModel.isLoggedIn() == true)
             showMenu();
     }
+
+    private int numberListener() {
+        String number = input.nextLine();
+        if(Validator.isValidInt(number))
+            return Integer.parseInt(number);
+        
+        return numberListener();
+    }        
+    
 }

@@ -111,7 +111,7 @@ public class AccountPojo {
     
     
     // ------------------ Public functions -------------------------
-    
+
     // ------------------ Private functions -------------------------
     /** 
      * Hash function from: http://stackoverflow.com/questions/3103652/hash-string-via-sha-256-in-java

@@ -7,6 +7,8 @@ package com.boerpiet.domeinapp;
 
 import com.boerpiet.cheeseapp.account.AccountDAOFactory;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -15,6 +17,8 @@ import java.util.ArrayList;
  */
 public class AccountModel {
     private LoginManager loginManager;
+    private final Logger logger = LoggerFactory.getLogger(AccountModel.class);
+
 
     public LoginManager getLogin() {
         return loginManager;
@@ -29,6 +33,7 @@ public class AccountModel {
         AccountPojo login = new AccountPojo(parts[0], parts[1]);
         if(AccountDAOFactory.getAccountDAO().fillAccountPojoByUsernamePassword(login)) { 
             loginManager = new LoginManager(login);
+            logger.info("new login from user id:" + login.getKlantId() + " " + parts[0]);
             return true;
         }
         else
@@ -43,7 +48,11 @@ public class AccountModel {
             account.setAccountStatus("medewerker");
         else 
             account.setAccountStatus("klant");
-        return AccountDAOFactory.getAccountDAO("MySQL").createAccount(account);
+        if (AccountDAOFactory.getAccountDAO("MySQL").createAccount(account)) {
+            logger.info("new account created id: " + account.getKlantId() + account.getGebruikersnaam());
+            return true;
+        }
+        return false;
     }
     
     /**

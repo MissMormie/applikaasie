@@ -1,2 +1,4 @@
 /target/
 /src/main/java/com/boerpiet/mainTest.java
+/nbproject/
+debug.log

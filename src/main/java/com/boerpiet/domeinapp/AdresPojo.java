@@ -117,15 +117,18 @@ public class AdresPojo implements Cloneable {
     /**
      * Clones the currentAdresPojo and returns a new instance
      * @return AdresPojo 
+     * @throws java.lang.CloneNotSupportedException 
      */
-    @Override
-    public AdresPojo clone() {
-        try {
-            AdresPojo clone = (AdresPojo) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(AdresPojo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+    @Override 
+    public AdresPojo clone() throws CloneNotSupportedException{
+        AdresPojo clone = (AdresPojo) super.clone();
+        return clone;
     }
+
+    @Override
+    public String toString() {
+        return "AdresPojo{" + "idAdres=" + idAdres + ", straat=" + straat + ", huisnummer=" + huisnummer + ", toevoeging=" + toevoeging + ", woonplaats=" + woonplaats + ", deleted=" + deleted + ", adresType=" + adresType + '}';
+    }
+    
+    
 }

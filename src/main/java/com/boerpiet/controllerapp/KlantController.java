@@ -8,6 +8,7 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantPojo;
+import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.KlantView;
 import java.util.Scanner;
 
@@ -43,7 +44,28 @@ public class KlantController {
      */
     public void newKlant() {
         klantView.showNewKlant();
-        newKlantListener();
+        klantModel.getKlantPojo().setVoornaam(textListener());
+
+        klantView.showTussenvoegsel();
+        klantModel.getKlantPojo().setTussenvoegsel(textListener());
+        
+        klantView.showAchternaam();
+        klantModel.getKlantPojo().setAchternaam(textListener());
+        
+        klantView.showTelefoonnummer();
+        klantModel.getKlantPojo().setTelefoonnummer(phoneListener());
+
+        klantView.showEmailAdres();
+        klantModel.getKlantPojo().setEmailadres(emailListener());
+        
+        setAdresses();
+                 
+        if(klantModel.createKlant()) 
+            klantView.showCreationSuccess();
+        else {
+            klantView.showCreationFail();
+            newKlant();
+        }        
     }
 
     /**
@@ -66,65 +88,76 @@ public class KlantController {
     
     // ------------ PRIVATE FUNCTIONS ---------------------------------
 
-    /** New klantListener cycles through the various attributes of a new klant */
-    private void newKlantListener() {
+    private String textListener() {
         String voornaam = input.nextLine();
-        klantView.showAchternaam();
-        String achternaam = input.nextLine();
-        klantView.showTussenvoegsel();
-        String tussenvoegsel = input.nextLine();
+        if(voornaam.isEmpty())
+            return textListener();
+        return voornaam;
+    }    
+    
+    private int numberListener() {
+        String number = input.nextLine();
+        if(Validator.isValidInt(number))
+            return Integer.parseInt(number);
+        
+        klantView.showValidNumber();
+        return numberListener();
+    }    
+    
+    private String phoneListener() {
+        String phone = input.nextLine();
+        if(Validator.isValidPhonenumber(phone))
+            return phone;
+        
         klantView.showTelefoonnummer();
-        String telefoonnummer = input.nextLine();
-        klantView.showEmailAdres();
-        String emailadres = input.nextLine();
-        
-        sameAdres();
-        
-        KlantPojo klantPojo = new KlantPojo(voornaam, achternaam, tussenvoegsel, 
-                                        telefoonnummer, emailadres, false);
-        klantModel.setKlantPojo(klantPojo);
-         
-        if(klantModel.createKlant()) 
-            klantView.showCreationSuccess();
-        else {
-            klantView.showCreationFail();
-            newKlant();
-        }
+        return phoneListener();
     }
     
+    private String emailListener() {
+        String email = input.nextLine();
+        if (Validator.isValidEmailadres(email))
+            return email;
+        
+        klantView.showEmailAdres();
+        return emailListener();
+    }
+       
     /**
     * Asks if user wants to use the same address voor all addresstypes
-    * Calls single adresListener if same adress is to be used.
-    * Calls adresListener 3 times in succession for different addresses.
+ Calls single setAdres if same adress is to be used.
+    * Calls setAdres 3 times in succession for different addresses.
     */
-    private void sameAdres() {
+    private void setAdresses() {
         klantView.showAskSameAdres();
         String sameAdres = input.nextLine();
         if(sameAdres.equalsIgnoreCase("j")) {
             klantView.showSameAdres();
-            adresListener("Same");
+            setAdres("Same");
         } else if (sameAdres.equalsIgnoreCase("n")) {
             klantView.showPostAdres();
-            adresListener("Postadres");
+            setAdres("Postadres");
             klantView.showFactuurAdres();
-            adresListener("Factuuradres");
+            setAdres("Factuuradres");
             klantView.showBezorgAdres();
-            adresListener("Bezorgadres");
+            setAdres("Bezorgadres");
         } else {
-            sameAdres();
+            setAdresses();
         }
     }
+ 
     
-    
-    private void adresListener(String type) {
+    private void setAdres(String type) {
         klantView.showStraat();
-        String straat = input.nextLine();
+        String straat = textListener();
+
         klantView.showHuisnummer();
-        int huisnummer = Integer.parseInt(input.nextLine());
+        int huisnummer = numberListener();
+
         klantView.showToevoeging();
-        String toevoeging = input.nextLine();
+        String toevoeging = textListener();
+
         klantView.showWoonplaats();
-        String woonplaats = input.nextLine(); 
+        String woonplaats = textListener(); 
         
         if(type.equalsIgnoreCase("same")) {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
@@ -143,7 +176,8 @@ public class KlantController {
         if (in.equalsIgnoreCase("n")) 
             return;
         
-        int id = Integer.parseInt(in);
+        int id = numberListener();
+        
         switch(id) {
             case 1: // Voornaam
                 klantView.showModifyVoornaam(klantModel);
@@ -188,7 +222,7 @@ public class KlantController {
     }
 
     private void modifyAdresListener(String type) {
-        adresListener(type);
+        setAdres(type);
         if(klantModel.updateAdres(type)) 
             klantView.showUpdateSuccess(klantModel); 
         else {
@@ -256,7 +290,7 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateTelefoonnummer(in)) { 
+        if (Validator.isValidPhonenumber(in) && klantModel.updateTelefoonnummer(in)) { 
             klantView.showUpdateSuccess(klantModel);
         } else {
             klantView.showUpdateFailed(klantModel);
@@ -273,7 +307,7 @@ public class KlantController {
             return;
         
         //  Check if update username successful
-        if (klantModel.updateEmailadres(in)) { 
+        if (Validator.isValidEmailadres(in) && klantModel.updateEmailadres(in)) { 
             klantView.showUpdateSuccess(klantModel);
         } else {
             klantView.showUpdateFailed(klantModel);
@@ -296,6 +330,5 @@ public class KlantController {
         } else {
             deleteKlant();
         }
-        
     }
 }

@@ -30,5 +30,10 @@ public class LoginManager {
         }
         return "";
     }
+    
+    @Override
+    public String toString() {
+        return account.toString();
+    }
 }
 

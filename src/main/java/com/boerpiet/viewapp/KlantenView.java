@@ -74,4 +74,9 @@ public class KlantenView {
         showDivider();
         System.out.println("De gekozen klant bestaat niet.");            
     }
+    
+    public void showValidNumber() {
+        System.out.println("Vul een geldig nummer in.");
+    }
+
 }

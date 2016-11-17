@@ -7,9 +7,8 @@ package com.boerpiet.cheeseapp;
 
 import com.boerpiet.cheeseapp.account.MySQLAccountDAO;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Singleton die MySQL connectie opent en andere klassen in staat stelt hier gebruik van te maken.
  * Usage example:
@@ -30,6 +29,8 @@ public class MySQLConnection {
     private final static MySQLConnection mysqlConnection = new MySQLConnection();
     Connection connection;
     Statement statement;
+    private final Logger logger = LoggerFactory.getLogger(MySQLConnection.class);
+
 
     // ------------ CONSTRUCTORS ---------------------------------
 
@@ -67,7 +68,7 @@ public class MySQLConnection {
             ResultSet result = statement.executeQuery(sql);
             return result;
         } catch (Exception ex) {
-            Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            logger.debug("sql query failed:" + sql + " " + ex);
             return null;
         }
     }
@@ -117,7 +118,7 @@ public class MySQLConnection {
                 }
             }
          } catch (Exception ex) {
-            Logger.getLogger(MySQLConnection.class.getName()).log(Level.SEVERE, null, ex);
+            logger.debug("sql query failed:" + sql + " " + ex);
             return 0;
         }
     }

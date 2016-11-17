@@ -195,4 +195,8 @@ public class KlantView {
         System.out.println("Klant verwijderen mislukt, probeer het nogmaal.\n "
                 + "Blijft het probleem zich voordoen neem contact op met IT.");
     }
+
+    public void showValidNumber() {
+        System.out.println("Geef een juist nummer op.");
+    }
 }

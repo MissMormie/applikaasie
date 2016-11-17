@@ -6,6 +6,9 @@
 package com.boerpiet.domeinapp;
 
 import com.boerpiet.cheeseapp.klant.KlantDAOFactory;
+import java.util.logging.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -16,10 +19,12 @@ import com.boerpiet.cheeseapp.klant.KlantDAOFactory;
 public class KlantModel {
     // ------------ VARIABLES ---------------------------------
 
-    private KlantPojo klantPojo;
+    private KlantPojo klantPojo = new KlantPojo();
     private AdresPojo factuurAdresPojo;
     private AdresPojo postAdresPojo;
     private AdresPojo bezorgAdresPojo;
+    private final Logger logger = LoggerFactory.getLogger(KlantModel.class);
+
        
     // ------------ CONSTRUCTORS ---------------------------------
     
@@ -152,7 +157,11 @@ public class KlantModel {
      * @return boolean true on success;
      */   
     public boolean createKlant() {
-        return KlantDAOFactory.getKlantDAO().createKlant(this);
+        if (KlantDAOFactory.getKlantDAO().createKlant(this)) {
+            logger.info("new klant created: " + this.toString());
+            return true;
+        }
+        return false;
     }    
     
     /**
@@ -183,17 +192,19 @@ public class KlantModel {
     }
     
     public void setAllAdresses(AdresPojo adresPojo) {
-        AdresPojo bezorgadres = adresPojo.clone();
-        bezorgadres.setAdresType("Bezorgadres");
-        setAdres(bezorgadres);
-        
-        AdresPojo factuuradres = adresPojo.clone();
-        factuuradres.setAdresType("Factuuradres");
-        setAdres(factuuradres);
-
-        AdresPojo postadres = adresPojo.clone();
-        postadres.setAdresType("Postadres");
-        setAdres(postadres);
+        cloneAdress(adresPojo, "Bezorgadres");
+        cloneAdress(adresPojo, "Factuuradres");
+        cloneAdress(adresPojo, "Postadres");
+    }
+    
+    public void cloneAdress(AdresPojo adresPojo, String type) {
+        try {
+            AdresPojo adres = adresPojo.clone();
+            adres.setAdresType(type);        
+            setAdres(adres);
+        } catch (CloneNotSupportedException ex) {
+            logger.debug("failed to clone adres: " + adresPojo.toString());
+        }
     }
     
     /**
@@ -266,6 +277,11 @@ public class KlantModel {
         if (klantPojo.getId() == 0)
             return false;
         return KlantDAOFactory.getKlantDAO().updateKlantById(klantPojo);
+    }
+
+    @Override
+    public String toString() {
+        return "KlantModel{" + "klantPojo=" + klantPojo + ", factuurAdresPojo=" + factuurAdresPojo + ", postAdresPojo=" + postAdresPojo + ", bezorgAdresPojo=" + bezorgAdresPojo + ", logger=" + logger + '}';
     }
 
 }

@@ -47,11 +47,10 @@ public class LoginController {
     }
     
     private String listenForLogin() {
-        String usernamePassword = "";
-        if (input.hasNext()) {
-            usernamePassword = input.nextLine();
-        }
-        
+        String usernamePassword = input.nextLine();
+        if(usernamePassword.isEmpty())
+            return listenForLogin();
         return usernamePassword;
     }
+    
 }

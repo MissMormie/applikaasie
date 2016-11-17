@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    
+    <!-- logged directly to console because of consoleappender -->
+    <!-- todo change to log to file -->
+ <!--
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> 
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+  -->
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>debug.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <!-- Sets logging level for specific packages. -->
+  <logger name="com.boerpiet" level="debug" />
+
+  <!-- Set logging for complete project --> 
+  <root level="debug">
+    <appender-ref ref="FILE" />
+  </root>
+</configuration>

@@ -8,6 +8,7 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.domeinapp.KlantenModel;
+import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.AccountView;
 import com.boerpiet.viewapp.KlantenView;
 import java.util.Scanner;
@@ -77,15 +78,23 @@ public class AccountController {
     private void selectAccountToModifyListener() {
         String in = input.nextLine();
 
+        // Check if back to menu.
         if (in.equalsIgnoreCase("n")) 
             return;
-        int id = Integer.parseInt(in);
-        // validate id
-        AccountPojo account = accountModel.getAccountById(id);
-        if (account == null)
-            selectAccountToModify();
-        else 
-            modifyAccount(account);
+        
+        // Check if valid input.
+        if (!Validator.isValidInt(in)) {
+            selectAccountToModify();        
+        } else {
+            int id = Integer.parseInt(in);
+            AccountPojo account = accountModel.getAccountById(id);
+            
+            // If no account exists with that id
+            if (account == null)
+                selectAccountToModify();
+            else 
+                modifyAccount(account);
+        }
     }
 
     public void deleteAccount() {
@@ -98,12 +107,18 @@ public class AccountController {
         String in = input.nextLine();
         if (in.equalsIgnoreCase("n")) 
             return;
-        int id = Integer.parseInt(in);
-        if (accountModel.deleteAccountById(id)) {
-            accountView.showDeleteAccountSuccess();
-        } else {
-            accountView.showDeleteAccountFail();
+        
+        // Check if valid input.
+        if (!Validator.isValidInt(in)) {
             deleteAccount();
+        } else {         
+            int id = Integer.parseInt(in);
+            if (accountModel.deleteAccountById(id)) {
+                accountView.showDeleteAccountSuccess();
+            } else {
+                accountView.showDeleteAccountFail();
+                deleteAccount();
+            }
         }
     }
 
@@ -119,26 +134,32 @@ public class AccountController {
         if (in.equalsIgnoreCase("n")) 
             return;
         
-        int id = Integer.parseInt(in);
-        switch(id) {
-            case 1: 
-                accountView.showModifyUsername(account);
-                modifyUsernameListener(account);
-                break;
-            case 2: 
-                accountView.showModifyPassword(account);
-                modifyPasswordListener(account);
-                break;
-            case 3: 
-                accountView.showModifyAccountStatus(account);
-                modifyAccountStatusListener(account);
-                break;
-            case 4: 
-                accountView.showModifyKlantId(account);
-                modifyKlantIdListener(account);
-                break;
-            default:
-                modifyAccount(account);
+        // Check if valid input.
+        if (!Validator.isValidInt(in)) {
+            modifyAccount(account);
+        } else  {
+            int id = Integer.parseInt(in);
+        
+            switch(id) {
+                case 1: 
+                    accountView.showModifyUsername(account);
+                    modifyUsernameListener(account);
+                    break;
+                case 2: 
+                    accountView.showModifyPassword(account);
+                    modifyPasswordListener(account);
+                    break;
+                case 3: 
+                    accountView.showModifyAccountStatus(account);
+                    modifyAccountStatusListener(account);
+                    break;
+                case 4: 
+                    accountView.showModifyKlantId(account);
+                    modifyKlantIdListener(account);
+                    break;
+                default:
+                    modifyAccount(account);
+            }
         }
     }
 
@@ -208,15 +229,21 @@ public class AccountController {
         if (in.equalsIgnoreCase("n")) 
             return;
         
-        int id = Integer.parseInt(in);
-        
-        //  Check if update password successful
-        if (accountModel.updateAccountKlantId(account, id)) { 
-            accountView.showUpdateSuccess();
-        } else {
-            accountView.showUpdateFailed();
+                // Check if valid input.
+        if (!Validator.isValidInt(in)) {
             accountView.showModifyKlantId(account);
             modifyKlantIdListener(account);
+        } else  {
+            int id = Integer.parseInt(in);
+
+            //  Check if update password successful
+            if (accountModel.updateAccountKlantId(account, id)) { 
+                accountView.showUpdateSuccess();
+            } else {
+                accountView.showUpdateFailed();
+                accountView.showModifyKlantId(account);
+                modifyKlantIdListener(account);
+            }
         }
     }
    
