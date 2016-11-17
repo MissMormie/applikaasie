@@ -102,10 +102,14 @@ public class MySQLKlantDAO extends KlantDAO {
     
     @Override
     public boolean updateAdres(AdresPojo adres) {
-    
-                String sql = "Update Adres SET Deleted = 1 "
-                   + "WHERE idAdres = '"+ adres.getIdAdres()+"'";
-
+   
+        String sql =  "Update Adres SET "
+                    + "Straat='" + adres.getStraat()+ "', "
+                    + "Huisnummer='" + adres.getHuisnummer() + "', "
+                    + "Toevoeging='" + adres.getToevoeging() + "', "
+                    + "Woonplaats='" + adres.getWoonplaats() + "' "
+                    + "WHERE idAdres = '"+ adres.getIdAdres()+"'";
+        System.out.println(sql);    
         return MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
     }
    
@@ -134,7 +138,9 @@ public class MySQLKlantDAO extends KlantDAO {
         
         try {
             while(result.next()) {
-                String sql3 = "Update Adres SET Deleted = 1 WHERE idAdres = " + result.getInt("AdresID");
+                int adresId = result.getInt("AdresId");
+                String sql3 = "Update Adres SET Deleted = 1 WHERE idAdres = " + adresId;
+                System.out.println(sql3);
                 MySQLConnection.getMySQLConnection().createUpdateDelete(sql3);
             }
         } catch (SQLException ex) { 
@@ -221,7 +227,7 @@ public class MySQLKlantDAO extends KlantDAO {
     }
     
     private KlantPojo getKlantPojoById(int id) {
-        String sql = "SELECT * FROM Klant WHERE idKlant=" + id + ";";
+        String sql = "SELECT * FROM Klant WHERE idKlant=" + id + " AND Deleted='0';";
         ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
         KlantPojo kp = new KlantPojo(); 
         if(tryFillKlantPojo(result, kp)) 

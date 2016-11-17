@@ -54,6 +54,11 @@ public class KlantenView {
         System.out.println("Type het id nummer de klant die je wil verwijderen.\n" 
                          + "Of type N om terug te gaan naar het menu.");
     }
+    
+    public void showSelectKlant() {
+        showDivider();
+        System.out.println("Type het id nummer de klant die je wil kiezen.\n");        
+    }
 
     public void showDeleteKlantSuccess() {
         showDivider();
@@ -64,6 +69,9 @@ public class KlantenView {
         showDivider();
         System.out.println("Klant verwijderen mislukt, probeer het nog eens.");
     }
-    
-    
+
+    public void showSelectKlantfailed() {
+        showDivider();
+        System.out.println("De gekozen klant bestaat niet.");            
+    }
 }

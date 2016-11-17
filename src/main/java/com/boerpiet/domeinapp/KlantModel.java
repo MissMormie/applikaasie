@@ -165,25 +165,35 @@ public class KlantModel {
     public void setAdres(AdresPojo adresPojo) {
         switch(adresPojo.getAdresType().toLowerCase()) {
             case "postadres":
+                if(postAdresPojo != null && postAdresPojo.getIdAdres() != 0)
+                    adresPojo.setIdAdres(postAdresPojo.getIdAdres());
                 this.postAdresPojo = adresPojo;
                 break;
             case "factuuradres":
+                if(factuurAdresPojo != null && factuurAdresPojo.getIdAdres() != 0)
+                    adresPojo.setIdAdres(factuurAdresPojo.getIdAdres());
                 this.factuurAdresPojo = adresPojo;
                 break;
             case "bezorgadres":
+                if(bezorgAdresPojo != null && bezorgAdresPojo.getIdAdres() != 0)
+                    adresPojo.setIdAdres(bezorgAdresPojo.getIdAdres());
                 this.bezorgAdresPojo = adresPojo;
-                break;
-                
-            // All 3 address types are the same
-            case "same":
-                this.bezorgAdresPojo = adresPojo;
-                bezorgAdresPojo.setAdresType("Bezorgadres");
-                this.factuurAdresPojo = adresPojo.clone();
-                factuurAdresPojo.setAdresType("Factuuradres");
-                this.postAdresPojo = adresPojo.clone();
-                postAdresPojo.setAdresType("Postadres");
-                break;
+                break;                
         }
+    }
+    
+    public void setAllAdresses(AdresPojo adresPojo) {
+        AdresPojo bezorgadres = adresPojo.clone();
+        bezorgadres.setAdresType("Bezorgadres");
+        setAdres(bezorgadres);
+        
+        AdresPojo factuuradres = adresPojo.clone();
+        factuuradres.setAdresType("Factuuradres");
+        setAdres(factuuradres);
+
+        AdresPojo postadres = adresPojo.clone();
+        postadres.setAdresType("Postadres");
+        setAdres(postadres);
     }
     
     /**
@@ -238,7 +248,7 @@ public class KlantModel {
                 break;
             case "bezorgadres":
                 if(bezorgAdresPojo != null & bezorgAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(postAdresPojo);            
+                    return KlantDAOFactory.getKlantDAO().updateAdres(bezorgAdresPojo);            
                 break;
                 
             // All 3 address types are the same

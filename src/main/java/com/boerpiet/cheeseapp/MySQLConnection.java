@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  * 
  * TODO: Change class to open and close connection when needed instead of 
  * keeping it open.
+ * - createupdatedelete is already changed.
  */
 public class MySQLConnection {
     // ------------ VARIABLES ---------------------------------
@@ -62,14 +63,13 @@ public class MySQLConnection {
      * @return ResultSet with result of the sql statement.
      */
     public ResultSet read(String sql) {
-        ResultSet result = null;
         try {
-            result = statement.executeQuery(sql);
+            ResultSet result = statement.executeQuery(sql);
+            return result;
         } catch (Exception ex) {
             Logger.getLogger(MySQLAccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return result;
+            return null;
         }
-        return result;        
     }
     
     /**
@@ -79,15 +79,18 @@ public class MySQLConnection {
      * @return boolean, true on success
      */
     public boolean createUpdateDelete(String sql) {
-        try {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {                     
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         } catch (Exception ex) {
-            Logger.getLogger(MySQLConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("com.boerpiet.cheeseapp.MySQLConnection.createUpdateDelete()");
+            System.out.println(ex);
             return false;
         }
-        return true;             
+        return true;
     }
-
+    
     /**
      * Executes sql create statement, returns id of first new row 
      * 

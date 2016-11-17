@@ -32,7 +32,7 @@ public class AdresPojo implements Cloneable {
      * @param toevoeging String
      * @param woonplaats String
      * @param deleted boolean
-     * @param adresType enum 
+     * @param adresType String 
      */
     public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String woonplaats, boolean deleted, String adresType) {
         this.idAdres = idAdres;
@@ -43,6 +43,15 @@ public class AdresPojo implements Cloneable {
         this.deleted = deleted;
         this.adresType = adresType;
     }
+    
+    public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String woonplaats, boolean deleted) {
+        this.idAdres = idAdres;
+        this.straat = straat;
+        this.huisnummer = huisnummer;
+        this.toevoeging = toevoeging;
+        this.woonplaats = woonplaats;
+        this.deleted = deleted;
+    }    
     
     // ------------ Getters and Setters ---------------------------------
 

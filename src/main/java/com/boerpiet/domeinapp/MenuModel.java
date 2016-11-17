@@ -5,117 +5,171 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.controllerapp.AccountController;
-import com.boerpiet.controllerapp.KlantenController;
-import com.boerpiet.controllerapp.KlantController;
-import com.boerpiet.viewapp.AccountView;
-import com.boerpiet.viewapp.KlantenView;
-import com.boerpiet.viewapp.KlantView;
+import com.boerpiet.controllerapp.*;
+import com.boerpiet.viewapp.*;
+import java.io.File;
+import javax.xml.parsers.*;
+import javax.xml.xpath.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Sonja
  */
 public class MenuModel {
-
+    
     // ------------ VARIABLES ---------------------------------
 
-    int currentMenu = -1;
+    private NodeList menu;
+    private Document doc;
+    private int menuId;
+    private LoginManager loginManager;
 
+    // ------------ CONSTRUCTORS ---------------------------------
+
+    /**
+     * Initializes MenuModel and reads menu.xml
+     * 
+     * @param loginManager -- LoginManager 
+     */
+    public MenuModel(LoginManager loginManager) {
+        this.loginManager = loginManager;
+        try {
+            // Read in XML file and normalize it.
+            File xmlFile = new File("xml/menu.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            doc = dBuilder.parse(xmlFile);
+            doc.getDocumentElement().normalize();
+        } catch (Exception ex) {
+            System.out.println("errors" + ex);
+        }        
+    }
+    
     // ------------ Getters and Setters ---------------------------------
        
-    public int getCurrentMenu() {
-        return currentMenu;
-    }
-
-    public void setCurrentMenu(int currentMenu) {
-        this.currentMenu = currentMenu;
+    public boolean isLoggedIn() {
+        return loginManager.isLoggedIn();
     }
     
     // ------------ PUBLIC FUNCTIONS ---------------------------------
+    /**
+     * Executes the action choosen in the menu
+     * 
+     * @param menuNumber the menu number selected.
+     * @return true on succes.
+     */
+    public boolean chooseMenuItem(int menuNumber) {
+        String currentMenu ="";
+        if (menuId != 0)
+            currentMenu = "/menuItem[@id=\"" + menuId + "\"]";
+        
+        String expression = "//mainMenu[@login='" + loginManager.getAccountStatus() + "']" + currentMenu + "/menuItem[@number=\"" + menuNumber + "\"]";
+        XPath xpath = XPathFactory.newInstance().newXPath();            
 
-    public void changeCurrentMenu(int changeMenu) {
-        switch(currentMenu) {
-            case 1: // Kazen
-                pickFromCheeseMenu(changeMenu);
-                break;
-            case 2: // Account
-                pickFromAccountMenu(changeMenu);
-                break;
-            case 3: // KLanten
-                pickFromKlantenMenu(changeMenu);
-                break;
-            case 4:  // bestellingen
-                pickFromBestellingMenu(changeMenu);
-                break;
-            case 5: 
-                System.exit(0);
-            default: 
-                currentMenu = changeMenu;
+        try {
+            // Get the Nodelist that adheres to the expression
+            XPathExpression expr = xpath.compile(expression);
+            NodeList resultNode = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+            // Check if there is a node with the selected number is found.
+            if(resultNode.getLength() == 0)
+                return false;
+
+            // Read action and id attributes from selected node
+            String action = resultNode.item(0).getAttributes().getNamedItem("action").getNodeValue();
+            String id = resultNode.item(0).getAttributes().getNamedItem("id").getNodeValue();
+            int intId = Integer.parseInt(id);
+            
+            // execute the action from the xml.
+            doAction(action,intId);
+            
+        } catch (XPathExpressionException ex) {
+            return false;
+        }
+        return true;
+    }
+    
+    public NodeList getMenuNode() {
+        String currentMenu ="";
+            if (menuId != 0)
+                currentMenu = "/menuItem[@id=\"" + menuId + "\"]";
+            
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        String ex = "//mainMenu[@login='" + loginManager.getAccountStatus() + "']" 
+                    + currentMenu + "/menuItem";
+
+        try {
+            XPathExpression expr = xpath.compile(ex);
+            Object exprResult = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodeList = (NodeList) exprResult;
+            return nodeList;
+        } catch (Exception excep) {
+            return null;
         }
     }
     
     // ------------ PRIVATE FUNCTIONS ---------------------------------    
 
-    private void pickFromCheeseMenu(int changeMenu) {
-        switch (changeMenu) {
-            case 1: 
-                break;
-            case 2:
-                break;
-            case 3: 
-                currentMenu = 0;
-        }
+    private void setSubmenu(int id) {
+        menuId = id;
     }
 
-    private void pickFromAccountMenu(int changeMenu) {
-        AccountController ac;
-        switch(changeMenu) {
-            case 1: // New Account
-                ac = new AccountController(new AccountModel(), new AccountView());
-                ac.newAccount();
-                break;
-            case 2: // Change Account
-                ac = new AccountController(new AccountModel(), new AccountView());
-                ac.selectAccountToModify();
-                break;
-            case 3: // Delete Account
-                ac = new AccountController(new AccountModel(), new AccountView());
-                ac.deleteAccount();
-                break;
-            case 4: // Return to menu
-                currentMenu = 0;
-                break;
-        }
+    private void setHoofdmenu() {
+        menuId = 0;
     }
-
-    private void pickFromKlantenMenu(int changeMenu) {
-        KlantenController kc;
-        switch(changeMenu) {
-            case 1: // new Klant
-                KlantController skc = new KlantController(new KlantModel(), new KlantView());
-                skc.newKlant();
-                break;
-            case 2: // Modify klant
-                kc = new KlantenController(new KlantenModel(), new KlantenView());
-                kc.selectKlantToModify();
-                break;
-            case 3: // Delete Klant
-                kc = new KlantenController(new KlantenModel(), new KlantenView());
-                kc.selectKlantToDelete();                
-                break;
-            case 4: // Return to menu
-                currentMenu = 0;
-        }
+    
+    private void logout() {
+        loginManager.logout();
     }
-
-    private void pickFromBestellingMenu(int changeMenu) {
-        if (changeMenu == 1) {
-
-        } else if (changeMenu == 2) {
-
-        } else if (changeMenu == 3) {
-            currentMenu = 0;
+        
+    /**
+     * Performs the selected action
+     * 
+     * @param action the action attribute
+     * @param id the node id
+     */
+    private void doAction(String action, int id) {
+        switch(action){
+            // CHANGE MENU
+            case "submenu": setSubmenu(id); break;
+            case "hoofdmenu": setHoofdmenu(); break;
+            
+            // ACCOUNTS
+            case "nieuwKlantAccount": // New Account
+                AccountController ac = new AccountController(new AccountModel(), new AccountView());
+                ac.newKlantAccount();
+                break;
+            case "nieuwMedewerkerAccount": // New Account
+                AccountController ac4 = new AccountController(new AccountModel(), new AccountView());
+                ac4.newMedewerkerAccount();
+                break;                
+            case "wijzigAccount": // Change Account
+                AccountController ac2 = new AccountController(new AccountModel(), new AccountView());
+                ac2.selectAccountToModify();
+                break;
+            case "verwijderAccount": // Delete Account
+                AccountController ac3 = new AccountController(new AccountModel(), new AccountView());
+                ac3.deleteAccount();
+                break;
+                
+            // KLANTEN
+            case "nieuweKlant": // new Klant
+                KlantController kc1 = new KlantController(new KlantModel(), new KlantView());
+                kc1.newKlant();
+                break;
+            case "wijzigKlant": // Modify klant
+                KlantenController kc2 = new KlantenController(new KlantenModel(), new KlantenView());
+                kc2.selectKlantToModify();
+                break;
+            case "verwijderKlant": // Delete Klant
+                KlantenController kc3 = new KlantenController(new KlantenModel(), new KlantenView());
+                kc3.selectKlantToDelete();                
+                break;
+                
+            // LOGOUT
+            case "logout": logout(); break;
         }
     }
 }

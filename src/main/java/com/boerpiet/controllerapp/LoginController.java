@@ -28,9 +28,18 @@ public class LoginController {
     
     private void login() {
         loginView.showLogin();
-        if (accountModel.validateLogin(listenForLogin())) {
+        
+        String login = listenForLogin();
+        if(login.equalsIgnoreCase("exit"))
+            return;
+
+        if (accountModel.validateLogin(login)) {
             loginView.showLoginSuccess();
-            new MenuController(new MenuModel(), new MenuView());
+            MenuController mc = new MenuController(new MenuModel(accountModel.getLogin()), new MenuView());
+            mc.showMenu();
+            
+            loginView.showLogoutSuccess();
+            login();
         } else {
             loginView.showLoginFailed();
             login();

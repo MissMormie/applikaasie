@@ -126,9 +126,16 @@ public class KlantController {
         klantView.showWoonplaats();
         String woonplaats = input.nextLine(); 
         
-        AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
+        if(type.equalsIgnoreCase("same")) {
+            AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
+                    straat, huisnummer, toevoeging, woonplaats, false);
+            klantModel.setAllAdresses(adres);
+        } 
+        else {
+            AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
                 straat, huisnummer, toevoeging, woonplaats, false, type);
-        klantModel.setAdres(adres);
+            klantModel.setAdres(adres);
+        }
     }
 
     private void modifyKlantListener() {

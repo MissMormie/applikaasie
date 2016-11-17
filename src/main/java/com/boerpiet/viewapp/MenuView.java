@@ -5,43 +5,30 @@
  */
 package com.boerpiet.viewapp;
 
+import org.w3c.dom.NodeList;
+
 /**
  *
  * @author Sonja
  */
 public class MenuView {
 
-    public void showCurrentMenu(int currentMenu) {
-        System.out.println("----------------------------------------------");
-        if (currentMenu == 1) {
-            System.out.println(   "1 Voeg nieuwe kaas toe\n"
-                                + "2 Zoek kaas om te wijzigen\n"
-                                + "3 Terug naar hoofdmenu");
+    /**
+     * Prints the menu items in the current node, if there's a @name this is used, otherwise textnode.
+     * @param nodeList Nodelist containing <menuItem>
+     */
+    public void showMenu(NodeList nodeList) {
+        System.out.println("\n----------------------------------------------");
 
-        } else if (currentMenu == 2) {
-            System.out.println(   "1 Maak nieuw account\n"
-                                + "2 Zoek account om te wijzigen\n"
-                                + "3 Zoek account om te verwijderen\n"
-                                + "4 Terug naar hoofdmenu");
-
-        } else if (currentMenu == 3) {
-            System.out.println(   "1 Voeg nieuwe klant toe\n"
-                                + "2 Zoek klant om te wijzigen\n"
-                                + "3 Zoek een klant om te verwijderen\n"
-                                + "4 Terug naar hoofdmenu");
-
-        } else if (currentMenu == 4) {
-            System.out.println(   "1 Voeg nieuwe bestelling toe\n"
-                                + "2 Zoek bestelling om te wijzigen\n"
-                                + "3 Terug naar hoofdmenu");
-
-        } else {
-            System.out.println(   "1 Kazen\n"
-                                + "2 Accounts\n"
-                                + "3 Klanten\n"
-                                + "4 Bestellingen\n"
-                                + "5 Afsluiten\n");
+        for(int i = 0; i < nodeList.getLength(); i++) {
+            if(nodeList.item(i).getAttributes().getNamedItem("name") != null)
+                System.out.print(nodeList.item(i).getAttributes().getNamedItem("number").getNodeValue() + " " +
+                             nodeList.item(i).getAttributes().getNamedItem("name").getNodeValue()
+                             + "\n");                
+            else 
+                System.out.print(nodeList.item(i).getAttributes().getNamedItem("number").getNodeValue() + " " +
+                             nodeList.item(i).getTextContent()
+                             + "\n");
         }
     }
-
 }

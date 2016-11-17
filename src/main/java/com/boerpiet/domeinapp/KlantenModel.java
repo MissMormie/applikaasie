@@ -18,7 +18,7 @@ public class KlantenModel {
         return KlantDAOFactory.getKlantDAO().getAllKlanten();
     }
 
-    public KlantModel getSingleKlantById(int id) {
+    public KlantModel getKlantById(int id) {
         return KlantDAOFactory.getKlantDAO().getKlantById(id);  
     }
 }

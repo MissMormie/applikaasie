@@ -14,6 +14,11 @@ import java.util.ArrayList;
  * @author Sonja
  */
 public class AccountModel {
+    private LoginManager loginManager;
+
+    public LoginManager getLogin() {
+        return loginManager;
+    }
     
     // TODO niet als 1 string meegeven maar in controller splitsen.
     public boolean validateLogin(String usernamePassword) {
@@ -22,7 +27,12 @@ public class AccountModel {
             return false;
         }
         AccountPojo login = new AccountPojo(parts[0], parts[1]);
-        return AccountDAOFactory.getAccountDAO().fillAccountPojoByUsernamePassword(login);
+        if(AccountDAOFactory.getAccountDAO().fillAccountPojoByUsernamePassword(login)) { 
+            loginManager = new LoginManager(login);
+            return true;
+        }
+        else
+            return false;
     }
     
     // TODO create an create account with account status.

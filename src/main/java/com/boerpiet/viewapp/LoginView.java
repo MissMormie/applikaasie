@@ -11,14 +11,18 @@ package com.boerpiet.viewapp;
  */
 public class LoginView {
     public void showLogin() {
-        System.out.println("Enter your username, space, then enter your password.");
+        System.out.println("Voer 'gebruikersnaam <spatie> wachtwoord' in. Of type exit om te stoppen.");
     }
    
     public void showLoginFailed() {
-        System.out.println("The combination of username and password does not exist");
+        System.out.println("De combinatie van gebruiksnaam en wachtwoord bestaat niet.");
     }
     
     public void showLoginSuccess() {
-        System.out.println("Login succesfull");
+        System.out.println("\nLogin geslaagd.");
+    }
+
+    public void showLogoutSuccess() {
+        System.out.println("Logout geslaagd.");
     }
 }

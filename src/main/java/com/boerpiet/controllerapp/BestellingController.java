@@ -45,6 +45,7 @@ public class BestellingController {
         
     }
     private void makeNewOrder () {
+        /*
         String begin = input.nextLine();
         
         if (begin.equalsIgnoreCase("N")) {
@@ -84,6 +85,7 @@ public class BestellingController {
             bestellingView.showNewBestellingFailure ();
             makeNewOrder();
         }
+*/
     }
     public void modifyOrder () {
         

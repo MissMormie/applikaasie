@@ -18,9 +18,8 @@ public class AccountView {
     public void showNewAccount() {
         showDivider();
         System.out.println("Je gaat nu een nieuw account maken. Wil je dit niet, type dan N en druk op enter.\n"
-                         + "klantId is 0 indien er geen klant gekoppeld hoeft te worden.\n\n"
                          + "Geef de gegevens voor het nieuwe account als volgt op:\n"
-                         + "Gebruikernaam wachtwoord klantId, druk hierna op enter.\n");
+                         + "Gebruikernaam wachtwoord druk hierna op enter. \n");
     }
 
     public void showWrongInput() {
