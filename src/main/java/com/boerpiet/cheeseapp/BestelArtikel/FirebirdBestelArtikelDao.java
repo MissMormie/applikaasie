@@ -41,7 +41,12 @@ public class FirebirdBestelArtikelDao extends SuperBestelArtikelDao {
     }
 
     @Override
-    public boolean deleteBestelArtikel(BestelArtikelPojo bArtikel) {
+    public boolean deleteBestelArtikel(int brId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void deleteArticleFromOrder (int brId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

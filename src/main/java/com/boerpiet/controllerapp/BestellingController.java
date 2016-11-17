@@ -45,7 +45,7 @@ public class BestellingController {
         
     }
     private void makeNewOrder () {
-        /*
+        
         String begin = input.nextLine();
         
         if (begin.equalsIgnoreCase("N")) {
@@ -85,7 +85,6 @@ public class BestellingController {
             bestellingView.showNewBestellingFailure ();
             makeNewOrder();
         }
-*/
     }
     public void modifyOrder () {
         
@@ -121,7 +120,10 @@ public class BestellingController {
         System.out.println("Hoeveel wil je bestellen? Geef aantal:");
         int aantal = Integer.parseInt(input.nextLine());
         
-        createArticleToAddToOrder (bestelId, artikelId, aantal);        
+        createArticleToAddToOrder (bestelId, artikelId, aantal);
+
+        System.out.println("Dit is de gewijzigde bestelling.");
+        bestellingView.showAllBestelRegelsByBestelId(bestelId);        
     }
     
     public void createArticleToAddToOrder (int bestelId, int artikelId, int aantal) {
@@ -129,6 +131,7 @@ public class BestellingController {
         BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
         if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel)) {
             System.out.println("Artikel is toegevoegd aan bestelling met id: "+bestelId);
+            
         }else {
             System.out.println("Er is iets misgegaan, probeer het opnieuw.");
             addArticleToOrder();
@@ -169,6 +172,70 @@ public class BestellingController {
             modifyArticleFromOrder();
         }        
     }
+    
+    public void deleteOrderOptions () {
+        bestellingView.startDeleteOrder();
+        int keuze = Integer.parseInt(input.nextLine());
+        
+        switch (keuze) {
+            case 1:
+                deleteOneTupelFromOrder ();
+                break;
+            case 2:
+                deleteTotalOrder ();
+                break;
+            case 3:
+                return;
+            default:
+                deleteOrderOptions();
+                break;           
+        }
+    }
+    
+    public void deleteOneTupelFromOrder () {
+        System.out.println("Geef klantid:");
+        int klantId = Integer.parseInt(input.nextLine());
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef bestelid waar je artikelen wilt verwijderen:");
+        int bestelId = Integer.parseInt(input.nextLine());
+        bestellingView.showAllBestelRegelsByBestelId(bestelId);        
+        System.out.println("Welke regel wil je verwijderen? Geef bestelregelid:");
+        int brId = Integer.parseInt(input.nextLine());
+        
+        if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteBestelArtikel(brId)) {
+            System.out.println("Artikel is verwijderd van bestelling.");
+            System.out.println("Dit is de gewijzigde bestelling.");
+            bestellingView.showAllOrdersByKlantId(klantId);
+        } else {
+            System.out.println("Er is iets misgegaan, probeer het opnieuw");
+            return;
+        }
+        System.out.println("Wil je nog meer artikelen verwijderen van bestelling? (J/N):");
+        String jaNee = input.nextLine();
+        if (jaNee.equalsIgnoreCase("j")){
+            deleteOneTupelFromOrder();
+        }
+            
+    }
+
+    public void deleteTotalOrder() {
+        System.out.println("Geef klantid:");
+        int klantId = Integer.parseInt(input.nextLine());
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef id van bestelling die je wilt verwijderen (bestelid):");
+        int bestelId = Integer.parseInt(input.nextLine());
+        deleteArticlesFromOrder(bestelId);
+        if (BestellingDaoFactory.getBestellingDAO("MySQL").deleteBestelling(bestelId)) {
+            System.out.println("Bestelling is verwijderd");
+            bestellingView.showAllOrdersByKlantId(klantId);            
+        }        
+    }
+    
+    public void deleteArticlesFromOrder (int bestelId) {
+        ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId(bestelId);
+        for (BestelArtikelPojo ba : baList) {
+            BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
+            }
+        }
 }
-    
-    

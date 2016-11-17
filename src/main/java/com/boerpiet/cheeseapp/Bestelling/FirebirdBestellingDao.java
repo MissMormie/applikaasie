@@ -5,7 +5,9 @@
  */
 package com.boerpiet.cheeseapp.Bestelling;
 
+import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.BestellingPojo;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,6 +18,10 @@ public class FirebirdBestellingDao extends SuperBestellingDao {
     @Override
     public boolean createBestelling(BestellingPojo bestelling) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override public int createBestellingWithReturnId (BestellingPojo bestelling) {
+        throw new UnsupportedOperationException ("Not supported yet.");
     }
 
     @Override
@@ -34,8 +40,17 @@ public class FirebirdBestellingDao extends SuperBestellingDao {
     }
 
     @Override
-    public boolean deleteBestelling(BestellingPojo bestelling) {
+    public boolean deleteBestelling(int bestelId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public ArrayList <BestellingPojo> getAllByKlantId (int klantId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public ArrayList <BestellingModel> getBestelLijstByBestelId (int bestelId) {
+           throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

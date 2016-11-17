@@ -8,7 +8,6 @@ package com.boerpiet.viewapp;
 import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
-import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ public class BestellingView {
             
     public void showNewBestelling () {
         
-        System.out.println("Wil je een nieuwe bestelling invoeren? (Y/N):");        
+        System.out.println("Wil je een nieuwe bestelling invoeren? (J/N):");        
     }
     
     public void showNewBestellingSucces () {
@@ -36,10 +35,19 @@ public class BestellingView {
         System.out.println("Wat wil je doen:\n"
                 +"1. Artikelen toevoegen aan bestelling \n"
                 +"2. Artikelen wijzigen in bestelling \n"
-                +"3. Terug naar het menu");
+                +"3. Terug naar het menu \n");
         //+ status bestelling veranderen (afgehandeld op true zetten)   later toevoegen?
         
     }
+    
+    public void startDeleteOrder () {
+        System.out.println("Dit is het menu voor verwijderen van bestellingen.");
+        System.out.println("Wat wil je doen:\n"
+                +"1. Een of meerdere artikelen verwijderen van bestelling \n"
+                +"2. Gehele bestelling verwijderen \n"
+                +"3. Terug naar het menu \n");
+    }
+    
     public void showBestellingListByKlantId (ArrayList<BestellingPojo>bestelList) {
         showDivider();
         showBestelListHeader();
@@ -56,13 +64,13 @@ public class BestellingView {
     private void showBestelListHeader() {
         System.out.printf("%-3s %-15s \n",
                 "id",
-                "besteldatum");
+                "besteldatum \n");
     }
 
     private void showBestelListItem(BestellingPojo bp) {
         System.out.printf("%-3s %-15s \n", 
                 bp.getId(),
-                bp.getBestelDatum());
+                bp.getBestelDatum() +"\n");
     }
     public void showAllOrdersByKlantId (int klantId) {
         ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
@@ -83,14 +91,14 @@ public class BestellingView {
         System.out.printf("%-15s %-15s %-13s \n",
                         "Bestelregelid",
                         "Artikelid",
-                        "Aantal besteld");                
+                        "Aantal besteld \n");                
     }
 
     private void showBestelLijstByBestelIdItem(BestelArtikelPojo ba) {
         System.out.printf("%-15s %-15s %-13s \n",
                 ba.getId(),
                 ba.getArtikelId(),
-                ba.getAantal());
+                ba.getAantal()+"\n");
     }
     
     public void showAllBestelRegelsByBestelId (int bestelId) {
@@ -98,5 +106,8 @@ public class BestellingView {
                 getBestelLijstByBestelId(bestelId);
         BestellingView bvList = new BestellingView();
         bvList.showBestelLijstByBestelId(baList);
+
     }
+    
+        
 }

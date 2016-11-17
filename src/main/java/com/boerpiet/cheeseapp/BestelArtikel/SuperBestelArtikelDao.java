@@ -25,7 +25,9 @@ public abstract class SuperBestelArtikelDao {
     
     public abstract boolean updateBestelArtikel (BestelArtikelPojo bArtikel, int regelId);
 
-    public abstract boolean deleteBestelArtikel (BestelArtikelPojo bArtikel);
+    public abstract boolean deleteBestelArtikel (int brId);
+    
+    public void deleteArticleFromOrder (int brId) {};
 
     public abstract boolean isValidLogin(BestelArtikelPojo bArtikel);
     

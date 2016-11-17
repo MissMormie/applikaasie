@@ -30,7 +30,7 @@ public class ArtikelView {
                 "id",
                 "naam",
                 "prijs",
-                "voorraad");
+                "voorraad \n");
     }
     
     private void showArtikelListItem(ArtikelPojo ap) {
@@ -38,7 +38,7 @@ public class ArtikelView {
                 ap.getId(), 
                 ap.getNaam(), 
                 ap.getPrijs(),
-                ap.getVoorraad());       
+                ap.getVoorraad()+"\n");       
     }
     
     public void showDivider() {

@@ -39,7 +39,8 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     @Override
     public BestelArtikelPojo getBestelArtikelById (int bArtikelId) {
         BestelArtikelPojo ba = new BestelArtikelPojo ();
-        String sql = "SELECT * FROM BestelArtikel" + " WHERE idBestelArtikel = "+bArtikelId;
+        String sql = "SELECT * FROM BestelArtikel" + " WHERE Deleted = 0 AND Bezorgd = 0 "
+                   + "AND idBestelArtikel = "+bArtikelId;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
         ba.setId (rs.getInt(1));
         ba.setBestelId (rs.getInt(2));
@@ -56,7 +57,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     @Override
     public BestelArtikelPojo getBestelArtikelByBestelId (int bestelId) {
         BestelArtikelPojo ba = new BestelArtikelPojo ();
-        String sql = "SELECT (ArtikelId, Aantal) " + "WHERE BestellingId = " + bestelId;
+        String sql = "SELECT (ArtikelId, Aantal) " + "WHERE Deleted = 0 AND Bezorgd = 0 AND BestellingId = " + bestelId;
         try {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             ba.setArtikelId (rs.getInt(1));
@@ -74,9 +75,6 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                 + "FROM BestelArtikel "
                 + "INNER JOIN Artikel ON BestelArtikel.ArtikelId = Artikel.idArtikel "
                 + "WHERE BestelArtikel.Bezorgd = 0 AND BestelArtikel.BestellingId = "+ bestelId;
-                //+ "AND SELECT Artikel.Naam FROM Artikel "
-                //+ "INNER JOIN BestelArtikel ON Artikel.Id = BestelArtikel.ArtikelId "
-                //+ "WHERE BestelArtikel.Bezorgd = 0 AND BestelArtikel.BestellingId = "+ bestelId;
         ResultSet result  = MySQLConnection.getMySQLConnection().read(sql);//sql syntax error
         ArrayList <BestelArtikelPojo> list = new ArrayList<>();
         if (result==null) {
@@ -120,14 +118,25 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     }
 
     @Override
-    public boolean deleteBestelArtikel(BestelArtikelPojo bArtikel) {
-        String sql = "DELETE * FROM BestelArtikel" + " WHERE idBestelArtikel = "+bArtikel.getId ();
+    public boolean deleteBestelArtikel(int brId) {
+        String sql = "UPDATE BestelArtikel SET Deleted = 1 "
+                    + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return true;
+    }
+    //verwijdering van artikel zonder return value
+    @Override
+    public void deleteArticleFromOrder (int brId) {
+        String sql = "UPDATE BestelArtikel SET Deleted = 1 "
+                    + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
+        } catch (Exception ex) {
+            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
