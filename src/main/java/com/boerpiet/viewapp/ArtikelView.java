@@ -6,10 +6,10 @@
 package com.boerpiet.viewapp;
 
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
-import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.domeinapp.ArtikelPojo;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  *
@@ -26,19 +26,20 @@ public class ArtikelView {
     }
 
     private void showArtikelListHeader() {
-        System.out.printf("%-3s %-15s %-10s %s \n",
+        System.out.printf("%-3s %-17s %-10s %s \n",
                 "id",
                 "naam",
                 "prijs",
-                "voorraad \n");
+                "voorraad");
     }
     
     private void showArtikelListItem(ArtikelPojo ap) {
-        System.out.printf("%-3s %-15s %-10s %s \n", 
+        //NumberFormat nfPrijs = new DecimalFormat ("#.###,00");
+        System.out.printf("%-3s %-17s %-10s %s \n", 
                 ap.getId(), 
                 ap.getNaam(), 
                 ap.getPrijs(),
-                ap.getVoorraad()+"\n");       
+                ap.getVoorraad());       
     }
     
     public void showDivider() {
@@ -48,5 +49,21 @@ public class ArtikelView {
         ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
         ArtikelView artList = new ArtikelView();
         artList.showArtikelList(aList);
+    }
+
+    public void startCreateArticle() {
+        System.out.println("Wil je een nieuw artikel invoeren? (J/N)");
+    }
+    
+    public void articleModifyOptions () {
+        System.out.println("Wat wil je wijzigen? \n"
+                        + "1. Naam \n"
+                        + "2. Prijs \n"
+                        + "3. Voorraad \n"
+                        + "4. Terug naar menu \n");
+    }
+    
+    public void startDeleteArticle () {
+        System.out.println("Dit is het menu voor verwijderen van artikelen.");
     }
 }

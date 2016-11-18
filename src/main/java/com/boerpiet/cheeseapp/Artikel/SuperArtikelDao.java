@@ -5,7 +5,6 @@
  */
 package com.boerpiet.cheeseapp.Artikel;
 
-import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import java.util.ArrayList;
 
@@ -21,12 +20,18 @@ public abstract class SuperArtikelDao {
     
     public abstract boolean findArtikelId (int artikelId);
     
-    public abstract boolean updateArtikel (ArtikelPojo artikel);
+    public abstract boolean updateArtikelAll (ArtikelPojo artikel);
+    
+    public abstract boolean updateArtikelNaam (String naam, int id);
+    
+    public abstract boolean updateArtikelPrijs (double prijs, int id);
+    
+    public abstract boolean updateArtikelVoorraad (int voorraad, int id);
 
-    public abstract boolean deleteArtikel (ArtikelPojo artikel);
-
-    public abstract boolean isValidLogin(ArtikelPojo artikel);
+    public abstract boolean deleteArtikel (int id);
     
     public abstract ArrayList <ArtikelPojo> getAllArticles();
+
+    public abstract boolean isValidLogin(ArtikelPojo artikel);
     
 }

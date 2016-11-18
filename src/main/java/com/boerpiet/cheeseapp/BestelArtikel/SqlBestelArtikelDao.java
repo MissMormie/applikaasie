@@ -7,8 +7,6 @@ package com.boerpiet.cheeseapp.BestelArtikel;
 
 import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
-import com.boerpiet.domeinapp.BestellingModel;
-import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -57,7 +55,8 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     @Override
     public BestelArtikelPojo getBestelArtikelByBestelId (int bestelId) {
         BestelArtikelPojo ba = new BestelArtikelPojo ();
-        String sql = "SELECT (ArtikelId, Aantal) " + "WHERE Deleted = 0 AND Bezorgd = 0 AND BestellingId = " + bestelId;
+        String sql = "SELECT (ArtikelId, Aantal) "
+                   + "WHERE Deleted = 0 AND Bezorgd = 0 AND BestellingId = " + bestelId;
         try {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             ba.setArtikelId (rs.getInt(1));
@@ -108,7 +107,6 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                         + "ArtikelId = '" + bArtikel.getArtikelId() + "', "
                         + "Aantal = '" + bArtikel.getAantal() + "'"
                         + "WHERE idBestelArtikel = " + regelId;
-                        //+ "Bezorgd = '" +bArtikel.isBezorgd() + "';";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);

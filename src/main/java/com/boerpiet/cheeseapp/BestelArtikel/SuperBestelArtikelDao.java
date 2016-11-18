@@ -6,7 +6,6 @@
 package com.boerpiet.cheeseapp.BestelArtikel;
 
 import com.boerpiet.domeinapp.BestelArtikelPojo;
-import com.boerpiet.domeinapp.BestellingModel;
 import java.util.ArrayList;
 
 /**

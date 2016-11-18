@@ -136,6 +136,7 @@ public class MenuModel {
             case "submenu": setSubmenu(id); break;
             case "hoofdmenu": setHoofdmenu(); break;
             
+            
             // ACCOUNTS
             case "nieuwKlantAccount": // New Account
                 AccountController ac = new AccountController(new AccountModel(), new AccountView());
@@ -167,6 +168,16 @@ public class MenuModel {
                 KlantenController kc3 = new KlantenController(new KlantenModel(), new KlantenView());
                 kc3.selectKlantToDelete();                
                 break;
+                
+                //Bestellingen:
+            case "Nieuwe Bestelling": //nieuwe bestelling
+                BestellingController bcTest1 = new BestellingController (new BestellingPojo(),
+                        new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
+                bcTest1.newOrderInput();
+            case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
+                BestellingController bcTest2 = new BestellingController (new BestellingPojo(),
+                        new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
+                bcTest2.modifyOrder();
                 
             // LOGOUT
             case "logout": logout(); break;

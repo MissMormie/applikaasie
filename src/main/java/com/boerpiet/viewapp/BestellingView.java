@@ -27,24 +27,23 @@ public class BestellingView {
     }
     
     public void showNewBestellingFailure () {
-        System.out.println("Er is iets misgegaan, probeer het opnieuw");
+        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
     }
 
     public void startModifyOrder() {
         System.out.println("Je bent nu in het bestelling-wijzigingsmenu.");
-        System.out.println("Wat wil je doen:"
-                +"1. Artikelen toevoegen aan bestelling"
-                +"2. Artikelen wijzigen in bestelling"
+        System.out.println("Wat wil je doen? \n"
+                +"1. Artikelen toevoegen aan bestelling \n"
+                +"2. Artikelen wijzigen in bestelling \n"
                 +"3. Terug naar het menu \n");
-        //+ status bestelling veranderen (afgehandeld op true zetten)   later toevoegen?
-        
+        //+ status bestelling veranderen (afgehandeld op true zetten)   later toevoegen?  
     }
     
     public void startDeleteOrder () {
         System.out.println("Dit is het menu voor verwijderen van bestellingen.");
-        System.out.println("Wat wil je doen:"
-                +"1. Een of meerdere artikelen verwijderen van bestelling"
-                +"2. Gehele bestelling verwijderen"
+        System.out.println("Wat wil je doen? \n"
+                +"1. Een of meerdere artikelen verwijderen van bestelling \n"
+                +"2. Gehele bestelling verwijderen \n"
                 +"3. Terug naar het menu \n");
     }
     
@@ -57,7 +56,7 @@ public class BestellingView {
         System.out.println();
     }
     
-    public void showDivider() {
+    private void showDivider() {
         System.out.println("\n--------------------------------------------------------");        
     }
     
@@ -78,7 +77,7 @@ public class BestellingView {
         bvList.showBestellingListByKlantId(bList);
     }
     
-    public void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
+    private void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
         showDivider();
         showBestelLijstByBestelIdHeader ();
         for (BestelArtikelPojo ba : bestelList) {
@@ -107,7 +106,5 @@ public class BestellingView {
         BestellingView bvList = new BestellingView();
         bvList.showBestelLijstByBestelId(baList);
 
-    }
-    
-        
+    }       
 }

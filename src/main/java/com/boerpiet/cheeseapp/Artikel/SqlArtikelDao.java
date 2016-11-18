@@ -65,14 +65,11 @@ public class SqlArtikelDao extends SuperArtikelDao {
         }
 
     @Override
-    public boolean updateArtikel (ArtikelPojo artikel) {
-        String sql = "UPDATE Artikel SET (Naam, Prijs, Voorraad)"
-                + " VALUES ("
-                        //+ "'" + artikel.getId () + "',"
-                        + "'" + artikel.getNaam () + "',"
-                        + "'" + artikel.getPrijs () + "',"
-                        + "'" + artikel.getVoorraad () + "');";
-                        //+ "'" + artikel.isDeleted () + "');";
+    public boolean updateArtikelAll (ArtikelPojo artikel) {
+        String sql = "UPDATE Artikel SET"
+                + " (Naam = " + artikel.getNaam()+ ","
+                + " Prijs = " + artikel.getPrijs() + ","
+                + " Voorraad = " + artikel.getVoorraad () + ");";
         //System.out.println(sql);
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
@@ -81,11 +78,13 @@ public class SqlArtikelDao extends SuperArtikelDao {
         }
         return true;
     }
-
+    
     @Override
-    public boolean deleteArtikel (ArtikelPojo artikel) {
-        String sql = "DELETE * FROM Artikel" + " WHERE ArtikelId = "+artikel.getId ();
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
+    public boolean updateArtikelNaam (String naam, int id) {
+        String sql = "UPDATE Artikel SET Naam = '" + naam + "' "
+                   + "WHERE idArtikel = " + id;
+        //System.out.println(sql);
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -94,8 +93,40 @@ public class SqlArtikelDao extends SuperArtikelDao {
     }
     
     @Override
-    public boolean isValidLogin (ArtikelPojo artikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean updateArtikelPrijs (double prijs, int id) {
+        String sql = "UPDATE Artikel SET Prijs = '" + prijs + "' "
+                   + "WHERE idArtikel = " + id;
+        //System.out.println(sql);
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
+        } catch (Exception ex) {
+            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean updateArtikelVoorraad (int voorraad, int id) {
+        String sql = "UPDATE Artikel SET Voorraad = '" + voorraad + "' "
+                   + "WHERE idArtikel = " + id;
+        //System.out.println(sql);
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
+        } catch (Exception ex) {
+            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
+    }   
+
+    @Override
+    public boolean deleteArtikel (int id) {
+        String sql = "UPDATE Artikel SET Deleted = 1 WHERE idArtikel = " + id;
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
+        } catch (Exception ex) {
+            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
     }
     
     @Override
@@ -123,7 +154,12 @@ public class SqlArtikelDao extends SuperArtikelDao {
     private void fillPojo (ResultSet result, ArtikelPojo artikelPojo) throws SQLException {
         artikelPojo.setId (result.getInt ("idArtikel"));
         artikelPojo.setNaam (result.getString ("Naam"));
-        artikelPojo.setPrijs (result.getDouble("Prijs"));
+        artikelPojo.setPrijs (result.getDouble ("Prijs"));
         artikelPojo.setVoorraad (result.getInt("Voorraad"));
+    }
+    
+    @Override
+    public boolean isValidLogin (ArtikelPojo artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

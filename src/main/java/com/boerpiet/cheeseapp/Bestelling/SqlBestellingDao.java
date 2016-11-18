@@ -68,7 +68,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
     @Override
     public BestellingPojo getBestellingByKlantId (int klantId) {
         BestellingPojo b = new BestellingPojo ();
-        String sql = "SELECT idBestelling FROM Bestelling "+ "WHERE Deleted = 0 AND Afgehandeld = 0 AND KlantKey = "+klantId;
+        String sql = "SELECT idBestelling FROM Bestelling "
+                + "WHERE Deleted = 0 AND Afgehandeld = 0 AND KlantKey = "+klantId;
         try {ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
         if (rs.next()) {
             b.setId (rs.getInt(1));
@@ -101,7 +102,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
     @Override
     public boolean deleteBestelling(int bestelId) {
         String sql = "UPDATE Bestelling SET Deleted = 1 "
-                + " WHERE Deleted = 0 AND idBestelling = "+bestelId;
+                + " WHERE Deleted = 0 AND idBestelling = " + bestelId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);

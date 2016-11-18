@@ -30,12 +30,27 @@ public class FirebirdArtikelDao extends SuperArtikelDao {
     }
 
     @Override
-    public boolean updateArtikel(ArtikelPojo artikel) {
+    public boolean updateArtikelAll (ArtikelPojo artikel) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public boolean updateArtikelNaam (String naam, int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public boolean updateArtikelPrijs (double prijs, int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public boolean updateArtikelVoorraad (int voorraad, int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean deleteArtikel(ArtikelPojo artikel) {
+    public boolean deleteArtikel(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

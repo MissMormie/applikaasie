@@ -8,7 +8,6 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
-import com.boerpiet.domeinapp.ArtikelPojo;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.viewapp.ArtikelView;
@@ -99,7 +98,7 @@ public class BestellingController {
             case 2: modifyArticleFromOrder();
                     modifyOrder();
                 break;
-            case 3:
+          case 3:
                 return;
                 //of logout
             default:
@@ -108,7 +107,7 @@ public class BestellingController {
         }        
     }
     
-    public void addArticleToOrder () {
+    private void addArticleToOrder () {
         System.out.println("Geef klantid:");
         int klantId = Integer.parseInt(input.nextLine());
         bestellingView.showAllOrdersByKlantId(klantId);
@@ -126,7 +125,7 @@ public class BestellingController {
         bestellingView.showAllBestelRegelsByBestelId(bestelId);        
     }
     
-    public void createArticleToAddToOrder (int bestelId, int artikelId, int aantal) {
+    private void createArticleToAddToOrder (int bestelId, int artikelId, int aantal) {
         
         BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
         if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel)) {
@@ -138,7 +137,7 @@ public class BestellingController {
         }
     }
     
-    public void modifyArticleFromOrder () {
+    private void modifyArticleFromOrder () {
         System.out.println("Geef klantid:");
         int klantId = Integer.parseInt(input.nextLine());
         bestellingView.showAllOrdersByKlantId(klantId);
@@ -160,7 +159,7 @@ public class BestellingController {
         bestellingView.showAllBestelRegelsByBestelId(bestelId);
     }
     
-    public void modifyArticle (int regelId, int artikelId, int aantal) {
+    private void modifyArticle (int regelId, int artikelId, int aantal) {
         BestelArtikelPojo ba = new BestelArtikelPojo ();
         //ba.setId(regelId);
         ba.setArtikelId(artikelId);
@@ -192,7 +191,7 @@ public class BestellingController {
         }
     }
     
-    public void deleteOneTupelFromOrder () {
+    private void deleteOneTupelFromOrder () {
         System.out.println("Geef klantid:");
         int klantId = Integer.parseInt(input.nextLine());
         bestellingView.showAllOrdersByKlantId(klantId);
@@ -207,7 +206,7 @@ public class BestellingController {
             System.out.println("Dit is de gewijzigde bestelling.");
             bestellingView.showAllOrdersByKlantId(klantId);
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw");
+            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
             return;
         }
         System.out.println("Wil je nog meer artikelen verwijderen van bestelling? (J/N):");
@@ -218,7 +217,7 @@ public class BestellingController {
             
     }
 
-    public void deleteTotalOrder() {
+    private void deleteTotalOrder() {
         System.out.println("Geef klantid:");
         int klantId = Integer.parseInt(input.nextLine());
         bestellingView.showAllOrdersByKlantId(klantId);
@@ -226,12 +225,12 @@ public class BestellingController {
         int bestelId = Integer.parseInt(input.nextLine());
         deleteArticlesFromOrder(bestelId);
         if (BestellingDaoFactory.getBestellingDAO("MySQL").deleteBestelling(bestelId)) {
-            System.out.println("Bestelling is verwijderd");
+            System.out.println("Bestelling is verwijderd.");
             bestellingView.showAllOrdersByKlantId(klantId);            
         }        
     }
     
-    public void deleteArticlesFromOrder (int bestelId) {
+    private void deleteArticlesFromOrder (int bestelId) {
         ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
         for (BestelArtikelPojo ba : baList) {

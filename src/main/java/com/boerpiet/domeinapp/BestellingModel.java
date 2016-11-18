@@ -5,56 +5,51 @@
  */
 package com.boerpiet.domeinapp;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 /**
  *
  * @author Peaq
  */
 public class BestellingModel {
-    private int id;
-    private int klantKey;
-    private LocalDate bestelDatum;
-    private int accountKey;
-    private boolean deleted;
+    private BestellingModel bm;
+    private BestellingPojo bp;
+    private BestelArtikelPojo ba;
+    private ArtikelPojo ap;
     
-    public BestellingModel () {};
-    public BestellingModel (int id, int klantKey, LocalDate bestelDatum, int accountKey, boolean deleted) {
-        this.id = id;
-        this.klantKey = klantKey;
-        this.bestelDatum = bestelDatum;
-        this.accountKey = accountKey;
-        this.deleted = deleted;
+    public BestellingModel () {
+        
     }
+        
+    public BestellingModel (BestellingModel bm, BestellingPojo bp, BestelArtikelPojo ba, ArtikelPojo ap) {
+        this.bm = bm;
+        this.bp = bp;
+        this.ba = ba; 
+        this.ap = ap;
+    }    
     
-    public int getId (){
-        return id;
+    public BestellingModel getBestellingModel () {
+        return bm;
     }
-    public void setId (int id) {
-        this.id = id;
+    public void setBestellingModel (BestellingModel bm) {
+        this.bm = bm;
     }
-    public int getKlantKey() {
-        return klantKey;
+    public BestellingPojo getBestellingPojo () {
+        return bp;
     }
-    public void setKlantKey (int klantKey) {
-        this.klantKey = klantKey;
+    public void setBestellingPojo (BestellingPojo bp) {
+        this.bp = bp;
     }
-    public LocalDate getBestelDatum () {
-        return bestelDatum;
+    public BestelArtikelPojo getBestelArtikelPojo () {
+        return ba;
     }
-    public void setBestelDatum (LocalDate bestelDatum) {
-        this.bestelDatum = bestelDatum;
+    public void setBestelArtikelPojo (BestelArtikelPojo ba) {
+        this.ba = ba;
     }
-    public int getAccountKey () {
-        return accountKey;
+    public ArtikelPojo getArtikelPojo () {
+        return ap;
     }
-    public void setAccountKey (int accountKey) {
-        this.accountKey = accountKey;
-    }
-    public boolean isDeleted () {
-        return deleted;
-    }
-    public void setDeleted (boolean deleted) {
-        this.deleted = deleted;
+    public void setArtikelPojo (ArtikelPojo ap) {
+        this.ap = ap;
     }
 }
