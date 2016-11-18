@@ -32,9 +32,9 @@ public class BestellingView {
 
     public void startModifyOrder() {
         System.out.println("Je bent nu in het bestelling-wijzigingsmenu.");
-        System.out.println("Wat wil je doen:\n"
-                +"1. Artikelen toevoegen aan bestelling \n"
-                +"2. Artikelen wijzigen in bestelling \n"
+        System.out.println("Wat wil je doen:"
+                +"1. Artikelen toevoegen aan bestelling"
+                +"2. Artikelen wijzigen in bestelling"
                 +"3. Terug naar het menu \n");
         //+ status bestelling veranderen (afgehandeld op true zetten)   later toevoegen?
         
@@ -42,9 +42,9 @@ public class BestellingView {
     
     public void startDeleteOrder () {
         System.out.println("Dit is het menu voor verwijderen van bestellingen.");
-        System.out.println("Wat wil je doen:\n"
-                +"1. Een of meerdere artikelen verwijderen van bestelling \n"
-                +"2. Gehele bestelling verwijderen \n"
+        System.out.println("Wat wil je doen:"
+                +"1. Een of meerdere artikelen verwijderen van bestelling"
+                +"2. Gehele bestelling verwijderen"
                 +"3. Terug naar het menu \n");
     }
     
