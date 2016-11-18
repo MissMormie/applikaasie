@@ -169,15 +169,40 @@ public class MenuModel {
                 kc3.selectKlantToDelete();                
                 break;
                 
-                //Bestellingen:
-            case "Nieuwe Bestelling": //nieuwe bestelling
+                //Bestellingen en Artikelen ingevoerd door Jung, voorlopig werkende versie.
+                //Moet nog een scheiding tussen controller en model gemaakt worden,
+                //en misschien tussen klant- en medewerkeropties.
+                
+                //BESTELLINGEN:
+            case "Nieuwe bestelling": //nieuwe bestelling
                 BestellingController bcTest1 = new BestellingController (new BestellingPojo(),
                         new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
                 bcTest1.newOrderInput();
+                break;
             case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
                 BestellingController bcTest2 = new BestellingController (new BestellingPojo(),
                         new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
                 bcTest2.modifyOrder();
+                break;
+            case "Bestelling verwijderen": //artikelen verwijderen van bestelling of totale bestelling verwijderen
+                BestellingController bcTest3 = new BestellingController (new BestellingPojo(),
+                        new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
+                bcTest3.deleteOrderOptions();
+                break;
+                
+            //ARTIKELEN:
+            case "Nieuw artikel":
+                ArtikelController artC1 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                artC1.createArticle();
+                break;
+            case "Wijzig artikel":
+                ArtikelController artC2 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                artC2.modifyArticle();
+                break;
+            case "Verwijder artikel":
+                ArtikelController artC3 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                artC3.deleteArticle();
+                break;
                 
             // LOGOUT
             case "logout": logout(); break;

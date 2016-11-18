@@ -8,7 +8,6 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import com.boerpiet.viewapp.ArtikelView;
-import java.math.BigDecimal;
 import java.util.Scanner;
 
 /**
