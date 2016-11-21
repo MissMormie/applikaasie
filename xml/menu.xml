@@ -9,9 +9,9 @@ and open the template in the editor.
     <mainMenu login='medewerker'>
         <!-- @id=unique number in this mainmenuNode, number is selection number, action is action to be done -->
         <menuItem id="1" number='1' action='submenu' name='Kazen'>
-            <menuItem id="11" number='1' action='nieuwArtikel'>Voeg nieuwe kaas toe</menuItem>
-            <menuItem id="12" number='2' action='wijzigKaas'>Zoek kaas om te wijzigen</menuItem>
-            <menuItem id="13" number='3' action='verwijderKaas'>Zoek kaas om te verwijderen</menuItem>
+            <menuItem id="11" number='1' action='Nieuw artikel'>Voeg nieuwe kaas toe</menuItem>
+            <menuItem id="12" number='2' action='Wijzig artikel'>Zoek kaas om te wijzigen</menuItem>
+            <menuItem id="13" number='3' action='Verwijder artikel'>Zoek kaas om te verwijderen</menuItem>
             <menuItem id="14" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>        
         <menuItem id="2" number='2' action='submenu' name='Klantgegevens'>
@@ -21,9 +21,9 @@ and open the template in the editor.
             <menuItem id="34" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="3" number='3' action='submenu' name='Bestellingen'>
-            <menuItem id="41" number='1' action='nieuweBestelling'>Voeg nieuwe bestelling toe</menuItem>
-            <menuItem id="42" number='2' action='wijzigBestelling'>Zoek klant om te wijzigen</menuItem>
-            <menuItem id="43" number='3' action='verwijderBestelling'>Zoek klant om te verwijderen</menuItem>
+            <menuItem id="41" number='1' action='Nieuwe bestelling'>Voeg nieuwe bestelling toe</menuItem>
+            <menuItem id="42" number='2' action='Wijzig bestelling'>Zoek bestelling om te wijzigen</menuItem>
+            <menuItem id="43" number='3' action='Verwijder bestelling'>Zoek bestelling om te verwijderen</menuItem>
             <menuItem id="44" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="4" number='4' action='submenu' name='Account'>
@@ -35,9 +35,9 @@ and open the template in the editor.
     </mainMenu>
     <mainMenu login='admin'>
         <menuItem id="1" number='1' action='submenu' name='Kazen'>
-            <menuItem id="11" number='1' action='nieuwArtikel'>Voeg nieuwe kaas toe</menuItem>
-            <menuItem id="12" number='2' action='wijzigKaas'>Zoek kaas om te wijzigen</menuItem>
-            <menuItem id="13" number='3' action='verwijderKaas'>Zoek kaas om te verwijderen</menuItem>
+            <menuItem id="11" number='1' action='Nieuw artikel'>Voeg nieuwe kaas toe</menuItem>
+            <menuItem id="12" number='2' action='Wijzig artikel'>Zoek kaas om te wijzigen</menuItem>
+            <menuItem id="13" number='3' action='Verwijder artikel'>Zoek kaas om te verwijderen</menuItem>
             <menuItem id="14" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="2" number='2' action='submenu' name='Accounts'>
@@ -54,9 +54,9 @@ and open the template in the editor.
             <menuItem id="34" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="4" number='4' action='submenu' name='Bestellingen'>
-            <menuItem id="41" number='1' action='nieuweBestelling'>Voeg nieuwe bestelling toe</menuItem>
-            <menuItem id="42" number='2' action='wijzigBestelling'>Zoek klant om te wijzigen</menuItem>
-            <menuItem id="43" number='3' action='verwijderBestelling'>Zoek klant om te verwijderen</menuItem>
+            <menuItem id="41" number='1' action='Nieuwe bestelling'>Voeg nieuwe bestelling toe</menuItem>
+            <menuItem id="42" number='2' action='Wijzig bestelling'>Zoek bestelling om te wijzigen</menuItem>
+            <menuItem id="43" number='3' action='Verwijder bestelling'>Zoek bestelling om te verwijderen</menuItem>
             <menuItem id="44" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id='5' number='9' action='logout' name="Log uit"/>                                            
@@ -65,9 +65,9 @@ and open the template in the editor.
 
     <mainMenu login='klant'>
         <menuItem id="4" number='1' action='submenu' name='Bestellingen'>
-            <menuItem id="41" number='1' action='nieuweBestelling'>Voeg nieuwe bestelling toe</menuItem>
-            <menuItem id="42" number='2' action='wijzigBestelling'>Zoek bestelling om te wijzigen</menuItem>
-            <menuItem id="43" number='3' action='verwijderBestelling'>Zoek bestelling om te verwijderen</menuItem>
+            <menuItem id="41" number='1' action='Nieuwe bestelling'>Voeg nieuwe bestelling toe</menuItem>
+            <menuItem id="42" number='2' action='Wijzig bestelling'>Zoek bestelling om te wijzigen</menuItem>
+            <menuItem id="43" number='3' action='Verwijder bestelling'>Zoek bestelling om te verwijderen</menuItem>
             <menuItem id="44" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="2" number='2' action='submenu' name='Account'>
