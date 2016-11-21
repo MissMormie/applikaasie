@@ -7,8 +7,6 @@ package com.boerpiet.viewapp;
 
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.ArtikelPojo;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +24,7 @@ public class ArtikelView {
     }
 
     private void showArtikelListHeader() {
-        System.out.printf("%-3s %-17s %-10s %s \n",
+        System.out.printf("%-3s %-25s %-10s %s \n",
                 "id",
                 "naam",
                 "prijs",
@@ -35,7 +33,7 @@ public class ArtikelView {
     
     private void showArtikelListItem(ArtikelPojo ap) {
         //NumberFormat nfPrijs = new DecimalFormat ("#.###,00");
-        System.out.printf("%-3s %-17s %-10s %s \n", 
+        System.out.printf("%-3s %-25s %-10s %s \n", 
                 ap.getId(), 
                 ap.getNaam(), 
                 ap.getPrijs(),
@@ -52,7 +50,9 @@ public class ArtikelView {
     }
 
     public void startCreateArticle() {
-        System.out.println("Wil je een nieuw artikel invoeren? (J/N)");
+        System.out.println("Wat wil je doen? \n"
+                + "1. Nieuw artikel invoeren \n"
+                + "2. Terug naar menu \n");
     }
     
     public void articleModifyOptions () {
@@ -64,6 +64,8 @@ public class ArtikelView {
     }
     
     public void startDeleteArticle () {
-        System.out.println("Dit is het menu voor verwijderen van artikelen.");
+        System.out.println("Wat wil je doen? \n"
+                + "1. Artikel verwijderen \n"
+                + "2. Terug naar menu \n");
     }
 }

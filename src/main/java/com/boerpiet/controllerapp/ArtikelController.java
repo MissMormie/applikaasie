@@ -6,6 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
+import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.Scanner;
@@ -16,44 +17,44 @@ import java.util.Scanner;
  */
 public class ArtikelController {
     private final Scanner input = new Scanner (System.in);
+    private final ArtikelModel artikelModel;
     private final ArtikelPojo artikelPojo;
     private final ArtikelView artikelView;
     
-    public ArtikelController (ArtikelPojo artikelPojo, ArtikelView artikelView) {
+    public ArtikelController (ArtikelModel artikelModel, ArtikelPojo artikelPojo,
+            ArtikelView artikelView) {
+        this.artikelModel = artikelModel;
         this.artikelPojo = artikelPojo;
         this.artikelView = artikelView;
         }
     
     public void createArticle () {
         artikelView.startCreateArticle ();
-        addArticleToDatabase ();
+        int keuze  = Integer.parseInt(input.nextLine());
         
+        switch (keuze) {
+            case 1: addArticleToDatabase ();
+                    createArticle ();
+                break;
+            case 2:
+                return;
+            default: addArticleToDatabase ();
+                break;
+        }        
     }
     
     private void addArticleToDatabase () {
-        String begin = input.nextLine();
-        if (begin.equalsIgnoreCase("N")) {
-            return;
-        }
-        
+                
         System.out.println("Geef naam voor artikel:");
         String naam = input.nextLine();
+        
         System.out.println("Geef prijs voor artikel:");
-        Double prijs = Double.parseDouble(input.nextLine());
+        double prijs = Double.parseDouble(input.nextLine());
+        
         System.out.println("Geef huidige voorraad van dit artikel:");
         int voorraad = Integer.parseInt(input.nextLine());
         
-        artikelPojo.setNaam(naam);
-        artikelPojo.setPrijs(prijs);
-        artikelPojo.setVoorraad(voorraad);
-        
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").createArtikel(artikelPojo)) {
-            System.out.println("Artikel is toegevoegd aan de database.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            createArticle();
-        }
+        artikelModel.addArticle(naam, prijs, voorraad);
     }
     
     public void modifyArticle () {
@@ -81,66 +82,56 @@ public class ArtikelController {
         artikelView.showAllArticles();
         System.out.println("Geef artikelid voor wijziging:");
         int id = Integer.parseInt(input.nextLine());
+        
         System.out.println("Geef de nieuwe naam:");
         String naam = input.nextLine();
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelNaam(naam, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            modifyArticle ();
-        }
+        artikelModel.modifyNaam(id, naam);
     }
     
     private void modifyArticlePrijs () {
         artikelView.showAllArticles();
         System.out.println("Geef artikelid voor wijziging:");
         int id = Integer.parseInt(input.nextLine());
+        
         System.out.println("Geef de nieuwe prijs:");
         double prijs = Double.parseDouble(input.nextLine());
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelPrijs(prijs, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            modifyArticle ();
-        }
+        artikelModel.modifyPrijs(id, prijs);
     }
     
     private void modifyArticleVoorraad () {
         artikelView.showAllArticles();
         System.out.println("Geef artikelid voor wijziging:");
         int id = Integer.parseInt(input.nextLine());
+        
         System.out.println("Geef de nieuwe voorraad:");
         int voorraad = Integer.parseInt(input.nextLine());
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelVoorraad(voorraad, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            modifyArticle ();
+        artikelModel.modifyVoorraad(id, voorraad);
+    }
+    
+    public void deleteArticleMenu () {
+        artikelView.startDeleteArticle();
+        
+        int keuze = Integer.parseInt(input.nextLine());
+        
+        switch (keuze) {
+            case 1: deleteArticleFromDatabase ();
+                    deleteArticleMenu ();
+                break;
+            case 2:
+                return;
+            default: deleteArticleMenu ();
+                break;
         }
     }
     
-    public void deleteArticle () {
-        artikelView.startDeleteArticle();
+    private void deleteArticleFromDatabase () {
         artikelView.showAllArticles();
         System.out.println("Geef id van artikel voor verwijdering:");
         int id = Integer.parseInt(input.nextLine());
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").deleteArtikel(id)) {
-            System.out.println("Artikel is nu verwijderd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            return;
-        }
-        System.out.println("Wil je nog meer artikelen verwijderen? (J/N)");
-        String jaNee = input.nextLine();
-        if (jaNee.equalsIgnoreCase("j")) {
-            deleteArticle ();
-        }
+        
+        artikelModel.deleteArticle(id);
     }
 }

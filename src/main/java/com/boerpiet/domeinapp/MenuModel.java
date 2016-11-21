@@ -209,16 +209,19 @@ public class MenuModel {
                 
             //ARTIKELEN:
             case "Nieuw artikel":
-                ArtikelController artC1 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC1 = new ArtikelController (new ArtikelModel (),
+                        new ArtikelPojo (), new ArtikelView ());
                 artC1.createArticle();
                 break;
             case "Wijzig artikel":
-                ArtikelController artC2 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC2 = new ArtikelController (new ArtikelModel (),
+                        new ArtikelPojo (), new ArtikelView ());
                 artC2.modifyArticle();
                 break;
             case "Verwijder artikel":
-                ArtikelController artC3 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
-                artC3.deleteArticle();
+                ArtikelController artC3 = new ArtikelController (new ArtikelModel (),
+                        new ArtikelPojo (), new ArtikelView ());
+                artC3.deleteArticleMenu();
                 break;
                 
             // LOGOUT

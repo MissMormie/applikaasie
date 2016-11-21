@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package com.boerpiet.domeinapp;
-
-import java.math.BigDecimal;
-
 /**
  *
  * @author Peaq

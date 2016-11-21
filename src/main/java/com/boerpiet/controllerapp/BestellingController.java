@@ -5,8 +5,6 @@
  */
 package com.boerpiet.controllerapp;
 
-import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
-import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.BestellingPojo;
@@ -15,7 +13,6 @@ import com.boerpiet.viewapp.BestellingView;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
