@@ -5,6 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.cheeseapp.adres.AdresDAOFactory;
 import com.boerpiet.cheeseapp.klant.KlantDAOFactory;
 import java.util.logging.Level;
 import org.slf4j.Logger;
@@ -235,7 +236,7 @@ public class KlantModel {
      */
     public boolean delete() {
         if(klantPojo.getId() != 0)
-            return KlantDAOFactory.getKlantDAO().deleteKlantById(klantPojo.getId());
+            return KlantDAOFactory.getKlantDAO().deleteKlantAndAdressenById(klantPojo.getId());
         return false;
     }
 
@@ -251,15 +252,15 @@ public class KlantModel {
         switch(type.toLowerCase()) {
             case "postadres":
                 if(postAdresPojo != null & postAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(postAdresPojo);            
+                    return AdresDAOFactory.getAdresDAO().updateAdres(postAdresPojo);            
                 break;
             case "factuuradres":
                 if(factuurAdresPojo != null & factuurAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(factuurAdresPojo);            
+                    return AdresDAOFactory.getAdresDAO().updateAdres(factuurAdresPojo);            
                 break;
             case "bezorgadres":
                 if(bezorgAdresPojo != null & bezorgAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(bezorgAdresPojo);            
+                    return AdresDAOFactory.getAdresDAO().updateAdres(bezorgAdresPojo);            
                 break;
                 
             // All 3 address types are the same

@@ -114,7 +114,7 @@ public class KlantController {
     
     private String phoneListener() {
         String phone = input.nextLine();
-        if(Validator.isValidPhonenumber(phone))
+        if(phone.equals("") || Validator.isValidPhonenumber(phone))
             return phone;
         
         klantView.showTelefoonnummer();
@@ -123,13 +123,22 @@ public class KlantController {
     
     private String emailListener() {
         String email = input.nextLine();
-        if (Validator.isValidEmailadres(email))
+        if (email.equals("") || Validator.isValidEmailadres(email))
             return email;
         
         klantView.showEmailAdres();
         return emailListener();
     }
        
+    private String postcodeListener() {
+        String postcode = input.nextLine();
+        if (Validator.isValidPostcode(postcode))
+            return postcode;
+        
+        klantView.showEmailAdres();
+        return emailListener();
+    }
+    
     /**
     * Asks if user wants to use the same address voor all addresstypes
  Calls single setAdres if same adress is to be used.
@@ -152,7 +161,6 @@ public class KlantController {
             setAdresses();
         }
     }
- 
     
     private void setAdres(String type) {
         klantView.showStraat();
@@ -163,18 +171,21 @@ public class KlantController {
 
         klantView.showToevoeging();
         String toevoeging = textListener();
+        
+        klantView.showPostcode();
+        String postcode = postcodeListener();
 
         klantView.showWoonplaats();
         String woonplaats = notEmptyTextListener(); 
         
         if(type.equalsIgnoreCase("same")) {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
-                    straat, huisnummer, toevoeging, woonplaats, false);
+                    straat, huisnummer, toevoeging, postcode, woonplaats, false);
             klantModel.setAllAdresses(adres);
         } 
         else {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
-                straat, huisnummer, toevoeging, woonplaats, false, type);
+                straat, huisnummer, toevoeging, postcode, woonplaats, false, type);
             klantModel.setAdres(adres);
         }
     }

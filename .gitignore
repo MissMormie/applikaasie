@@ -2,3 +2,5 @@
 /src/main/java/com/boerpiet/mainTest.java
 /nbproject/
 debug.log
+/logs/rollingfile.log
+/logs/

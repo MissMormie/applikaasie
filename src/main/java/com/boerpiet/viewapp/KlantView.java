@@ -182,7 +182,11 @@ public class KlantView {
     }
 
     public void showWoonplaats() {
-        System.out.println("Woonplaats");
+        System.out.println("Woonplaats:");
+    }
+
+    public void showPostcode() {
+        System.out.println("Postcode:");
     }
 
     public void showDeleteSuccess() {
@@ -199,4 +203,5 @@ public class KlantView {
     public void showValidNumber() {
         System.out.println("Geef een juist nummer op.");
     }
+
 }

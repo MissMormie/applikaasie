@@ -85,8 +85,7 @@ public class MySQLConnection {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         } catch (Exception ex) {
-            System.out.println("com.boerpiet.cheeseapp.MySQLConnection.createUpdateDelete()");
-            System.out.println(ex);
+            logger.debug("sql query failed:" + sql + " " + ex);
             return false;
         }
         return true;

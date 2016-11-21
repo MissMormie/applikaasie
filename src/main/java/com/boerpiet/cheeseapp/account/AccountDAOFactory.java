@@ -5,41 +5,24 @@
  */
 package com.boerpiet.cheeseapp.account;
 
+import com.boerpiet.domeinapp.ConfigVars;
+
 /**
  *
  * @author Sonja
- * UsageExample: AccountDAO dao = AccountDAOFactory.getAccountDAO("MySQL");
- * 
+ * UsageExample: AccountDAO dao = AccountDAOFactory.getAccountDAO();
+ * Takes info from config.xml to determine the database type.
  */
 public class AccountDAOFactory {
-    // Todo make this settable and generic.
-    private static final String type = "MySQL";
-    
-    /**
-     * @deprecated Use getAccountDAO() instead
-     * @param type
-     * @return 
-     */
-    public static AccountDAO getAccountDAO(String type){
-            if (type.equals("MySQL")) {
-                    return new MySQLAccountDAO();
-            } else if (type.equals("Firebird")) {
-                    return new FirebirdAccountDAO();
-            } 
-            return new MySQLAccountDAO();
-    }   
     
     public static AccountDAO getAccountDAO(){
-            if (type.equals("MySQL")) {
-                    return new MySQLAccountDAO();
-            } else if (type.equals("Firebird")) {
-                    return new FirebirdAccountDAO();
-            } 
-            return new MySQLAccountDAO();
-    }    
-    
-    
-    
-    
+        String type = ConfigVars.getDbType();
+        if (type.equals("MySQL")) {
+                return new MySQLAccountDAO();
+        } else if (type.equals("Firebird")) {
+                return new FirebirdAccountDAO();
+        }
+        return new MySQLAccountDAO();
+    }
     
 }

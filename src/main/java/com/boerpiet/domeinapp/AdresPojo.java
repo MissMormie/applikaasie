@@ -19,6 +19,7 @@ public class AdresPojo implements Cloneable {
     private String straat;
     private int huisnummer;
     private String toevoeging;
+    private String postcode;
     private String woonplaats;
     private boolean deleted;
     private String adresType; // Deze staat niet direct in deze database tabel maar hoort hier wel bij. Eigenlijk zou adres_type tabel bij adres moeten en niet bij klant heeft adres omdat het iets zegt over het type adres niet over de relatie met klant. 
@@ -34,21 +35,23 @@ public class AdresPojo implements Cloneable {
      * @param deleted boolean
      * @param adresType String 
      */
-    public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String woonplaats, boolean deleted, String adresType) {
+    public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, boolean deleted, String adresType) {
         this.idAdres = idAdres;
         this.straat = straat;
         this.huisnummer = huisnummer;
         this.toevoeging = toevoeging;
+        this.postcode = postcode;
         this.woonplaats = woonplaats;
         this.deleted = deleted;
         this.adresType = adresType;
     }
     
-    public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String woonplaats, boolean deleted) {
+    public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, boolean deleted) {
         this.idAdres = idAdres;
         this.straat = straat;
         this.huisnummer = huisnummer;
         this.toevoeging = toevoeging;
+        this.postcode = postcode;
         this.woonplaats = woonplaats;
         this.deleted = deleted;
     }    
@@ -110,7 +113,14 @@ public class AdresPojo implements Cloneable {
     public void setAdresType(String adresType) {
         this.adresType = adresType;
     }
-    
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }    
     
     // ------------ PUBLIC FUNCTIONS ---------------------------------
 

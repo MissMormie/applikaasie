@@ -17,9 +17,9 @@ public class AccountView {
 
     public void showNewAccount() {
         showDivider();
-        System.out.println("Je gaat nu een nieuw account maken. Wil je dit niet, type dan N en druk op enter.\n"
+        System.out.println("Je gaat nu een nieuw account maken. Wil je dit niet, type dan N en druk op enter.\n\n"
                          + "Geef de gegevens voor het nieuwe account als volgt op:\n"
-                         + "Gebruikernaam wachtwoord druk hierna op enter. \n");
+                         + "Gebruikernaam <spatie> wachtwoord druk hierna op enter. \n");
     }
 
     public void showWrongInput() {
@@ -102,8 +102,6 @@ public class AccountView {
         System.out.println("\nWat wil je wijzigen aan dit account?\n"
                          + "1 Gebruikersnaam\n"
                          + "2 Wachtwoord\n"
-//                         + "3 AccountStatus\n"
-//                         + "4 klantId\n"
                          + "Of type N om terug te gaan naar het menu.");
     }
 
@@ -162,5 +160,11 @@ public class AccountView {
     public void showUpdateSuccess() {
         showDivider();
         System.out.println("Update van account is geslaagd.");
+    }
+
+    public void showUserExists() {
+        showDivider();
+        System.out.println("Account maken mislukt: Deze gebruikersnaam bestaat al.");
+
     }
 }

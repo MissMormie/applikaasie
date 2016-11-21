@@ -38,4 +38,9 @@ public class Validator {
         String regex ="\\S+@\\S+\\.\\S{2,}";
         return email.matches(regex);
     }
+
+    public static boolean isValidPostcode(String postcode) {
+        String regex ="[1-9][0-9]{3}\\s?\\w\\w";
+        return postcode.matches(regex);
+    }
 }

@@ -26,6 +26,7 @@ public class MenuModel {
     private int menuId;
     private LoginManager loginManager;
 
+
     // ------------ CONSTRUCTORS ---------------------------------
 
     /**
@@ -219,6 +220,18 @@ public class MenuModel {
             case "Verwijder artikel":
                 ArtikelController artC3 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
                 artC3.deleteArticle();
+                break;
+                
+            // CONFIGURATIE
+                
+            case "wijzigDatabase":
+                ConfController cc1 = new ConfController(new ConfModel(), new ConfView(), loginManager);
+                cc1.modifyDatabaseSetting();
+                break;
+            case "wijzigConnectionPool":
+                ConfController cc2 = new ConfController(new ConfModel(), new ConfView(), loginManager);
+                cc2.modifyConnectionPoolSetting();
+
                 break;
                 
             // LOGOUT
