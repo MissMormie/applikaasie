@@ -19,7 +19,9 @@ public class BestellingView {
             
     public void showNewBestelling () {
         
-        System.out.println("Wil je een nieuwe bestelling invoeren? (J/N):");        
+        System.out.println("Wat wil je doen? \n"
+                +"1. Nieuwe bestelling invoeren \n"
+                +"2. Terug naar het menu \n");
     }
     
     public void showNewBestellingSucces () {
