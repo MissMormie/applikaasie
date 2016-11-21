@@ -117,7 +117,9 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
 
     @Override
     public boolean deleteBestelArtikel(int brId) {
-        String sql = "UPDATE BestelArtikel SET Deleted = 1 "
+        String sql = "UPDATE BestelArtikel SET Deleted = 1, Bezorgd = 1 "
+                //als deleted op 1 staat dan is bezorgd =1 noodzakelijk voor het
+                //laten zien van actuele lijst in view, maar het is niet daadwerkelijk bezorgd
                     + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {

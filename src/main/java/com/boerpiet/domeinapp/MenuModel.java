@@ -189,18 +189,21 @@ public class MenuModel {
                 
                 //BESTELLINGEN:
             case "Nieuwe bestelling": //nieuwe bestelling
-                BestellingController bcTest1 = new BestellingController (new BestellingPojo(),
-                        new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
-                bcTest1.newOrderInput();
+                BestellingController bcTest1 = new BestellingController (new BestellingModel (),
+                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
+                        new ArtikelView());
+                bcTest1.startNewOrder();
                 break;
             case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
-                BestellingController bcTest2 = new BestellingController (new BestellingPojo(),
-                        new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
+                BestellingController bcTest2 = new BestellingController (new BestellingModel (),
+                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
+                        new ArtikelView());
                 bcTest2.modifyOrder();
                 break;
             case "Bestelling verwijderen": //artikelen verwijderen van bestelling of totale bestelling verwijderen
-                BestellingController bcTest3 = new BestellingController (new BestellingPojo(),
-                        new BestellingView(), new BestelArtikelPojo(), new ArtikelView());
+                BestellingController bcTest3 = new BestellingController (new BestellingModel (),
+                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
+                        new ArtikelView());
                 bcTest3.deleteOrderOptions();
                 break;
                 

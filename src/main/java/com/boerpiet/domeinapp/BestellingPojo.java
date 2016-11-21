@@ -6,7 +6,6 @@
 package com.boerpiet.domeinapp;
 
 import java.sql.Date;
-import java.time.LocalDate;
 
 /**
  *
