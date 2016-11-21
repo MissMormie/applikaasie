@@ -91,7 +91,7 @@ public class AccountView {
     }
 
     public void showDivider() {
-        System.out.println("\n------------------------------------------------------------------------");        
+        System.out.println("\n------------------------------------------------------------------------\n");        
     }
     
     public void showModifyAccount(AccountPojo account) {
@@ -102,8 +102,8 @@ public class AccountView {
         System.out.println("\nWat wil je wijzigen aan dit account?\n"
                          + "1 Gebruikersnaam\n"
                          + "2 Wachtwoord\n"
-                         + "3 AccountStatus\n"
-                         + "4 klantId\n"
+//                         + "3 AccountStatus\n"
+//                         + "4 klantId\n"
                          + "Of type N om terug te gaan naar het menu.");
     }
 
@@ -114,12 +114,24 @@ public class AccountView {
         System.out.println("\nType de nieuwe gebruikersnaam gevolgd door Enter\n"
                          + "Of type N om terug te gaan naar het menu.");        
     }
+    
+    public void showModifyOwnUsername() {
+        showDivider();
+        System.out.println("Type uw nieuwe gebruikersnaam gevolgd door Enter\n"
+                         + "Of type N om terug te gaan naar het menu.");
+    }
 
     public void showModifyPassword(AccountPojo account) {
         showDivider();
         showAccountListHeader();
         showAccountListItem(account);
         System.out.println("\nType het nieuwe paswoord gevolgd door Enter\n"
+                         + "Of type N om terug te gaan naar het menu.");        
+    }
+    
+    public void showModifyOwnPassword() {
+        showDivider();
+        System.out.println("\nType uw nieuwe paswoord gevolgd door Enter\n"
                          + "Of type N om terug te gaan naar het menu.");        
     }
 

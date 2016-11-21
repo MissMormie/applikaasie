@@ -15,7 +15,7 @@ import com.boerpiet.domeinapp.KlantPojo;
  */
 public class KlantView {
     private void showDivider() {
-        System.out.println("\n------------------------------------------------------------------------");        
+        System.out.println("\n------------------------------------------------------------------------\n");        
     }
     
     public void showNewKlant() {

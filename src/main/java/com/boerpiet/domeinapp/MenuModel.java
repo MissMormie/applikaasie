@@ -154,6 +154,14 @@ public class MenuModel {
                 AccountController ac3 = new AccountController(new AccountModel(), new AccountView());
                 ac3.deleteAccount();
                 break;
+            case "wijzigGebruiker": // Change own Account
+                AccountController ac5 = new AccountController(new AccountModel(loginManager), new AccountView());
+                ac5.modifyOwnUsername();
+                break;
+            case "wijzigWachtwoord": // Change own Account
+                AccountController ac6 = new AccountController(new AccountModel(loginManager), new AccountView());
+                ac6.modifyOwnPassword();
+                break;
                 
             // KLANTEN
             case "nieuweKlant": // new Klant
@@ -167,6 +175,12 @@ public class MenuModel {
             case "verwijderKlant": // Delete Klant
                 KlantenController kc3 = new KlantenController(new KlantenModel(), new KlantenView());
                 kc3.selectKlantToDelete();                
+                break;
+            case "wijzigKlantZelf": // Change logged in Klant
+                KlantenModel km = new KlantenModel();
+                KlantModel km2 = km.getKlantById(loginManager.getAccountPojo().getKlantId());
+                KlantController kc4 = new KlantController(km2, new KlantView());
+                kc4.modifyKlant();
                 break;
                 
                 //Bestellingen en Artikelen ingevoerd door Jung, voorlopig werkende versie.

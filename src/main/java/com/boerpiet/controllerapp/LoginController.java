@@ -30,7 +30,7 @@ public class LoginController {
         loginView.showLogin();
         
         String login = listenForLogin();
-        if(login.equalsIgnoreCase("exit"))
+        if(login.equalsIgnoreCase("exit") || login.equals("9"))
             return;
 
         if (accountModel.validateLogin(login)) {

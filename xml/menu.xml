@@ -14,19 +14,19 @@ and open the template in the editor.
             <menuItem id="13" number='3' action='verwijderKaas'>Zoek kaas om te verwijderen</menuItem>
             <menuItem id="14" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>        
-        <menuItem id="3" number='3' action='submenu' name='Klantgegevens'>
+        <menuItem id="2" number='2' action='submenu' name='Klantgegevens'>
             <menuItem id="31" number='1' action='nieuweKlant'>Voeg nieuwe klant toe</menuItem>
             <menuItem id="32" number='2' action='wijzigKlant'>Zoek klant om te wijzigen</menuItem>
             <menuItem id="33" number='3' action='verwijderKlant'>Zoek klant om te verwijderen</menuItem>
             <menuItem id="34" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
-        <menuItem id="4" number='4' action='submenu' name='Bestellingen'>
+        <menuItem id="3" number='3' action='submenu' name='Bestellingen'>
             <menuItem id="41" number='1' action='nieuweBestelling'>Voeg nieuwe bestelling toe</menuItem>
             <menuItem id="42" number='2' action='wijzigBestelling'>Zoek klant om te wijzigen</menuItem>
             <menuItem id="43" number='3' action='verwijderBestelling'>Zoek klant om te verwijderen</menuItem>
             <menuItem id="44" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
-        <menuItem id="2" number='2' action='submenu' name='Account'>
+        <menuItem id="4" number='4' action='submenu' name='Account'>
             <menuItem id="21" number='1' action='wijzigGebruiker'>Wijzig gebruikersnaam</menuItem>
             <menuItem id="22" number='2' action='wijzigWachtwoord'>Wijzig wachtwoord</menuItem>
             <menuItem id="34" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>                        
@@ -70,12 +70,12 @@ and open the template in the editor.
             <menuItem id="43" number='3' action='verwijderBestelling'>Zoek bestelling om te verwijderen</menuItem>
             <menuItem id="44" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
-        <menuItem id="2" number='2' action='submenu' name='Accounts'>
+        <menuItem id="2" number='2' action='submenu' name='Account'>
             <menuItem id="21" number='1' action='wijzigGebruiker'>Wijzig gebruikersnaam</menuItem>
             <menuItem id="22" number='2' action='wijzigWachtwoord'>Wijzig wachtwoord</menuItem>
+            <menuItem id="23" number='3' action='wijzigKlantZelf'>Wijzig klantgegevens</menuItem>
             <menuItem id="34" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>                        
         </menuItem>
-        
         <menuItem id='5' number='9' action='logout' name="Log uit"/>                                            
     </mainMenu>
 </root>

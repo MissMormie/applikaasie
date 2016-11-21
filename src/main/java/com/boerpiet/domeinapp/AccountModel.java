@@ -19,6 +19,13 @@ public class AccountModel {
     private LoginManager loginManager;
     private final Logger logger = LoggerFactory.getLogger(AccountModel.class);
 
+    public AccountModel() {
+        
+    }
+
+    public AccountModel(LoginManager loginManager) {
+        this.loginManager = loginManager;
+    }
 
     public LoginManager getLogin() {
         return loginManager;

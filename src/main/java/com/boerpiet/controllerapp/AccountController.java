@@ -17,7 +17,7 @@ import java.util.Scanner;
  *
  * @author Sonja
  */
-public class AccountController {  
+public class AccountController {
     private final AccountModel accountModel;
     private final AccountView accountView;
     private final Scanner input = new Scanner(System.in);
@@ -125,6 +125,17 @@ public class AccountController {
     private void modifyAccount(AccountPojo account) {
         accountView.showModifyAccount(account);
         modifyAccountListener(account);
+    }
+    
+    public void modifyOwnPassword() {
+        accountView.showModifyOwnPassword();
+        modifyPasswordListener(accountModel.getLogin().getAccountPojo());
+    }
+    
+    public void modifyOwnUsername() {
+        AccountPojo account = accountModel.getLogin().getAccountPojo();
+        accountView.showModifyOwnUsername();
+        modifyUsernameListener(account);
     }
 
     // Listen for account update options 

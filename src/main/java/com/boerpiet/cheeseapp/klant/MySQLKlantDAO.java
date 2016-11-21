@@ -127,11 +127,18 @@ public class MySQLKlantDAO extends KlantDAO {
     // TODO Make sure that everything or nothing gets deleted with transactions.
     @Override
     public boolean deleteKlantById(int id) {
-        String sql = "Update Klant SET Deleted = 1 WHERE idKlant = '"+ id +"'";
-
-        // Als delete klant mislukt, stop dan.
+        // Start deleting accounts for customer, return if error.
+        String sql ="Update Account SET Deleted = 1 WHERE KlantID = '"+ id +"'";
         if(!MySQLConnection.getMySQLConnection().createUpdateDelete(sql))
             return false;
+
+
+        String sql1 = "Update Klant SET Deleted = 1 WHERE idKlant = '"+ id +"'";
+
+        // Als delete klant mislukt, stop dan.
+        if(!MySQLConnection.getMySQLConnection().createUpdateDelete(sql1))
+            return false;
+
         
         String sql2 = "Select AdresId from Klant_heeft_Adres WHERE klantId = '" + id + "'";
         ResultSet result = MySQLConnection.getMySQLConnection().read(sql2);
@@ -146,7 +153,6 @@ public class MySQLKlantDAO extends KlantDAO {
         } catch (SQLException ex) { 
             Logger.getLogger(MySQLKlantDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
 
         String sql4 = "UPDATE Klant_heeft_Adres SET Deleted = 1 WHERE klantID =" + id;
         return MySQLConnection.getMySQLConnection().createUpdateDelete(sql4);

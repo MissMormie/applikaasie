@@ -16,6 +16,10 @@ public class LoginManager {
         this.account = account;
     }
     
+    public AccountPojo getAccountPojo() {
+        return account;
+    }
+    
     public void logout() {
         account = null;        
     }

@@ -10,8 +10,13 @@ package com.boerpiet.viewapp;
  * @author Sonja
  */
 public class LoginView {
+    public void showDivider() {
+        System.out.println("\n------------------------------------------------------------------------\n");        
+
+    }
+    
     public void showLogin() {
-        System.out.println("Voer 'gebruikersnaam <spatie> wachtwoord' in. Of type exit om te stoppen.");
+        System.out.println("Voer 'gebruikersnaam <spatie> wachtwoord' in. Of type exit of 9 om te stoppen.");
     }
    
     public void showLoginFailed() {

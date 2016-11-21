@@ -18,7 +18,7 @@ public class MenuView {
      * @param nodeList Nodelist containing <menuItem>
      */
     public void showMenu(NodeList nodeList) {
-        System.out.println("\n----------------------------------------------");
+        System.out.println("\n------------------------------------------------------------------------\n");        
 
         for(int i = 0; i < nodeList.getLength(); i++) {
             if(nodeList.item(i).getAttributes().getNamedItem("name") != null)

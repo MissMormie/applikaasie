@@ -24,7 +24,7 @@ public class KlantModel {
     private AdresPojo postAdresPojo;
     private AdresPojo bezorgAdresPojo;
     private final Logger logger = LoggerFactory.getLogger(KlantModel.class);
-
+    
        
     // ------------ CONSTRUCTORS ---------------------------------
     

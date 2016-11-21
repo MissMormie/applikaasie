@@ -44,13 +44,17 @@ public class KlantController {
      */
     public void newKlant() {
         klantView.showNewKlant();
-        klantModel.getKlantPojo().setVoornaam(textListener());
+        String voornaam = notEmptyTextListener();
+        if (voornaam.equalsIgnoreCase("n"))
+            return; 
+
+        klantModel.getKlantPojo().setVoornaam(voornaam);
 
         klantView.showTussenvoegsel();
         klantModel.getKlantPojo().setTussenvoegsel(textListener());
         
         klantView.showAchternaam();
-        klantModel.getKlantPojo().setAchternaam(textListener());
+        klantModel.getKlantPojo().setAchternaam(notEmptyTextListener());
         
         klantView.showTelefoonnummer();
         klantModel.getKlantPojo().setTelefoonnummer(phoneListener());
@@ -89,11 +93,15 @@ public class KlantController {
     // ------------ PRIVATE FUNCTIONS ---------------------------------
 
     private String textListener() {
-        String voornaam = input.nextLine();
-        if(voornaam.isEmpty())
-            return textListener();
-        return voornaam;
+        return input.nextLine();
     }    
+    
+    private String notEmptyTextListener() {
+        String text = input.nextLine();
+        if(text.isEmpty())
+            return textListener();
+        return text;        
+    }
     
     private int numberListener() {
         String number = input.nextLine();
@@ -148,7 +156,7 @@ public class KlantController {
     
     private void setAdres(String type) {
         klantView.showStraat();
-        String straat = textListener();
+        String straat = notEmptyTextListener();
 
         klantView.showHuisnummer();
         int huisnummer = numberListener();
@@ -157,7 +165,7 @@ public class KlantController {
         String toevoeging = textListener();
 
         klantView.showWoonplaats();
-        String woonplaats = textListener(); 
+        String woonplaats = notEmptyTextListener(); 
         
         if(type.equalsIgnoreCase("same")) {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
@@ -176,7 +184,9 @@ public class KlantController {
         if (in.equalsIgnoreCase("n")) 
             return;
         
-        int id = numberListener();
+        int id = 0;
+        if(Validator.isValidInt(in))
+            id = Integer.parseInt(in);
         
         switch(id) {
             case 1: // Voornaam
@@ -217,6 +227,7 @@ public class KlantController {
                 break;
                 
             default:
+                klantView.showValidNumber();
                 modifyKlant();               
         }
     }
