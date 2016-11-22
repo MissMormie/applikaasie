@@ -7,6 +7,7 @@ package com.boerpiet.domeinapp;
 
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.viewapp.ArtikelView;
+import java.util.Scanner;
 
 /**
  *
@@ -16,6 +17,7 @@ public class ArtikelModel {
     private ArtikelModel am;
     private ArtikelView av;
     private ArtikelPojo ap;
+    private final Scanner input = new Scanner (System.in);
     
     public ArtikelModel () {
     }
@@ -95,7 +97,35 @@ public class ArtikelModel {
             System.out.println("Er is iets misgegaan, probeer het opnieuw.");
         }
     }
+    //Input data
+    public int inputArticleId () {
+        av.showAllArticles();
+        av.showInputArticleId();
+        int artikelId = Integer.parseInt(input.nextLine());
+        return artikelId;
+    }
     
+    public String inputName () {
+        av.showAllArticles();
+        av.showInputName();
+        String naam = input.nextLine();
+        return naam;
+    }
+    
+    public double inputPrijs () {
+        av.showAllArticles();
+        av.showInputPrijs();
+        double prijs = Double.parseDouble(input.nextLine());
+        return prijs;
+    }
+    
+    public int inputVoorraad () {
+        av.showAllArticles();
+        av.showInputVoorraad();
+        int voorraad = Integer.parseInt(input.nextLine());
+        return voorraad;
+    }
+    //Getters and setters
     public ArtikelModel getArtikelModel () {
         return am;
     }

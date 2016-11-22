@@ -118,20 +118,12 @@ public class BestellingView {
         System.out.println("Geef accountid:");
     }
     
-    public void showInputArticleId () {
-        System.out.println("Geef artikelid voor bestelling:");
-    }
-    
     public void showInputNumberToOrder () {
         System.out.println("Hoeveel wil je bestellen? Geef aantal:");
     }
     
     public void showOrderIdToModify () {
         System.out.println("Geef bestelid voor wijziging of verwijdering:");
-    }
-    
-    public void showInputOrderArticleId () {
-        System.out.println("Geef bestelregelid waar je artikelen van wilt wijzigen of verwijderen:");
     }
     
     public void showInputKlantId () {

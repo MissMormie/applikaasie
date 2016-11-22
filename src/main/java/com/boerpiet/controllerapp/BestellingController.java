@@ -5,9 +5,9 @@
  */
 package com.boerpiet.controllerapp;
 
-import com.boerpiet.domeinapp.BestelArtikelPojo;
+import com.boerpiet.domeinapp.ArtikelModel;
+import com.boerpiet.domeinapp.BestelArtikelModel;
 import com.boerpiet.domeinapp.BestellingModel;
-import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestellingView;
 import java.sql.Date;
@@ -19,21 +19,25 @@ import java.util.Scanner;
  */
 public class BestellingController {
     private final Scanner input = new Scanner (System.in);
-    private final BestellingModel bestellingModel;
-    private final BestellingView bestellingView;
-    private final ArtikelView artikelView;
+    private final BestellingModel bm;
+    private final BestelArtikelModel bam;
+    private final ArtikelModel am;
+    private final BestellingView bv;
+    private final ArtikelView av;
     
-    public BestellingController (BestellingModel bestellingModel,
-            BestellingView bestellingView, ArtikelView artikelView) {
-        this.bestellingModel = bestellingModel;
-        this.bestellingView = bestellingView;
-        this.artikelView = artikelView;
+    public BestellingController (BestellingModel bm, BestelArtikelModel bam,
+            ArtikelModel am, BestellingView bv, ArtikelView av) {
+        this.bm = bm;
+        this.bam = bam;
+        this.am = am;
+        this.bv = bv;
+        this.av = av;
     }
     
     //Klant-opties
     public void startNewOrderKlant (int klantId) {
 
-        bestellingView.showNewBestelling();
+        bv.showNewBestelling();
         int keuze  = Integer.parseInt (input.nextLine());
         
         switch (keuze) {
@@ -51,20 +55,20 @@ public class BestellingController {
     
     private void makeNewOrderKlant (int klantId) {
         
-        Date sqlDatum = bestellingModel.inputDate();
+        Date sqlDatum = bm.inputDate();
         
-        int accountId = bestellingModel.inputAccountId();
+        int accountId = bm.inputAccountId();
         
-        int artikelId = bestellingModel.inputArticleId();
+        int artikelId = am.inputArticleId();
         
-        int aantal = bestellingModel.inputNumberToOrder();
+        int aantal = bm.inputNumberToOrder();
         
-        bestellingModel.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
+        bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
     }
     
     public void modifyOrderKlant (int klantId) {
         
-        bestellingView.startModifyOrder ();
+        bv.startModifyOrder ();
         
         int keuze = Integer.parseInt(input.nextLine());
         
@@ -87,35 +91,35 @@ public class BestellingController {
     
     private void addArticleToOrderKlant (int klantId) {
         
-        bestellingView.showAllOrdersByKlantId(klantId);
+        bv.showAllOrdersByKlantId(klantId);
         
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        int bestelId = bm.inputOrderIdToModify();
                 
-        int artikelId = bestellingModel.inputArticleId();
+        int artikelId = am.inputArticleId();
         
-        int aantal = bestellingModel.inputNumberToOrder();
+        int aantal = bm.inputNumberToOrder();
         
-        bestellingModel.createArticleToAdd(bestelId, artikelId, aantal);
+        bm.createArticleToAdd(bestelId, artikelId, aantal);
     }
     
     private void modifyArticleFromOrderKlant (int klantId) {
         
-        bestellingView.showAllOrdersByKlantId(klantId);
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        bv.showAllOrdersByKlantId(klantId);
+        int bestelId = bm.inputOrderIdToModify();
         
-        bestellingView.showAllBestelRegelsByBestelId(bestelId);
-        int regelId = bestellingModel.inputOrderArticleId();
+        bv.showAllBestelRegelsByBestelId(bestelId);
+        int regelId = bam.inputOrderArticleId();
         
-        int modifiedArtikelId = bestellingModel.inputArticleId();
+        int modifiedArtikelId = am.inputArticleId();
         
-        int aantal = bestellingModel.inputNumberToOrder();
+        int aantal = bm.inputNumberToOrder();
         
-        bestellingModel.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+        bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
     }
     
     public void deleteOrderOptionsKlant (int klantId) {
         
-        bestellingView.startDeleteOrder();
+        bv.startDeleteOrder();
         int keuze = Integer.parseInt(input.nextLine());
         
         switch (keuze) {
@@ -137,26 +141,26 @@ public class BestellingController {
     
     private void deleteOneTupelFromOrderKlant (int klantId) {
                 
-        bestellingView.showAllOrdersByKlantId(klantId);
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        bv.showAllOrdersByKlantId(klantId);
+        int bestelId = bm.inputOrderIdToModify();
         
-        bestellingView.showAllBestelRegelsByBestelId(bestelId);        
-        int brId = bestellingModel.inputOrderArticleId();
+        bv.showAllBestelRegelsByBestelId(bestelId);        
+        int brId = bam.inputOrderArticleId();
         
-        bestellingModel.deleteOneTupel(klantId, brId, bestelId);           
+        bm.deleteOneTupel(klantId, brId, bestelId);           
     }
 
     private void deleteTotalOrderKlant (int klantId) {
         
-        bestellingView.showAllOrdersByKlantId(klantId);
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        bv.showAllOrdersByKlantId(klantId);
+        int bestelId = bm.inputOrderIdToModify();
         
-        bestellingModel.deleteOrder(klantId, bestelId);
+        bm.deleteOrder(klantId, bestelId);
     }
     
     //Medewerker-opties    
     public void startNewOrder () {
-        bestellingView.showNewBestelling();
+        bv.showNewBestelling();
         int keuze  = Integer.parseInt (input.nextLine());
         
         switch (keuze) {
@@ -173,22 +177,22 @@ public class BestellingController {
     
     private void makeNewOrder () {
                
-        int klantId = bestellingModel.inputKlantId();
+        int klantId = bm.inputKlantId();
         
-        Date sqlDatum = bestellingModel.inputDate();
+        Date sqlDatum = bm.inputDate();
         
-        int accountId = bestellingModel.inputAccountId();
+        int accountId = bm.inputAccountId();
         
-        int artikelId = bestellingModel.inputArticleId();
+        int artikelId = am.inputArticleId();
         
-        int aantal = bestellingModel.inputNumberToOrder();
+        int aantal = bm.inputNumberToOrder();
         
-        bestellingModel.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
+        bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
     }
     
     public void modifyOrder () {
         
-        bestellingView.startModifyOrder ();
+        bv.startModifyOrder ();
         
         int keuze = Integer.parseInt(input.nextLine());
         
@@ -210,38 +214,38 @@ public class BestellingController {
     
     private void addArticleToOrder () {
         System.out.println("Geef klantid:");
-        int klantId = bestellingModel.inputKlantId();
+        int klantId = bm.inputKlantId();
         
-        bestellingView.showAllOrdersByKlantId(klantId);
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        bv.showAllOrdersByKlantId(klantId);
+        int bestelId = bm.inputOrderIdToModify();
 
-        int artikelId = bestellingModel.inputArticleId();
+        int artikelId = am.inputArticleId();
         
-        int aantal = bestellingModel.inputNumberToOrder();
+        int aantal = bm.inputNumberToOrder();
         
-        bestellingModel.createArticleToAdd(bestelId, artikelId, aantal);
+        bm.createArticleToAdd(bestelId, artikelId, aantal);
     }
     
     private void modifyArticleFromOrder () {
-        int klantId = bestellingModel.inputKlantId();
+        int klantId = bm.inputKlantId();
         
-        bestellingView.showAllOrdersByKlantId(klantId);
+        bv.showAllOrdersByKlantId(klantId);
         
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        int bestelId = bm.inputOrderIdToModify();
         
-        bestellingView.showAllBestelRegelsByBestelId(bestelId);
+        bv.showAllBestelRegelsByBestelId(bestelId);
         
-        int regelId = bestellingModel.inputOrderArticleId();
+        int regelId = bam.inputOrderArticleId();
         
-        int modifiedArtikelId = bestellingModel.inputArticleId();
+        int modifiedArtikelId = am.inputArticleId();
         
-        int aantal = bestellingModel.inputNumberToOrder();
+        int aantal = bm.inputNumberToOrder();
         
-        bestellingModel.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+        bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
     }
     
     public void deleteOrderOptions () {
-        bestellingView.startDeleteOrder();
+        bv.startDeleteOrder();
         int keuze = Integer.parseInt(input.nextLine());
         
         switch (keuze) {
@@ -262,23 +266,23 @@ public class BestellingController {
     }
     
     private void deleteOneTupelFromOrder () {
-        int klantId = bestellingModel.inputKlantId();
+        int klantId = bm.inputKlantId();
         
-        bestellingView.showAllOrdersByKlantId(klantId);
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        bv.showAllOrdersByKlantId(klantId);
+        int bestelId = bm.inputOrderIdToModify();
         
-        bestellingView.showAllBestelRegelsByBestelId(bestelId);        
-        int brId = bestellingModel.inputOrderArticleId();
+        bv.showAllBestelRegelsByBestelId(bestelId);        
+        int brId = bam.inputOrderArticleId();
         
-        bestellingModel.deleteOneTupel(klantId, brId, bestelId);           
+        bm.deleteOneTupel(klantId, brId, bestelId);           
     }
 
     private void deleteTotalOrder() {
-        int klantId = bestellingModel.inputKlantId();
+        int klantId = bm.inputKlantId();
         
-        bestellingView.showAllOrdersByKlantId(klantId);
-        int bestelId = bestellingModel.inputOrderIdToModify();
+        bv.showAllOrdersByKlantId(klantId);
+        int bestelId = bm.inputOrderIdToModify();
         
-        bestellingModel.deleteOrder(klantId, bestelId);
+        bm.deleteOrder(klantId, bestelId);
     }
 }

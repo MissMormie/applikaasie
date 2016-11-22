@@ -10,6 +10,7 @@ import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
 import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.ArtikelView;
+import com.boerpiet.viewapp.BestelArtikelView;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -29,19 +30,21 @@ public class BestellingModel {
     private BestelArtikelPojo ba;
     private ArtikelPojo ap;
     private ArtikelView av;
+    private BestelArtikelView bav;
     private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
     public BestellingModel () {  
     }
     
     public BestellingModel (BestellingModel bm, BestellingView bv, BestellingPojo bp,
-            BestelArtikelPojo ba, ArtikelPojo ap, ArtikelView av) {
+            BestelArtikelPojo ba, ArtikelPojo ap, ArtikelView av, BestelArtikelView bav) {
         this.bm = bm;
         this.bv = bv;
         this.bp = bp;
         this.ba = ba; 
         this.ap = ap;
         this.av = av;
+        this.bav = bav;
     }
     //Methoden voor menu-opties
     public void addNewOrder (int klantId, Date sqlDatum, int accountKey, int artikelId, int aantal) {
@@ -144,13 +147,6 @@ public class BestellingModel {
         return accountId;
     }
     
-    public int inputArticleId () {
-        av.showAllArticles();
-        bv.showInputArticleId();
-        int artikelId = Integer.parseInt(input.nextLine());
-        return artikelId;
-    }
-    
     public int inputNumberToOrder () {
         bv.showInputNumberToOrder();
         int aantal = Integer.parseInt(input.nextLine());
@@ -161,12 +157,6 @@ public class BestellingModel {
         bv.showOrderIdToModify();
         int bestelId = Integer.parseInt(input.nextLine());
         return bestelId;
-    }
-    
-    public int inputOrderArticleId () {
-        bv.showInputOrderArticleId();
-        int bestelregel = Integer.parseInt(input.nextLine());
-        return bestelregel;
     }
     
     public int inputKlantId () {

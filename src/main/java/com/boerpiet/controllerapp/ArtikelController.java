@@ -45,14 +45,11 @@ public class ArtikelController {
     
     private void addArticleToDatabase () {
                 
-        System.out.println("Geef naam voor artikel:");
-        String naam = input.nextLine();
+        String naam = artikelModel.inputName();
         
-        System.out.println("Geef prijs voor artikel:");
-        double prijs = Double.parseDouble(input.nextLine());
+        double prijs = artikelModel.inputPrijs();
         
-        System.out.println("Geef huidige voorraad van dit artikel:");
-        int voorraad = Integer.parseInt(input.nextLine());
+        int voorraad = artikelModel.inputVoorraad();
         
         artikelModel.addArticle(naam, prijs, voorraad);
     }
@@ -79,34 +76,28 @@ public class ArtikelController {
     }
     
     private void modifyArticleNaam () {
-        artikelView.showAllArticles();
-        System.out.println("Geef artikelid voor wijziging:");
-        int id = Integer.parseInt(input.nextLine());
         
-        System.out.println("Geef de nieuwe naam:");
-        String naam = input.nextLine();
+        int id = artikelModel.inputArticleId();
+        
+        String naam = artikelModel.inputName();
         
         artikelModel.modifyNaam(id, naam);
     }
     
     private void modifyArticlePrijs () {
-        artikelView.showAllArticles();
-        System.out.println("Geef artikelid voor wijziging:");
-        int id = Integer.parseInt(input.nextLine());
         
-        System.out.println("Geef de nieuwe prijs:");
-        double prijs = Double.parseDouble(input.nextLine());
+        int id = artikelModel.inputArticleId();
+
+        double prijs = artikelModel.inputPrijs();
         
         artikelModel.modifyPrijs(id, prijs);
     }
     
     private void modifyArticleVoorraad () {
-        artikelView.showAllArticles();
-        System.out.println("Geef artikelid voor wijziging:");
-        int id = Integer.parseInt(input.nextLine());
         
-        System.out.println("Geef de nieuwe voorraad:");
-        int voorraad = Integer.parseInt(input.nextLine());
+        int id = artikelModel.inputArticleId();
+        
+        int voorraad = artikelModel.inputVoorraad();
         
         artikelModel.modifyVoorraad(id, voorraad);
     }
@@ -128,9 +119,7 @@ public class ArtikelController {
     }
     
     private void deleteArticleFromDatabase () {
-        artikelView.showAllArticles();
-        System.out.println("Geef id van artikel voor verwijdering:");
-        int id = Integer.parseInt(input.nextLine());
+        int id = artikelModel.inputArticleId();
         
         artikelModel.deleteArticle(id);
     }

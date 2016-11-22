@@ -68,4 +68,20 @@ public class ArtikelView {
                 + "1. Artikel verwijderen \n"
                 + "2. Terug naar menu \n");
     }
+    
+    public void showInputName () {
+        System.out.println("Geef naam voor artikel:");
+    }
+    
+    public void showInputPrijs () {
+        System.out.println("Geef prijs voor artikel:");
+    }
+    
+    public void showInputVoorraad () {
+        System.out.println("Geef voorraad van dit artikel:");
+    }
+    
+    public void showInputArticleId () {
+        System.out.println("Geef artikelid:");
+    }
 }
