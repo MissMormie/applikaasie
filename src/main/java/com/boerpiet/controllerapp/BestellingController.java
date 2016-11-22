@@ -59,20 +59,15 @@ public class BestellingController {
     
     private void makeNewOrderKlant (int klantId) {
         
-        System.out.println("Geef besteldatum (yyyy-mm-dd):");
-        LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
-        Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
+        Date sqlDatum = bestellingModel.inputDate();
         
-        System.out.println("Geef accountid:");
-        int accountId = Integer.parseInt(input.nextLine());
+        int accountId = bestellingModel.inputAccountId();
         
         artikelView.showAllArticles();
         
-        System.out.println("Welke kaas wil je bestellen? Voer id in:");
-        int artikelId = Integer.parseInt(input.nextLine());
+        int artikelId = bestellingModel.inputArticleId();
         
-        System.out.println("Hoeveel wil je bestellen?");
-        int aantal = Integer.parseInt(input.nextLine());
+        int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
     }
@@ -103,15 +98,14 @@ public class BestellingController {
     private void addArticleToOrderKlant (int klantId) {
         
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef bestelid waar je artikelen aan wilt toe voegen:");
-        int bestelId = Integer.parseInt(input.nextLine());
+        
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         artikelView.showAllArticles();
-        System.out.println("Welk artikel wil je toevoegen? Geef artikelid:");
-        int artikelId = Integer.parseInt(input.nextLine());
         
-        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
-        int aantal = Integer.parseInt(input.nextLine());
+        int artikelId = bestellingModel.inputArticleId();
+        
+        int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.createArticleToAdd(bestelId, artikelId, aantal);
     }
@@ -119,22 +113,15 @@ public class BestellingController {
     private void modifyArticleFromOrderKlant (int klantId) {
         
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef bestelid waar je artikelen wilt wijzigen:");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         bestellingView.showAllBestelRegelsByBestelId(bestelId);
-        System.out.println("Geef bestelregelid voor wijziging:");
-        int regelId = Integer.parseInt(input.nextLine());
-        
-        //System.out.println("Geef artikelid voor wijziging:");
-        //int artikelId = Integer.parseInt(input.nextLine());
+        int regelId = bestellingModel.inputOrderArticleId();
         
         artikelView.showAllArticles();
-        System.out.println("Geef artikelid om te bestellen:");
-        int modifiedArtikelId = Integer.parseInt(input.nextLine());
+        int modifiedArtikelId = bestellingModel.inputArticleId();
         
-        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
-        int aantal = Integer.parseInt(input.nextLine());
+        int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
     }
@@ -164,12 +151,10 @@ public class BestellingController {
     private void deleteOneTupelFromOrderKlant (int klantId) {
                 
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef bestelid waar je artikelen wilt verwijderen:");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         bestellingView.showAllBestelRegelsByBestelId(bestelId);        
-        System.out.println("Welke regel wil je verwijderen? Geef bestelregelid:");
-        int brId = Integer.parseInt(input.nextLine());
+        int brId = bestellingModel.inputOrderArticleId();
         
         bestellingModel.deleteOneTupel(klantId, brId, bestelId);           
     }
@@ -177,8 +162,7 @@ public class BestellingController {
     private void deleteTotalOrderKlant (int klantId) {
         
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef id van bestelling die je wilt verwijderen (bestelid):");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         bestellingModel.deleteOrder(klantId, bestelId);
     }
@@ -202,23 +186,17 @@ public class BestellingController {
     
     private void makeNewOrder () {
                
-        System.out.println("Geef klantid voor nieuwe bestelling:");
-        int klantId = Integer.parseInt(input.nextLine());
+        int klantId = bestellingModel.inputKlantId();
         
-        System.out.println("Geef besteldatum (yyyy-mm-dd):");
-        LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
-        Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
+        Date sqlDatum = bestellingModel.inputDate();
         
-        System.out.println("Geef accountid:");
-        int accountId = Integer.parseInt(input.nextLine());
+        int accountId = bestellingModel.inputAccountId();
         
         artikelView.showAllArticles();
         
-        System.out.println("Welke kaas wil je bestellen? Voer id in:");
-        int artikelId = Integer.parseInt(input.nextLine());
+        int artikelId = bestellingModel.inputArticleId();
         
-        System.out.println("Hoeveel wil je bestellen?");
-        int aantal = Integer.parseInt(input.nextLine());
+        int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
     }
@@ -247,43 +225,36 @@ public class BestellingController {
     
     private void addArticleToOrder () {
         System.out.println("Geef klantid:");
-        int klantId = Integer.parseInt(input.nextLine());
+        int klantId = bestellingModel.inputKlantId();
         
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef bestelid waar je artikelen aan wilt toe voegen:");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         artikelView.showAllArticles();
-        System.out.println("Welk artikel wil je toevoegen? Geef artikelid:");
-        int artikelId = Integer.parseInt(input.nextLine());
+        int artikelId = bestellingModel.inputArticleId();
         
         System.out.println("Hoeveel wil je bestellen? Geef aantal:");
-        int aantal = Integer.parseInt(input.nextLine());
+        int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.createArticleToAdd(bestelId, artikelId, aantal);
     }
     
     private void modifyArticleFromOrder () {
-        System.out.println("Geef klantid:");
-        int klantId = Integer.parseInt(input.nextLine());
+        int klantId = bestellingModel.inputKlantId();
+        
         bestellingView.showAllOrdersByKlantId(klantId);
         
-        System.out.println("Geef bestelid waar je artikelen wilt wijzigen:");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
+        
         bestellingView.showAllBestelRegelsByBestelId(bestelId);
         
         System.out.println("Geef bestelregelid voor wijziging:");
-        int regelId = Integer.parseInt(input.nextLine());
-        
-        //System.out.println("Geef artikelid voor wijziging:");
-        //int artikelId = Integer.parseInt(input.nextLine());
+        int regelId = bestellingModel.inputOrderArticleId();
         
         artikelView.showAllArticles();
-        System.out.println("Geef artikelid om te bestellen:");
-        int modifiedArtikelId = Integer.parseInt(input.nextLine());
+        int modifiedArtikelId = bestellingModel.inputArticleId();
         
-        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
-        int aantal = Integer.parseInt(input.nextLine());
+        int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
     }
@@ -310,27 +281,22 @@ public class BestellingController {
     }
     
     private void deleteOneTupelFromOrder () {
-        System.out.println("Geef klantid:");
-        int klantId = Integer.parseInt(input.nextLine());
+        int klantId = bestellingModel.inputKlantId();
         
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef bestelid waar je artikelen wilt verwijderen:");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         bestellingView.showAllBestelRegelsByBestelId(bestelId);        
-        System.out.println("Welke regel wil je verwijderen? Geef bestelregelid:");
-        int brId = Integer.parseInt(input.nextLine());
+        int brId = bestellingModel.inputOrderArticleId();
         
         bestellingModel.deleteOneTupel(klantId, brId, bestelId);           
     }
 
     private void deleteTotalOrder() {
-        System.out.println("Geef klantid:");
-        int klantId = Integer.parseInt(input.nextLine());
+        int klantId = bestellingModel.inputKlantId();
         
         bestellingView.showAllOrdersByKlantId(klantId);
-        System.out.println("Geef id van bestelling die je wilt verwijderen (bestelid):");
-        int bestelId = Integer.parseInt(input.nextLine());
+        int bestelId = bestellingModel.inputOrderIdToModify();
         
         bestellingModel.deleteOrder(klantId, bestelId);
     }

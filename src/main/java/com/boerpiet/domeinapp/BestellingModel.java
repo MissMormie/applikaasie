@@ -10,7 +10,10 @@ import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
 import com.boerpiet.viewapp.BestellingView;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 /**
@@ -18,11 +21,13 @@ import java.util.ArrayList;
  * @author Peaq
  */
 public class BestellingModel {
+    private final Scanner input = new Scanner (System.in);
     private BestellingModel bm;
     private BestellingView bv;
     private BestellingPojo bp;
     private BestelArtikelPojo ba;
     private ArtikelPojo ap;
+    private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
     public BestellingModel () {  
     }
@@ -122,8 +127,50 @@ public class BestellingModel {
             }
     }
     
+    public Date inputDate () {
+        bv.showInputDate();
+        LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
+        Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
+        return sqlDatum;
+    }
     
+    public int inputAccountId () {
+        bv.showInputAccountId();
+        int accountId = Integer.parseInt(input.nextLine());
+        return accountId;
+    }
     
+    public int inputArticleId () {
+        bv.showInputArticleId();
+        int artikelId = Integer.parseInt(input.nextLine());
+        return artikelId;
+    }
+    
+    public int inputNumberToOrder () {
+        bv.showInputNumberToOrder();
+        int aantal = Integer.parseInt(input.nextLine());
+        return aantal;
+    }
+    
+    public int inputOrderIdToModify () {
+        bv.showOrderIdToModify();
+        int bestelId = Integer.parseInt(input.nextLine());
+        return bestelId;
+    }
+    
+    public int inputOrderArticleId () {
+        bv.showInputOrderArticleId();
+        int bestelregel = Integer.parseInt(input.nextLine());
+        return bestelregel;
+    }
+    
+    public int inputKlantId () {
+        bv.showInputKlantId();
+        int klantId = Integer.parseInt(input.nextLine());
+        return klantId;
+    }
+    
+    //getters and setters
     public BestellingModel getBestellingModel () {
         return bm;
     }
