@@ -25,6 +25,8 @@ public class MenuModel {
     private Document doc;
     private int menuId;
     private LoginManager loginManager;
+    private int klantId = loginManager.getAccountPojo().getKlantId();
+    //voor bestellingopties (klant of medewerker)
 
     // ------------ CONSTRUCTORS ---------------------------------
 
@@ -130,9 +132,6 @@ public class MenuModel {
      * @param action the action attribute
      * @param id the node id
      */
-    
-    int klantId = loginManager.getAccountPojo().getKlantId();
-    //voor bestellingopties (klant of medewerker)
     
     private void doAction(String action, int id) {
         switch(action){

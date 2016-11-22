@@ -248,12 +248,15 @@ public class BestellingController {
     private void addArticleToOrder () {
         System.out.println("Geef klantid:");
         int klantId = Integer.parseInt(input.nextLine());
+        
         bestellingView.showAllOrdersByKlantId(klantId);
         System.out.println("Geef bestelid waar je artikelen aan wilt toe voegen:");
         int bestelId = Integer.parseInt(input.nextLine());
+        
         artikelView.showAllArticles();
         System.out.println("Welk artikel wil je toevoegen? Geef artikelid:");
         int artikelId = Integer.parseInt(input.nextLine());
+        
         System.out.println("Hoeveel wil je bestellen? Geef aantal:");
         int aantal = Integer.parseInt(input.nextLine());
         
