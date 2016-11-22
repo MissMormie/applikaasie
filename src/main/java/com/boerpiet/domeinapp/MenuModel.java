@@ -25,7 +25,6 @@ public class MenuModel {
     private Document doc;
     private int menuId;
     private LoginManager loginManager;
-    private int klantId = loginManager.getAccountPojo().getKlantId();
     //voor bestellingopties (klant of medewerker)
 
     // ------------ CONSTRUCTORS ---------------------------------
@@ -189,31 +188,40 @@ public class MenuModel {
                 //Bestellingen en Artikelen ingevoerd door Jung, voorlopig werkende versie.
                 
                 //BESTELLINGEN:
-            case "Nieuwe bestelling": //nieuwe bestelling
-                BestellingController bcTest1 = new BestellingController (new BestellingModel (),
+            case "Nieuwe bestelling door klant": //nieuwe bestelling
+                BestellingController bc1 = new BestellingController (new BestellingModel (),
                         new BestellingView(), new ArtikelView());
                 //medewerkers en admins hebben klantId = 0 als het goed is
-                if (klantId!=0) {
-                    bcTest1.startNewOrderKlant(klantId);
+                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                    bc1.startNewOrderKlant(loginManager.getAccountPojo().getKlantId());
                 }
-                bcTest1.startNewOrder();
                 break;
-            case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
-                BestellingController bcTest2 = new BestellingController (new BestellingModel (),
+            case "Bestelling wijzigen door klant": //artikelen toevoegen aan of wijzigen in een bestelling
+                BestellingController bc2 = new BestellingController (new BestellingModel (),
                         new BestellingView(), new ArtikelView());
-                if (klantId !=0) {
-                    bcTest2.modifyOrderKlant(klantId);
+                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                    bc2.modifyOrderKlant(loginManager.getAccountPojo().getKlantId());
                 }
-                bcTest2.modifyOrder();
                 break;
-            case "Bestelling verwijderen": //artikelen verwijderen van bestelling of totale bestelling verwijderen
-                BestellingController bcTest3 = new BestellingController (new BestellingModel (),
+            case "Bestelling verwijderen door klant": //artikelen verwijderen van bestelling of totale bestelling verwijderen
+                BestellingController bc3 = new BestellingController (new BestellingModel (),
                         new BestellingView(), new ArtikelView());
-                if (klantId !=0) {
-                    bcTest3.deleteOrderOptionsKlant(klantId);
+                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                    bc3.deleteOrderOptionsKlant(loginManager.getAccountPojo().getKlantId());
                 }
-                bcTest3.deleteOrderOptionsKlant(klantId);
                 break;
+            case "Nieuwe bestelling door medewerker of admin":
+                BestellingController bc4 = new BestellingController (new BestellingModel (),
+                        new BestellingView (), new ArtikelView ());
+                bc4.startNewOrder();
+            case "Bestelling wijzigen door medewerker of admin":
+                BestellingController bc5 = new BestellingController (new BestellingModel (),
+                        new BestellingView (), new ArtikelView ());
+                bc5.modifyOrder();
+            case "Bestelling verwijderen door medewerker of admin":
+                BestellingController bc6 = new BestellingController (new BestellingModel (),
+                        new BestellingView (), new ArtikelView ());
+                bc6.deleteOrderOptions();
                 
             //ARTIKELEN:
             case "Nieuw artikel":
