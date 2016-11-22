@@ -191,8 +191,7 @@ public class MenuModel {
                 //BESTELLINGEN:
             case "Nieuwe bestelling": //nieuwe bestelling
                 BestellingController bcTest1 = new BestellingController (new BestellingModel (),
-                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
-                        new ArtikelView());
+                        new BestellingView(), new ArtikelView());
                 //medewerkers en admins hebben klantId = 0 als het goed is
                 if (klantId!=0) {
                     bcTest1.startNewOrderKlant(klantId);
@@ -201,8 +200,7 @@ public class MenuModel {
                 break;
             case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
                 BestellingController bcTest2 = new BestellingController (new BestellingModel (),
-                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
-                        new ArtikelView());
+                        new BestellingView(), new ArtikelView());
                 if (klantId !=0) {
                     bcTest2.modifyOrderKlant(klantId);
                 }
@@ -210,8 +208,7 @@ public class MenuModel {
                 break;
             case "Bestelling verwijderen": //artikelen verwijderen van bestelling of totale bestelling verwijderen
                 BestellingController bcTest3 = new BestellingController (new BestellingModel (),
-                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
-                        new ArtikelView());
+                        new BestellingView(), new ArtikelView());
                 if (klantId !=0) {
                     bcTest3.deleteOrderOptionsKlant(klantId);
                 }

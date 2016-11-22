@@ -11,8 +11,6 @@ import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestellingView;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
@@ -22,19 +20,13 @@ import java.util.Scanner;
 public class BestellingController {
     private final Scanner input = new Scanner (System.in);
     private final BestellingModel bestellingModel;
-    private final BestellingPojo bestellingPojo;
     private final BestellingView bestellingView;
-    private final BestelArtikelPojo bestelArtikelPojo;
     private final ArtikelView artikelView;
-    private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
-    public BestellingController (BestellingModel bestellingModel, BestellingPojo bestellingPojo,
-            BestellingView bestellingView, BestelArtikelPojo bestelArtikelPojo,
-            ArtikelView artikelView) {
+    public BestellingController (BestellingModel bestellingModel,
+            BestellingView bestellingView, ArtikelView artikelView) {
         this.bestellingModel = bestellingModel;
-        this.bestellingPojo = bestellingPojo;
         this.bestellingView = bestellingView;
-        this.bestelArtikelPojo = bestelArtikelPojo;
         this.artikelView = artikelView;
     }
     
