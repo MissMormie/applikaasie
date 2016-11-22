@@ -135,6 +135,7 @@ public class BestellingModel {
     
     //Input data voor controller    
     public Date inputDate () {
+        bv = new BestellingView();
         bv.showInputDate();
         LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
         Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
@@ -142,24 +143,28 @@ public class BestellingModel {
     }
     
     public int inputAccountId () {
+        bv = new BestellingView();
         bv.showInputAccountId();
         int accountId = Integer.parseInt(input.nextLine());
         return accountId;
     }
     
     public int inputNumberToOrder () {
+        bv = new BestellingView();
         bv.showInputNumberToOrder();
         int aantal = Integer.parseInt(input.nextLine());
         return aantal;
     }
     
     public int inputOrderIdToModify () {
+        bv = new BestellingView();
         bv.showOrderIdToModify();
         int bestelId = Integer.parseInt(input.nextLine());
         return bestelId;
     }
     
     public int inputKlantId () {
+        bv = new BestellingView();
         bv.showInputKlantId();
         int klantId = Integer.parseInt(input.nextLine());
         return klantId;

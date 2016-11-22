@@ -99,6 +99,7 @@ public class ArtikelModel {
     }
     //Input data
     public int inputArticleId () {
+        av = new ArtikelView();
         av.showAllArticles();
         av.showInputArticleId();
         int artikelId = Integer.parseInt(input.nextLine());
@@ -106,21 +107,21 @@ public class ArtikelModel {
     }
     
     public String inputName () {
-        av.showAllArticles();
+        av = new ArtikelView();
         av.showInputName();
         String naam = input.nextLine();
         return naam;
     }
     
     public double inputPrijs () {
-        av.showAllArticles();
+        av = new ArtikelView();
         av.showInputPrijs();
         double prijs = Double.parseDouble(input.nextLine());
         return prijs;
     }
     
     public int inputVoorraad () {
-        av.showAllArticles();
+        av = new ArtikelView();
         av.showInputVoorraad();
         int voorraad = Integer.parseInt(input.nextLine());
         return voorraad;

@@ -18,10 +18,33 @@ public class BestelArtikelModel {
     private BestelArtikelModel bam;
     private final Scanner input = new Scanner (System.in);
     
+    public BestelArtikelModel () {
+        
+    }
+    
+    public BestelArtikelModel (BestelArtikelView bav, BestelArtikelModel bam) {
+        this.bav = bav;
+        this.bam = bam;
+    }
+    
     public int inputOrderArticleId () {
+        bav = new BestelArtikelView ();
         bav.showInputOrderArticleId();
         int bestelregel = Integer.parseInt(input.nextLine());
         return bestelregel;
     }
     
+    //Getters and setters
+    public BestelArtikelView getBav () {
+        return bav;
+    }
+    public void setBav (BestelArtikelView bav) {
+        this.bav = bav;
+    }
+    public BestelArtikelModel getBam () {
+        return bam;
+    }
+    public void setBam (BestelArtikelModel bam) {
+        this.bam = bam;
+    }
 }
