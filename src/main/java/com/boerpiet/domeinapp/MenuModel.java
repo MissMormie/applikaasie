@@ -188,14 +188,13 @@ public class MenuModel {
                 break;
                 
                 //Bestellingen en Artikelen ingevoerd door Jung, voorlopig werkende versie.
-                //Moet nog een scheiding tussen controller en model gemaakt worden,
-                //en misschien tussen klant- en medewerkeropties.
                 
                 //BESTELLINGEN:
             case "Nieuwe bestelling": //nieuwe bestelling
                 BestellingController bcTest1 = new BestellingController (new BestellingModel (),
                         new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
                         new ArtikelView());
+                //medewerkers en admins hebben klantId = 0 als het goed is
                 if (klantId!=0) {
                     bcTest1.startNewOrderKlant(klantId);
                 }
