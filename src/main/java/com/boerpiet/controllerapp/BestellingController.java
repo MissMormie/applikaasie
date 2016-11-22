@@ -55,8 +55,6 @@ public class BestellingController {
         
         int accountId = bestellingModel.inputAccountId();
         
-        artikelView.showAllArticles();
-        
         int artikelId = bestellingModel.inputArticleId();
         
         int aantal = bestellingModel.inputNumberToOrder();
@@ -92,9 +90,7 @@ public class BestellingController {
         bestellingView.showAllOrdersByKlantId(klantId);
         
         int bestelId = bestellingModel.inputOrderIdToModify();
-        
-        artikelView.showAllArticles();
-        
+                
         int artikelId = bestellingModel.inputArticleId();
         
         int aantal = bestellingModel.inputNumberToOrder();
@@ -110,7 +106,6 @@ public class BestellingController {
         bestellingView.showAllBestelRegelsByBestelId(bestelId);
         int regelId = bestellingModel.inputOrderArticleId();
         
-        artikelView.showAllArticles();
         int modifiedArtikelId = bestellingModel.inputArticleId();
         
         int aantal = bestellingModel.inputNumberToOrder();
@@ -184,8 +179,6 @@ public class BestellingController {
         
         int accountId = bestellingModel.inputAccountId();
         
-        artikelView.showAllArticles();
-        
         int artikelId = bestellingModel.inputArticleId();
         
         int aantal = bestellingModel.inputNumberToOrder();
@@ -221,11 +214,9 @@ public class BestellingController {
         
         bestellingView.showAllOrdersByKlantId(klantId);
         int bestelId = bestellingModel.inputOrderIdToModify();
-        
-        artikelView.showAllArticles();
+
         int artikelId = bestellingModel.inputArticleId();
         
-        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
         int aantal = bestellingModel.inputNumberToOrder();
         
         bestellingModel.createArticleToAdd(bestelId, artikelId, aantal);
@@ -240,10 +231,8 @@ public class BestellingController {
         
         bestellingView.showAllBestelRegelsByBestelId(bestelId);
         
-        System.out.println("Geef bestelregelid voor wijziging:");
         int regelId = bestellingModel.inputOrderArticleId();
         
-        artikelView.showAllArticles();
         int modifiedArtikelId = bestellingModel.inputArticleId();
         
         int aantal = bestellingModel.inputNumberToOrder();
