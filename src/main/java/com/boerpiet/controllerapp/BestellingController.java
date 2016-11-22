@@ -29,14 +29,161 @@ public class BestellingController {
     private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
     public BestellingController (BestellingModel bestellingModel, BestellingPojo bestellingPojo,
-            BestellingView bestellingView, BestelArtikelPojo bestelArtikelPojo, ArtikelView artikelView) {
+            BestellingView bestellingView, BestelArtikelPojo bestelArtikelPojo,
+            ArtikelView artikelView) {
         this.bestellingModel = bestellingModel;
         this.bestellingPojo = bestellingPojo;
         this.bestellingView = bestellingView;
         this.bestelArtikelPojo = bestelArtikelPojo;
         this.artikelView = artikelView;
     }
+    
+    //Klant-opties
+    public void startNewOrderKlant (int klantId) {
+
+        bestellingView.showNewBestelling();
+        int keuze  = Integer.parseInt (input.nextLine());
         
+        switch (keuze) {
+            case 1:
+                makeNewOrderKlant(klantId);
+                startNewOrderKlant (klantId);
+                break;
+            case 2:
+                return;
+            default:
+                startNewOrderKlant (klantId);
+                break;
+        }        
+    }
+    
+    private void makeNewOrderKlant (int klantId) {
+        
+        System.out.println("Geef besteldatum (yyyy-mm-dd):");
+        LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
+        Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
+        
+        System.out.println("Geef accountid:");
+        int accountId = Integer.parseInt(input.nextLine());
+        
+        artikelView.showAllArticles();
+        
+        System.out.println("Welke kaas wil je bestellen? Voer id in:");
+        int artikelId = Integer.parseInt(input.nextLine());
+        
+        System.out.println("Hoeveel wil je bestellen?");
+        int aantal = Integer.parseInt(input.nextLine());
+        
+        bestellingModel.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
+    }
+    
+    public void modifyOrderKlant (int klantId) {
+        
+        bestellingView.startModifyOrder ();
+        
+        int keuze = Integer.parseInt(input.nextLine());
+        
+        switch(keuze){
+            case 1:
+                addArticleToOrderKlant(klantId);
+                modifyOrderKlant (klantId);
+                break;
+            case 2:
+                modifyArticleFromOrderKlant(klantId);
+                modifyOrderKlant (klantId);
+                break;
+            case 3:
+                return;
+            default:
+                modifyOrderKlant (klantId);
+                break;
+        }        
+    }
+    
+    private void addArticleToOrderKlant (int klantId) {
+        
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef bestelid waar je artikelen aan wilt toe voegen:");
+        int bestelId = Integer.parseInt(input.nextLine());
+        
+        artikelView.showAllArticles();
+        System.out.println("Welk artikel wil je toevoegen? Geef artikelid:");
+        int artikelId = Integer.parseInt(input.nextLine());
+        
+        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
+        int aantal = Integer.parseInt(input.nextLine());
+        
+        bestellingModel.createArticleToAdd(bestelId, artikelId, aantal);
+    }
+    
+    private void modifyArticleFromOrderKlant (int klantId) {
+        
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef bestelid waar je artikelen wilt wijzigen:");
+        int bestelId = Integer.parseInt(input.nextLine());
+        
+        bestellingView.showAllBestelRegelsByBestelId(bestelId);
+        System.out.println("Geef bestelregelid voor wijziging:");
+        int regelId = Integer.parseInt(input.nextLine());
+        
+        //System.out.println("Geef artikelid voor wijziging:");
+        //int artikelId = Integer.parseInt(input.nextLine());
+        
+        artikelView.showAllArticles();
+        System.out.println("Geef artikelid om te bestellen:");
+        int modifiedArtikelId = Integer.parseInt(input.nextLine());
+        
+        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
+        int aantal = Integer.parseInt(input.nextLine());
+        
+        bestellingModel.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+    }
+    
+    public void deleteOrderOptionsKlant (int klantId) {
+        
+        bestellingView.startDeleteOrder();
+        int keuze = Integer.parseInt(input.nextLine());
+        
+        switch (keuze) {
+            case 1:
+                deleteOneTupelFromOrderKlant (klantId);
+                deleteOrderOptionsKlant (klantId);
+                break;
+            case 2:
+                deleteTotalOrderKlant (klantId);
+                deleteOrderOptionsKlant (klantId);
+                break;
+            case 3:
+                return;
+            default:
+                deleteOrderOptionsKlant (klantId);
+                break;           
+        }
+    }
+    
+    private void deleteOneTupelFromOrderKlant (int klantId) {
+                
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef bestelid waar je artikelen wilt verwijderen:");
+        int bestelId = Integer.parseInt(input.nextLine());
+        
+        bestellingView.showAllBestelRegelsByBestelId(bestelId);        
+        System.out.println("Welke regel wil je verwijderen? Geef bestelregelid:");
+        int brId = Integer.parseInt(input.nextLine());
+        
+        bestellingModel.deleteOneTupel(klantId, brId, bestelId);           
+    }
+
+    private void deleteTotalOrderKlant (int klantId) {
+        
+        bestellingView.showAllOrdersByKlantId(klantId);
+        System.out.println("Geef id van bestelling die je wilt verwijderen (bestelid):");
+        int bestelId = Integer.parseInt(input.nextLine());
+        
+        bestellingModel.deleteOrder(klantId, bestelId);
+    }
+    
+    //Medewerker-opties    
     public void startNewOrder () {
         bestellingView.showNewBestelling();
         int keuze  = Integer.parseInt (input.nextLine());
@@ -47,14 +194,15 @@ public class BestellingController {
                 break;
             case 2:
                 return;
-            default: startNewOrder ();
+            default:
+                startNewOrder ();
                 break;
         }        
     }
     
     private void makeNewOrder () {
                
-        System.out.println("Geef klantid (0 voor medewerkers):");
+        System.out.println("Geef klantid voor nieuwe bestelling:");
         int klantId = Integer.parseInt(input.nextLine());
         
         System.out.println("Geef besteldatum (yyyy-mm-dd):");
@@ -144,9 +292,11 @@ public class BestellingController {
         switch (keuze) {
             case 1:
                 deleteOneTupelFromOrder ();
+                deleteOrderOptions ();
                 break;
             case 2:
                 deleteTotalOrder ();
+                deleteOrderOptions ();
                 break;
             case 3:
                 return;
@@ -168,14 +318,7 @@ public class BestellingController {
         System.out.println("Welke regel wil je verwijderen? Geef bestelregelid:");
         int brId = Integer.parseInt(input.nextLine());
         
-        bestellingModel.deleteOneTupel(klantId, brId, bestelId);
-        
-        System.out.println("Wil je nog meer artikelen verwijderen van bestelling? (J/N):");
-        String jaNee = input.nextLine();
-        if (jaNee.equalsIgnoreCase("j")){
-            deleteOneTupelFromOrder();
-        }
-            
+        bestellingModel.deleteOneTupel(klantId, brId, bestelId);           
     }
 
     private void deleteTotalOrder() {

@@ -45,12 +45,11 @@ public class LoginController {
             login();
         }
     }
-    
+        
     private String listenForLogin() {
         String usernamePassword = input.nextLine();
         if(usernamePassword.isEmpty())
             return listenForLogin();
         return usernamePassword;
-    }
-    
+    }    
 }

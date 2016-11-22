@@ -130,6 +130,10 @@ public class MenuModel {
      * @param action the action attribute
      * @param id the node id
      */
+    
+    int klantId = loginManager.getAccountPojo().getKlantId();
+    //voor bestellingopties (klant of medewerker)
+    
     private void doAction(String action, int id) {
         switch(action){
             // CHANGE MENU
@@ -192,19 +196,28 @@ public class MenuModel {
                 BestellingController bcTest1 = new BestellingController (new BestellingModel (),
                         new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
                         new ArtikelView());
+                if (klantId!=0) {
+                    bcTest1.startNewOrderKlant(klantId);
+                }
                 bcTest1.startNewOrder();
                 break;
             case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
                 BestellingController bcTest2 = new BestellingController (new BestellingModel (),
                         new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
                         new ArtikelView());
+                if (klantId !=0) {
+                    bcTest2.modifyOrderKlant(klantId);
+                }
                 bcTest2.modifyOrder();
                 break;
             case "Bestelling verwijderen": //artikelen verwijderen van bestelling of totale bestelling verwijderen
                 BestellingController bcTest3 = new BestellingController (new BestellingModel (),
                         new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
                         new ArtikelView());
-                bcTest3.deleteOrderOptions();
+                if (klantId !=0) {
+                    bcTest3.deleteOrderOptionsKlant(klantId);
+                }
+                bcTest3.deleteOrderOptionsKlant(klantId);
                 break;
                 
             //ARTIKELEN:

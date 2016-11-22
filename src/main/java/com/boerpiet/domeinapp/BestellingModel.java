@@ -24,10 +24,9 @@ public class BestellingModel {
     private BestelArtikelPojo ba;
     private ArtikelPojo ap;
     
-    public BestellingModel () {
-        
+    public BestellingModel () {  
     }
-        
+    
     public BestellingModel (BestellingModel bm, BestellingView bv, BestellingPojo bp,
             BestelArtikelPojo ba, ArtikelPojo ap) {
         this.bm = bm;
