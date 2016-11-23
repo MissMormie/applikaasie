@@ -5,7 +5,6 @@
  */
 package com.boerpiet.controllerapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import com.boerpiet.viewapp.ArtikelView;

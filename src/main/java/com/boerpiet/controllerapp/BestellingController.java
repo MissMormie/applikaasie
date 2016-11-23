@@ -8,6 +8,7 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.BestelArtikelModel;
 import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.LoginManager;
 import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestellingView;
 import java.sql.Date;
@@ -24,6 +25,7 @@ public class BestellingController {
     private final ArtikelModel am;
     private final BestellingView bv;
     private final ArtikelView av;
+    private LoginManager lm;
     
     public BestellingController (BestellingModel bm, BestelArtikelModel bam,
             ArtikelModel am, BestellingView bv, ArtikelView av) {
@@ -35,29 +37,28 @@ public class BestellingController {
     }
     
     //Klant-opties
-    public void startNewOrderKlant (int klantId) {
-
+    public void startNewOrderKlant () {
+        int klantId = lm.getAccountPojo().getKlantId();
+        int accountId = lm.getAccountPojo().getIdAccount();
         bv.showNewBestelling();
         int keuze  = Integer.parseInt (input.nextLine());
         
         switch (keuze) {
             case 1:
-                makeNewOrderKlant(klantId);
-                startNewOrderKlant (klantId);
+                makeNewOrderKlant(klantId, accountId);
+                startNewOrderKlant ();
                 break;
             case 2:
                 return;
             default:
-                startNewOrderKlant (klantId);
+                startNewOrderKlant ();
                 break;
         }        
     }
     
-    private void makeNewOrderKlant (int klantId) {
+    private void makeNewOrderKlant (int klantId, int accountId) {
         
         Date sqlDatum = bm.inputDate();
-        
-        int accountId = bm.inputAccountId();
         
         int artikelId = am.inputArticleId();
         
@@ -66,8 +67,8 @@ public class BestellingController {
         bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
     }
     
-    public void modifyOrderKlant (int klantId) {
-        
+    public void modifyOrderKlant () {
+        int klantId = lm.getAccountPojo().getKlantId();
         bv.startModifyOrder ();
         
         int keuze = Integer.parseInt(input.nextLine());
@@ -75,16 +76,16 @@ public class BestellingController {
         switch(keuze){
             case 1:
                 addArticleToOrderKlant(klantId);
-                modifyOrderKlant (klantId);
+                modifyOrderKlant ();
                 break;
             case 2:
                 modifyArticleFromOrderKlant(klantId);
-                modifyOrderKlant (klantId);
+                modifyOrderKlant ();
                 break;
             case 3:
                 return;
             default:
-                modifyOrderKlant (klantId);
+                modifyOrderKlant ();
                 break;
         }        
     }
@@ -117,7 +118,9 @@ public class BestellingController {
         bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
     }
     
-    public void deleteOrderOptionsKlant (int klantId) {
+    public void deleteOrderOptionsKlant () {
+        
+        int klantId = lm.getAccountPojo().getKlantId();
         
         bv.startDeleteOrder();
         int keuze = Integer.parseInt(input.nextLine());
@@ -125,16 +128,16 @@ public class BestellingController {
         switch (keuze) {
             case 1:
                 deleteOneTupelFromOrderKlant (klantId);
-                deleteOrderOptionsKlant (klantId);
+                deleteOrderOptionsKlant ();
                 break;
             case 2:
                 deleteTotalOrderKlant (klantId);
-                deleteOrderOptionsKlant (klantId);
+                deleteOrderOptionsKlant ();
                 break;
             case 3:
                 return;
             default:
-                deleteOrderOptionsKlant (klantId);
+                deleteOrderOptionsKlant ();
                 break;           
         }
     }
@@ -160,11 +163,13 @@ public class BestellingController {
     
     //Medewerker-opties    
     public void startNewOrder () {
+        
+        int accountId = lm.getAccountPojo().getIdAccount();
         bv.showNewBestelling();
         int keuze  = Integer.parseInt (input.nextLine());
         
         switch (keuze) {
-            case 1: makeNewOrder();
+            case 1: makeNewOrder(accountId);
                     startNewOrder();
                 break;
             case 2:
@@ -175,14 +180,12 @@ public class BestellingController {
         }        
     }
     
-    private void makeNewOrder () {
+    private void makeNewOrder (int accountId) {
                
         int klantId = bm.inputKlantId();
         
         Date sqlDatum = bm.inputDate();
-        
-        int accountId = bm.inputAccountId();
-        
+                
         int artikelId = am.inputArticleId();
         
         int aantal = bm.inputNumberToOrder();
@@ -213,7 +216,7 @@ public class BestellingController {
     }
     
     private void addArticleToOrder () {
-        System.out.println("Geef klantid:");
+        
         int klantId = bm.inputKlantId();
         
         bv.showAllOrdersByKlantId(klantId);

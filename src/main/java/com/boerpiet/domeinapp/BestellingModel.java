@@ -142,13 +142,6 @@ public class BestellingModel {
         return sqlDatum;
     }
     
-    public int inputAccountId () {
-        bv = new BestellingView();
-        bv.showInputAccountId();
-        int accountId = Integer.parseInt(input.nextLine());
-        return accountId;
-    }
-    
     public int inputNumberToOrder () {
         bv = new BestellingView();
         bv.showInputNumberToOrder();

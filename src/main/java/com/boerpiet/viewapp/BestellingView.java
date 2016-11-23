@@ -114,10 +114,6 @@ public class BestellingView {
         System.out.println("Geef besteldatum (yyyy-mm-dd):");
     }
     
-    public void showInputAccountId () {
-        System.out.println("Geef accountid:");
-    }
-    
     public void showInputNumberToOrder () {
         System.out.println("Hoeveel wil je bestellen? Geef aantal:");
     }
