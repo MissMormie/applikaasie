@@ -214,14 +214,17 @@ public class MenuModel {
                 BestellingController bc4 = new BestellingController (new BestellingModel (),
                         new BestelArtikelModel (), new ArtikelModel (), new BestellingView(), new ArtikelView());
                 bc4.startNewOrder();
+                break;
             case "Bestelling wijzigen door medewerker of admin":
                 BestellingController bc5 = new BestellingController (new BestellingModel (),
                         new BestelArtikelModel (), new ArtikelModel (), new BestellingView(), new ArtikelView());
                 bc5.modifyOrder();
+                break;
             case "Bestelling verwijderen door medewerker of admin":
                 BestellingController bc6 = new BestellingController (new BestellingModel (),
                         new BestelArtikelModel (), new ArtikelModel (), new BestellingView(), new ArtikelView());
                 bc6.deleteOrderOptions();
+                break;
                 
             //ARTIKELEN:
             case "Nieuw artikel":
