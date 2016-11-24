@@ -125,4 +125,12 @@ public class BestellingView {
     public void showInputKlantId () {
         System.out.println("Geef klantid:");
     }
+
+    public void showGiveNumber() {
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen");
+    }
+
+    public void showGiveDate() {
+        System.out.println("Geef een geldige datum (yyyy-MM-dd:");
+    }
 }

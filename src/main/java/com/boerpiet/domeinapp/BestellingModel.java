@@ -31,7 +31,6 @@ public class BestellingModel {
     private ArtikelPojo ap;
     private ArtikelView av;
     private BestelArtikelView bav;
-    private final DateTimeFormatter format = DateTimeFormatter.ofPattern ("yyyy-MM-dd");
     
     public BestellingModel () {  
     }
@@ -131,36 +130,6 @@ public class BestellingModel {
         for (BestelArtikelPojo baPojo : baList) {
             BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
             }
-    }
-    
-    //Input data voor controller    
-    public Date inputDate () {
-        bv = new BestellingView();
-        bv.showInputDate();
-        LocalDate bestelDatum = LocalDate.parse(input.nextLine(), format);
-        Date sqlDatum = java.sql.Date.valueOf(bestelDatum);
-        return sqlDatum;
-    }
-    
-    public int inputNumberToOrder () {
-        bv = new BestellingView();
-        bv.showInputNumberToOrder();
-        int aantal = Integer.parseInt(input.nextLine());
-        return aantal;
-    }
-    
-    public int inputOrderIdToModify () {
-        bv = new BestellingView();
-        bv.showOrderIdToModify();
-        int bestelId = Integer.parseInt(input.nextLine());
-        return bestelId;
-    }
-    
-    public int inputKlantId () {
-        bv = new BestellingView();
-        bv.showInputKlantId();
-        int klantId = Integer.parseInt(input.nextLine());
-        return klantId;
     }
     
     //getters and setters

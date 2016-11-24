@@ -14,5 +14,9 @@ public class BestelArtikelView {
     public void showInputOrderArticleId () {
         System.out.println("Geef bestelregelid waar je artikelen van wilt wijzigen of verwijderen:");
     }
+
+    public void showGiveNumber() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

@@ -7,6 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.ArtikelPojo;
+import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.Scanner;
 
@@ -16,20 +17,23 @@ import java.util.Scanner;
  */
 public class ArtikelController {
     private final Scanner input = new Scanner (System.in);
-    private final ArtikelModel artikelModel;
-    private final ArtikelPojo artikelPojo;
-    private final ArtikelView artikelView;
+    private ArtikelModel am;
+    private ArtikelPojo ap;
+    private ArtikelView av;
     
-    public ArtikelController (ArtikelModel artikelModel, ArtikelPojo artikelPojo,
-            ArtikelView artikelView) {
-        this.artikelModel = artikelModel;
-        this.artikelPojo = artikelPojo;
-        this.artikelView = artikelView;
+    public ArtikelController (ArtikelModel am) {
+        this.am = am;
         }
+
+    public ArtikelController() {
+        
+    }
     
     public void createArticle () {
-        artikelView.startCreateArticle ();
-        int keuze  = Integer.parseInt(input.nextLine());
+        av = new ArtikelView ();
+        
+        av.startCreateArticle ();
+        int keuze  = inputIntCheck();
         
         switch (keuze) {
             case 1: addArticleToDatabase ();
@@ -44,17 +48,19 @@ public class ArtikelController {
     
     private void addArticleToDatabase () {
                 
-        String naam = artikelModel.inputName();
+        String naam = inputName();
         
-        double prijs = artikelModel.inputPrijs();
+        double prijs = inputPrijs();
         
-        int voorraad = artikelModel.inputVoorraad();
+        int voorraad = inputVoorraad();
         
-        artikelModel.addArticle(naam, prijs, voorraad);
+        am.addArticle(naam, prijs, voorraad);
     }
     
     public void modifyArticle () {
-        artikelView.articleModifyOptions();
+        av = new ArtikelView ();
+        
+        av.articleModifyOptions();
         int keuze = Integer.parseInt(input.nextLine());
         
         switch (keuze) {
@@ -76,35 +82,37 @@ public class ArtikelController {
     
     private void modifyArticleNaam () {
         
-        int id = artikelModel.inputArticleId();
+        int id = inputArticleId();
         
-        String naam = artikelModel.inputName();
+        String naam = inputName();
         
-        artikelModel.modifyNaam(id, naam);
+        am.modifyNaam(id, naam);
     }
     
     private void modifyArticlePrijs () {
         
-        int id = artikelModel.inputArticleId();
+        int id = inputArticleId();
 
-        double prijs = artikelModel.inputPrijs();
+        double prijs = inputPrijs();
         
-        artikelModel.modifyPrijs(id, prijs);
+        am.modifyPrijs(id, prijs);
     }
     
     private void modifyArticleVoorraad () {
         
-        int id = artikelModel.inputArticleId();
+        int id = inputArticleId();
         
-        int voorraad = artikelModel.inputVoorraad();
+        int voorraad = inputVoorraad();
         
-        artikelModel.modifyVoorraad(id, voorraad);
+        am.modifyVoorraad(id, voorraad);
     }
     
     public void deleteArticleMenu () {
-        artikelView.startDeleteArticle();
+        av = new ArtikelView ();
         
-        int keuze = Integer.parseInt(input.nextLine());
+        av.startDeleteArticle();
+        
+        int keuze = inputIntCheck ();
         
         switch (keuze) {
             case 1: deleteArticleFromDatabase ();
@@ -118,8 +126,63 @@ public class ArtikelController {
     }
     
     private void deleteArticleFromDatabase () {
-        int id = artikelModel.inputArticleId();
+        int id = inputArticleId();
         
-        artikelModel.deleteArticle(id);
+        am.deleteArticle(id);
+    }
+    
+    //input methods
+    public int inputArticleId () {
+        av = new ArtikelView ();
+        av.showAllArticles();
+        av.showInputArticleId();
+        int artikelId = inputIntCheck();
+        return artikelId;
+    }
+    
+    public String inputName () {
+        av = new ArtikelView ();
+        av.showInputName();
+        String naam = input.nextLine();
+        return naam;
+    }
+    
+    public double inputPrijs () {
+        av = new ArtikelView ();
+        av.showInputPrijs();
+        double prijs = inputDoubleCheck();
+        return prijs;
+    }
+    
+    public int inputVoorraad () {
+        av = new ArtikelView ();
+        av.showInputVoorraad();
+        int voorraad = inputIntCheck();
+        return voorraad;
+    }
+    
+    //validate input methods
+    private int inputIntCheck () {
+        av = new ArtikelView ();
+        
+        String intInput = input.nextLine();
+        if (Validator.isValidInt(intInput)) {
+            return Integer.parseInt(intInput);
+        } else {
+            av.showGiveNumber ();
+            return inputIntCheck ();
+        }
+    }
+    
+    private double inputDoubleCheck () {
+        av = new ArtikelView ();
+        
+        String doubleInput = input.nextLine();
+        if (Validator.isValidDouble(doubleInput)) {
+            return Double.parseDouble(doubleInput);
+        } else {
+            av.showGivePrijs ();
+            return inputDoubleCheck ();
+        }
     }
 }

@@ -84,4 +84,12 @@ public class ArtikelView {
     public void showInputArticleId () {
         System.out.println("Geef artikelid:");
     }
+
+    public void showGiveNumber() {
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen");
+    }
+
+    public void showGivePrijs() {
+        System.out.println("Geef een geldige prijs (twee decimalen):");
+    }
 }

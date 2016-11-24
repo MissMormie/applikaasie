@@ -188,63 +188,48 @@ public class MenuModel {
                 
                 //BESTELLINGEN:
             case "Nieuwe bestelling door klant": //nieuwe bestelling
-                BestellingController bc1 = new BestellingController (new BestellingModel (),
-                        new BestelArtikelModel (), new ArtikelModel (), new BestellingView(),
-                        new ArtikelView(), loginManager);
+                BestellingController bc1 = new BestellingController (new BestellingModel (), loginManager);
                 //medewerkers en admins hebben klantId = 0 als het goed is
                 if (loginManager.getAccountPojo().getKlantId() !=0) {
                     bc1.startNewOrderKlant();
                 }
                 break;
             case "Bestelling wijzigen door klant": //artikelen toevoegen aan of wijzigen in een bestelling
-                BestellingController bc2 = new BestellingController (new BestellingModel (),
-                        new BestelArtikelModel (), new ArtikelModel (), new BestellingView(),
-                        new ArtikelView(), loginManager);
+                BestellingController bc2 = new BestellingController (new BestellingModel (), loginManager);
                 if (loginManager.getAccountPojo().getKlantId() !=0) {
                     bc2.modifyOrderKlant();
                 }
                 break;
             case "Bestelling verwijderen door klant": //artikelen verwijderen van bestelling of totale bestelling verwijderen
-                BestellingController bc3 = new BestellingController (new BestellingModel (),
-                        new BestelArtikelModel (), new ArtikelModel (), new BestellingView(),
-                        new ArtikelView(), loginManager);
+                BestellingController bc3 = new BestellingController (new BestellingModel (), loginManager);
                 if (loginManager.getAccountPojo().getKlantId() !=0) {
                     bc3.deleteOrderOptionsKlant();
                 }
                 break;
             case "Nieuwe bestelling door medewerker of admin":
-                BestellingController bc4 = new BestellingController (new BestellingModel (),
-                        new BestelArtikelModel (), new ArtikelModel (), new BestellingView(),
-                        new ArtikelView(), loginManager);
+                BestellingController bc4 = new BestellingController (new BestellingModel (), loginManager);
                 bc4.startNewOrder();
                 break;
             case "Bestelling wijzigen door medewerker of admin":
-                BestellingController bc5 = new BestellingController (new BestellingModel (),
-                        new BestelArtikelModel (), new ArtikelModel (), new BestellingView(),
-                        new ArtikelView(), loginManager);
+                BestellingController bc5 = new BestellingController (new BestellingModel (), loginManager);
                 bc5.modifyOrder();
                 break;
             case "Bestelling verwijderen door medewerker of admin":
-                BestellingController bc6 = new BestellingController (new BestellingModel (),
-                        new BestelArtikelModel (), new ArtikelModel (), new BestellingView(),
-                        new ArtikelView(), loginManager);
+                BestellingController bc6 = new BestellingController (new BestellingModel (), loginManager);
                 bc6.deleteOrderOptions();
                 break;
                 
             //ARTIKELEN:
             case "Nieuw artikel":
-                ArtikelController artC1 = new ArtikelController (new ArtikelModel (),
-                        new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC1 = new ArtikelController (new ArtikelModel ());
                 artC1.createArticle();
                 break;
             case "Wijzig artikel":
-                ArtikelController artC2 = new ArtikelController (new ArtikelModel (),
-                        new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC2 = new ArtikelController (new ArtikelModel ());
                 artC2.modifyArticle();
                 break;
             case "Verwijder artikel":
-                ArtikelController artC3 = new ArtikelController (new ArtikelModel (),
-                        new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC3 = new ArtikelController (new ArtikelModel ());
                 artC3.deleteArticleMenu();
                 break;
                 

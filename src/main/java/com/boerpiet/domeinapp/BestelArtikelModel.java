@@ -27,13 +27,6 @@ public class BestelArtikelModel {
         this.bam = bam;
     }
     
-    public int inputOrderArticleId () {
-        bav = new BestelArtikelView ();
-        bav.showInputOrderArticleId();
-        int bestelregel = Integer.parseInt(input.nextLine());
-        return bestelregel;
-    }
-    
     //Getters and setters
     public BestelArtikelView getBav () {
         return bav;
