@@ -143,7 +143,7 @@ public class ArtikelController {
     public String inputName () {
         av = new ArtikelView ();
         av.showInputName();
-        String naam = input.nextLine();
+        String naam = notEmptyNameInput ();
         return naam;
     }
     
@@ -183,6 +183,15 @@ public class ArtikelController {
         } else {
             av.showGivePrijs ();
             return inputDoubleCheck ();
+        }
+    }
+    
+    private String notEmptyNameInput () {
+        String text = input.nextLine();
+        if(text.isEmpty()) {
+            return inputName ();
+        } else {
+        return text;
         }
     }
 }
