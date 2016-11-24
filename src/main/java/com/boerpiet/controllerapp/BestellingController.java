@@ -28,12 +28,13 @@ public class BestellingController {
     private LoginManager lm;
     
     public BestellingController (BestellingModel bm, BestelArtikelModel bam,
-            ArtikelModel am, BestellingView bv, ArtikelView av) {
+            ArtikelModel am, BestellingView bv, ArtikelView av, LoginManager lm) {
         this.bm = bm;
         this.bam = bam;
         this.am = am;
         this.bv = bv;
         this.av = av;
+        this.lm = lm;
     }
     
     //Klant-opties

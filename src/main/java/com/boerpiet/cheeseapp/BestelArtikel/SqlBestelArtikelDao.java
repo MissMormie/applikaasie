@@ -25,7 +25,6 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                         + "'" + bArtikel.getBestelId    () + "',"
                         + "'" + bArtikel.getArtikelId   () + "',"
                         + "'" + bArtikel.getAantal      () + "');";
-                        //+ "'" + bArtikel.isDeleted  () + "');";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
             } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
