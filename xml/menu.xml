@@ -41,10 +41,10 @@ and open the template in the editor.
             <menuItem id="14" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="2" number='2' action='submenu' name='Accounts'>
-            <menuItem id="21" number='1' action='nieuwMedewerkerAccount'>Maak nieuw medewerker account</menuItem>
-            <menuItem id="25" number='2' action='nieuwKlantAccount'>Maak nieuw klant account</menuItem>
-            <menuItem id="22" number='3' action='wijzigAccount'>Zoek account om te wijzigen</menuItem>
-            <menuItem id="23" number='4' action='verwijderAccount'>Zoek account om te verwijderen</menuItem>
+            <menuItem id="21" number='1' action='nieuwMedewerkerAccount'>Maak nieuw account voor medewerker</menuItem>
+            <menuItem id="25" number='2' action='nieuwKlantAccount'>Maak nieuw accont voor klant </menuItem>
+            <menuItem id="22" number='3' action='wijzigAccount'>Zoek een account om te wijzigen</menuItem>
+            <menuItem id="23" number='4' action='verwijderAccount'>Zoek een account om te verwijderen</menuItem>
             <menuItem id="24" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
         <menuItem id="3" number='3' action='submenu' name='Klanten'>
