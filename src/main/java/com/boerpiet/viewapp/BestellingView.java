@@ -127,10 +127,10 @@ public class BestellingView {
     }
 
     public void showGiveNumber() {
-        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen");
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
     }
 
     public void showGiveDate() {
-        System.out.println("Geef een geldige datum (yyyy-MM-dd:");
+        System.out.println("Geef een geldige datum (yyyy-MM-dd):");
     }
 }

@@ -14,11 +14,12 @@ import java.util.ArrayList;
  * @author Peaq
  */
 public class ArtikelView {
+    
     public void showArtikelList (ArrayList<ArtikelPojo> artikelList) {
         showDivider();
         showArtikelListHeader();
         for (ArtikelPojo ap : artikelList) {
-            showArtikelListItem(ap); 
+            showArtikelListItem(ap);
         }
         System.out.println();
     }
@@ -86,10 +87,14 @@ public class ArtikelView {
     }
 
     public void showGiveNumber() {
-        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen");
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
     }
 
     public void showGivePrijs() {
         System.out.println("Geef een geldige prijs (twee decimalen):");
+    }
+
+    public void showMenuKeuze() {
+        System.out.println("Geef menu-keuze (getal):");
     }
 }

@@ -17,15 +17,16 @@ public class Validator {
         
     public static boolean isValidInt(String input) {   
         try {
-           int inputInt = Integer.parseInt(input);
-           if (inputInt > 0) {
-               return true;
-           } else {
-               return false;
-           }
-        } catch (NumberFormatException ex) {
+            int inputInt = Integer.parseInt(input);
+            return true;
+        }
+        catch (NumberFormatException ex) {
             return false;
         }
+    }
+    
+    public static boolean isPositiveInt (int input) {
+        return input > 0;
     }
     
     public static boolean isValidPhonenumber(String phoneNumber) {

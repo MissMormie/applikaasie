@@ -66,7 +66,7 @@ public class BestellingController {
         
         Date sqlDatum = inputDate();
         
-        int artikelId = ac.inputArticleId();
+        int artikelId = ac.inputIntPositiveAndInDatabaseCheck();
         
         int aantal = inputNumberToOrder();
         
@@ -106,9 +106,9 @@ public class BestellingController {
         
         bv.showAllOrdersByKlantId(klantId);
         
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
                 
-        int artikelId = ac.inputArticleId();
+        int artikelId = ac.inputIntPositiveAndInDatabaseCheck();
         
         int aantal = inputNumberToOrder();
         
@@ -120,12 +120,12 @@ public class BestellingController {
         ac = new ArtikelController ();
         
         bv.showAllOrdersByKlantId(klantId);
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
         
         bv.showAllBestelRegelsByBestelId(bestelId);
-        int regelId = bac.inputOrderArticleId();
+        int regelId = bac.inputOrderArticleId(bestelId);
         
-        int modifiedArtikelId = ac.inputArticleId();
+        int modifiedArtikelId = ac.inputIntPositiveAndInDatabaseCheck();
         
         int aantal = inputNumberToOrder();
         
@@ -163,10 +163,10 @@ public class BestellingController {
         bac = new BestelArtikelController ();
         
         bv.showAllOrdersByKlantId(klantId);
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
         
         bv.showAllBestelRegelsByBestelId(bestelId);        
-        int brId = bac.inputOrderArticleId();
+        int brId = bac.inputOrderArticleId(bestelId);
         
         bm.deleteOneTupel(klantId, brId, bestelId);           
     }
@@ -175,7 +175,7 @@ public class BestellingController {
         bv = new BestellingView ();
         
         bv.showAllOrdersByKlantId(klantId);
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
         
         bm.deleteOrder(klantId, bestelId);
     }
@@ -209,7 +209,7 @@ public class BestellingController {
         
         Date sqlDatum = inputDate();
                 
-        int artikelId = ac.inputArticleId();
+        int artikelId = ac.inputIntPositiveAndInDatabaseCheck();
         
         int aantal = inputNumberToOrder();
         
@@ -247,9 +247,9 @@ public class BestellingController {
         int klantId = inputKlantId();
         
         bv.showAllOrdersByKlantId(klantId);
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
 
-        int artikelId = ac.inputArticleId();
+        int artikelId = ac.inputIntPositiveAndInDatabaseCheck();
         
         int aantal = inputNumberToOrder();
         
@@ -266,13 +266,13 @@ public class BestellingController {
         
         bv.showAllOrdersByKlantId(klantId);
         
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
         
         bv.showAllBestelRegelsByBestelId(bestelId);
         
-        int regelId = bac.inputOrderArticleId();
+        int regelId = bac.inputOrderArticleId(bestelId);
         
-        int modifiedArtikelId = ac.inputArticleId();
+        int modifiedArtikelId = ac.inputIntPositiveAndInDatabaseCheck();
         
         int aantal = inputNumberToOrder();
         
@@ -311,10 +311,10 @@ public class BestellingController {
         int klantId = inputKlantId();
         
         bv.showAllOrdersByKlantId(klantId);
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
         
         bv.showAllBestelRegelsByBestelId(bestelId);        
-        int brId = bac.inputOrderArticleId();
+        int brId = bac.inputOrderArticleId(bestelId);
         
         bm.deleteOneTupel(klantId, brId, bestelId);           
     }
@@ -323,7 +323,7 @@ public class BestellingController {
         int klantId = inputKlantId();
         
         bv.showAllOrdersByKlantId(klantId);
-        int bestelId = inputOrderIdToModify();
+        int bestelId = inputOrderIdToModify(klantId);
         
         bm.deleteOrder(klantId, bestelId);
     }
@@ -345,11 +345,11 @@ public class BestellingController {
         return aantal;
     }
     
-    public int inputOrderIdToModify () {
+    public int inputOrderIdToModify (int klantId) {
         
         bv = new BestellingView ();
         bv.showOrderIdToModify();
-        int bestelId = inputIntCheck();
+        int bestelId = inputIntPositiveAndInDatabaseCheck (klantId);
         return bestelId;
     }
     
@@ -363,6 +363,16 @@ public class BestellingController {
         } else {
             bv.showGiveNumber ();
             return inputIntCheck ();
+        }
+    }
+    
+    public int inputIntPositiveAndInDatabaseCheck (int klantId) {
+        int aId = inputIntCheck();
+        if (Validator.isPositiveInt(aId) && bm.checkOrderId(aId, klantId)) {
+            return aId;
+        } else {
+            bv.showGiveNumber();
+            return inputIntPositiveAndInDatabaseCheck (klantId);
         }
     }
     

@@ -12,8 +12,6 @@ import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestelArtikelView;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -130,6 +128,24 @@ public class BestellingModel {
         for (BestelArtikelPojo baPojo : baList) {
             BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
             }
+    }
+    
+    //check bestellingid adhv klantid
+    public boolean checkOrderId (int inputOrderId, int klantId) {
+        bp = new BestellingPojo ();
+        ArrayList <BestellingPojo> aList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
+        for (BestellingPojo bp : aList) {
+            if (inputOrderId == idOrderList (bp)) {
+                System.out.println("Bestellingid gevonden");
+                break;
+            } return false;
+        }
+        return true;
+    }
+    
+    private int idOrderList (BestellingPojo bp) {
+        int id = bp.getId();
+        return id;
     }
     
     //getters and setters

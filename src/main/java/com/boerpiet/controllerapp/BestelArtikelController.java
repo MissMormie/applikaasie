@@ -27,11 +27,11 @@ public class BestelArtikelController {
     BestelArtikelController() {
     }
     
-    public int inputOrderArticleId () {
+    public int inputOrderArticleId (int bestelId) {
         bav = new BestelArtikelView ();
         bav.showInputOrderArticleId();
-        int bestelregel = inputIntCheck ();
-        return bestelregel;
+        int oAId = inputIntPositiveAndInDatabaseCheck (bestelId);
+        return oAId;
     }
     
     private int inputIntCheck () {
@@ -43,6 +43,16 @@ public class BestelArtikelController {
         } else {
             bav.showGiveNumber ();
             return inputIntCheck ();
+        }
+    }
+    
+    public int inputIntPositiveAndInDatabaseCheck (int bestelId) {
+        int aId = inputIntCheck();
+        if (Validator.isPositiveInt(aId) && bam.checkBestelRegelId(aId, bestelId)) {
+            return aId;
+        } else {
+            bav.showGiveNumber();
+            return inputIntPositiveAndInDatabaseCheck (bestelId);
         }
     }
     

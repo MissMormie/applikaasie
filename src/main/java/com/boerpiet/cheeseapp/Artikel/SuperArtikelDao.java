@@ -19,7 +19,7 @@ public abstract class SuperArtikelDao {
     public abstract ArtikelPojo getArtikelById (int artikelId);
     
     public abstract boolean findArtikelId (int artikelId);
-    
+        
     public abstract boolean updateArtikelAll (ArtikelPojo artikel);
     
     public abstract boolean updateArtikelNaam (String naam, int id);

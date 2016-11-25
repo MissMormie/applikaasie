@@ -25,8 +25,6 @@ public class SqlArtikelDao extends SuperArtikelDao {
                         + "'" + artikel.getNaam () + "',"
                         + "'" + artikel.getPrijs () + "',"
                         + "'" + artikel.getVoorraad () + "');";
-                        //+ "'" + artikel.isDeleted () + "');";
-        //System.out.println(sql);
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -38,7 +36,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
     @Override
     public ArtikelPojo getArtikelById (int artikelId) {
         ArtikelPojo a = new ArtikelPojo ();
-        String sql = "SELECT * FROM Artikel" + " WHERE idArtikel = "+artikelId;
+        String sql = "SELECT * FROM Artikel WHERE Deleted = 0 AND idArtikel = "+artikelId;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
         a.setNaam(rs.getString(2));
         a.setPrijs (rs.getDouble(3));
@@ -50,9 +48,10 @@ public class SqlArtikelDao extends SuperArtikelDao {
         }
         return a;
     }
+    
     @Override
     public boolean findArtikelId (int artikelId) {
-        String sql = "SELECT * FROM Artikel" + " WHERE idArtikel = " + artikelId;
+        String sql = "SELECT * FROM Artikel" + " WHERE Deleted = 0 AND idArtikel = " + artikelId;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
         if (rs == null) {
             return false;
@@ -63,14 +62,13 @@ public class SqlArtikelDao extends SuperArtikelDao {
                 return false;
                 }
         }
-
+    
     @Override
     public boolean updateArtikelAll (ArtikelPojo artikel) {
         String sql = "UPDATE Artikel SET"
                 + " (Naam = " + artikel.getNaam()+ ","
                 + " Prijs = " + artikel.getPrijs() + ","
                 + " Voorraad = " + artikel.getVoorraad () + ");";
-        //System.out.println(sql);
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,7 +81,6 @@ public class SqlArtikelDao extends SuperArtikelDao {
     public boolean updateArtikelNaam (String naam, int id) {
         String sql = "UPDATE Artikel SET Naam = '" + naam + "' "
                    + "WHERE idArtikel = " + id;
-        //System.out.println(sql);
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -96,7 +93,6 @@ public class SqlArtikelDao extends SuperArtikelDao {
     public boolean updateArtikelPrijs (double prijs, int id) {
         String sql = "UPDATE Artikel SET Prijs = '" + prijs + "' "
                    + "WHERE idArtikel = " + id;
-        //System.out.println(sql);
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,7 +105,6 @@ public class SqlArtikelDao extends SuperArtikelDao {
     public boolean updateArtikelVoorraad (int voorraad, int id) {
         String sql = "UPDATE Artikel SET Voorraad = '" + voorraad + "' "
                    + "WHERE idArtikel = " + id;
-        //System.out.println(sql);
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -150,7 +145,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
                     }
         return list;
     }
-    
+        
     private void fillPojo (ResultSet result, ArtikelPojo artikelPojo) throws SQLException {
         artikelPojo.setId (result.getInt ("idArtikel"));
         artikelPojo.setNaam (result.getString ("Naam"));
