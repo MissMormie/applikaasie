@@ -3,26 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.boerpiet.cheeseapp.klant;
+package com.boerpiet.cheeseapp.adres;
 
 import com.boerpiet.domeinapp.ConfigVars;
 
 /**
  *
- * @author Sonja UsageExample: AccountDAO dao =
- * KlantDAOFactory.getKlantDAO();
+ * @author Sonja
  */
-public class KlantDAOFactory {
-    // TODO get this variable from console input or config.
-   
-    public static KlantDAO getKlantDAO() {
+public class AdresDAOFactory {
+    public static AdresDAO getAdresDAO(){
         String type = ConfigVars.getDbType();
         if (type.equals("MySQL")) {
-            return new MySQLKlantDAO();
+            return new AdresMySQLDAO();
         } else if (type.equals("Firebird")) {
-            return new FirebirdKlantDAO();
+                return new AdresFirebirdDAO();
         }
-        return new MySQLKlantDAO();
+        return new AdresMySQLDAO();
     }
-
 }
+

@@ -1,4 +1,4 @@
-/*
+/**
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -75,4 +75,9 @@ public class Validator {
             }
     return true;
     }
+
+    public static boolean isValidPostcode(String postcode) {
+        String regex ="[1-9][0-9]{3}\\s?\\w\\w";
+        return postcode.matches(regex);
+    }    
 }

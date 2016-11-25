@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+--><root>
+    <databases>
+        <database default="true" type="Firebird">
+            <location>jdbc:firebirdsql:localhost/3050:APPLIKAASIE</location>
+            <username>SYSDBA</username>
+            <password>masterkey</password>
+            <driver>org.firebirdsql.jdbc.FBDriver</driver>
+        </database>
+        <database default="false" type="MySQL">
+            <location>jdbc:mysql://localhost/Applikaasie</location>
+            <username>boerpiet</username>
+            <password>kaaskop</password>
+            <driver>com.mysql.jdbc.Driver</driver>
+        </database>
+    </databases>
+    <connections>
+        <connection default="false" type="jdbc">
+        </connection>
+        <connection default="false" type="c3po">
+        </connection>
+        <connection default="true" type="HikariCP">
+        </connection>
+    </connections>
+</root>

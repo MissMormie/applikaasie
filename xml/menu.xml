@@ -59,7 +59,12 @@ and open the template in the editor.
             <menuItem id="43" number='3' action='Bestelling verwijderen door medewerker of admin'>Zoek bestelling om te verwijderen</menuItem>
             <menuItem id="44" number='9' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>            
         </menuItem>
-        <menuItem id='5' number='9' action='logout' name="Log uit"/>                                            
+        <menuItem id="5" number='5' action='submenu' name='Configuratie'>
+            <menuItem id="51" number='1' action='wijzigDatabase'>Wijzig database</menuItem>
+            <menuItem id="52" number='2' action='wijzigConnectionPool'>Wijzig connectionpool</menuItem>
+            <menuItem id="53" number='3' action='hoofdmenu'>Terug naar hoofdmenu</menuItem>
+        </menuItem>        
+        <menuItem id='6' number='9' action='logout' name="Log uit"/>                                            
     </mainMenu>
     
 

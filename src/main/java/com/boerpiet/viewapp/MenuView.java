@@ -15,7 +15,7 @@ public class MenuView {
 
     /**
      * Prints the menu items in the current node, if there's a @name this is used, otherwise textnode.
-     * @param nodeList Nodelist containing <menuItem>
+     * @param nodeList NodeList containing <menuItem>
      */
     public void showMenu(NodeList nodeList) {
         System.out.println("\n------------------------------------------------------------------------\n");        

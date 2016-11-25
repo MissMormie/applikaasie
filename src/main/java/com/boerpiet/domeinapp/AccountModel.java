@@ -5,8 +5,11 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.cheeseapp.account.AccountDAO;
 import com.boerpiet.cheeseapp.account.AccountDAOFactory;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,19 +50,27 @@ public class AccountModel {
             return false;
     }
     
-    // TODO create an create account with account status.
-    public boolean createAccount(String username, String password, int klantId) {
+    // TODO make sure username is unique.
+    public String createAccount(String username, String password, int klantId) {
+        AccountDAO ad = AccountDAOFactory.getAccountDAO();
+        try {
+            if(ad.userExists(username))
+                return "user exists";
+        } catch (SQLException ex) {
+            return "exception";
+        }
+        
         AccountPojo account = new AccountPojo(username, password);
         account.setKlantId(klantId);
         if (klantId == 0)
             account.setAccountStatus("medewerker");
         else 
             account.setAccountStatus("klant");
-        if (AccountDAOFactory.getAccountDAO("MySQL").createAccount(account)) {
+        if (ad.createAccount(account)) {
             logger.info("new account created id: " + account.getKlantId() + account.getGebruikersnaam());
-            return true;
+            return "true";
         }
-        return false;
+        return "exception";
     }
     
     /**
@@ -70,19 +81,19 @@ public class AccountModel {
     public boolean updateAccountById(AccountPojo account) {
         if(account.getIdAccount()== 0) 
             return false;
-        return AccountDAOFactory.getAccountDAO("MySQL").updateAccountById(account);
+        return AccountDAOFactory.getAccountDAO().updateAccountById(account);
     }
     
     public ArrayList<AccountPojo> fetchAccountList() {
-        return AccountDAOFactory.getAccountDAO("MySQL").getAllAccounts();
+        return AccountDAOFactory.getAccountDAO().getAllAccounts();
     }
 
     public boolean deleteAccountById(int id) {
-        return AccountDAOFactory.getAccountDAO("MySQL").deleteAccountById(id);
+        return AccountDAOFactory.getAccountDAO().deleteAccountById(id);
     }
 
     public AccountPojo getAccountById(int id) {
-        return AccountDAOFactory.getAccountDAO("MySQL").getAccountById(id);        
+        return AccountDAOFactory.getAccountDAO().getAccountById(id);        
     }
 
     public boolean updateUsername(AccountPojo account, String username) {

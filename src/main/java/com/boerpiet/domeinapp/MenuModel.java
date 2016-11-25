@@ -233,6 +233,18 @@ public class MenuModel {
                 artC3.deleteArticleMenu();
                 break;
                 
+            // CONFIGURATIE
+                
+            case "wijzigDatabase":
+                ConfController cc1 = new ConfController(new ConfModel(), new ConfView(), loginManager);
+                cc1.modifyDatabaseSetting();
+                break;
+            case "wijzigConnectionPool":
+                ConfController cc2 = new ConfController(new ConfModel(), new ConfView(), loginManager);
+                cc2.modifyConnectionPoolSetting();
+
+                break;                
+                
             // LOGOUT
             case "logout": logout(); break;
         }

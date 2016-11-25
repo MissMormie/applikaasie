@@ -5,9 +5,6 @@
  */
 package com.boerpiet.cheeseapp.account;
 
-import com.boerpiet.domeinapp.AccountPojo;
-import java.util.ArrayList;
-
 /**
  *
  * @author Sonja
@@ -15,43 +12,51 @@ import java.util.ArrayList;
 public class FirebirdAccountDAO extends AccountDAO {
 
     @Override
-    public boolean createAccount(AccountPojo model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getCreateAccountSQL() {
+        // I have no clue why but Firebird automatically changes the column name Datum_Aanmaak into DATUM_AANMAAK.
+        return "INSERT INTO \"account\" "
+             + "(\"Gebruikersnaam\", \"Wachtwoord\", \"Accountstatus\", "
+             + "\"DATUM_AANMAAK\", \"KlantId\", \"Deleted\") "
+             + "VALUES (?, ?, ?, ?, ?, ?);";
     }
 
     @Override
-    public boolean updateAccountById(AccountPojo model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getUpdateAccountByIdSQL() {
+        return "UPDATE \"account\" SET \"Gebruikersnaam\"=?,"
+             + " \"Wachtwoord\"=?, \"Accountstatus\"=?, \"DATUM_AANMAAK\"=?, "
+             + "\"KlantId\"=?, \"Deleted\"=? WHERE \"idAccount\"=?;";
     }
 
     @Override
-    public boolean deleteAccount(AccountPojo model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getAccountByIdSQL() {
+        return "SELECT * FROM \"account\" "
+             + "WHERE \"idAccount\"=? AND \"Deleted\"='0';";
     }
 
     @Override
-    public boolean isValidLogin(AccountPojo model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getFillAccountPojoByUsernamePasswordSQL() {
+        return "SELECT * FROM \"account\" WHERE \"Gebruikersnaam\"=? "
+                        + "AND \"Wachtwoord\"=? AND \"Deleted\"='0';";
     }
 
     @Override
-    public AccountPojo getAccountById(int accountId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getAllAccountsSQL() {
+        return "SELECT * FROM \"account\" WHERE \"Deleted\"='0';";
     }
 
     @Override
-    public boolean fillAccountPojoByUsernamePassword(AccountPojo model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getDeleteAccountByIdSQL() {
+        return "UPDATE \"account\" SET \"Deleted\"='1' WHERE \"idAccount\"=?;";
     }
 
     @Override
-    public ArrayList<AccountPojo> getAllAccounts() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getDeleteAccountsByKlantIdSQL() {
+        return "Update \"account\" SET \"Deleted\" = '1' WHERE \"KlantID\" = ?";    
     }
 
     @Override
-    public boolean deleteAccountById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getUserExistsSQL() {
+        return "SELECT * FROM \"account\" WHERE \"Deleted\"='0' AND \"Gebruikersnaam\" = ? ;";
+
     }
-    
 }

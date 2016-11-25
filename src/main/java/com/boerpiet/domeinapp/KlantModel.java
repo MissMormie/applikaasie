@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,10 +6,8 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.cheeseapp.adres.AdresDAOFactory;
 import com.boerpiet.cheeseapp.klant.KlantDAOFactory;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -237,7 +236,7 @@ public class KlantModel {
      */
     public boolean delete() {
         if(klantPojo.getId() != 0)
-            return KlantDAOFactory.getKlantDAO().deleteKlantById(klantPojo.getId());
+            return KlantDAOFactory.getKlantDAO().deleteKlantAndAdressenById(klantPojo.getId());
         return false;
     }
 
@@ -253,15 +252,15 @@ public class KlantModel {
         switch(type.toLowerCase()) {
             case "postadres":
                 if(postAdresPojo != null & postAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(postAdresPojo);            
+                    return AdresDAOFactory.getAdresDAO().updateAdres(postAdresPojo);            
                 break;
             case "factuuradres":
                 if(factuurAdresPojo != null & factuurAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(factuurAdresPojo);            
+                    return AdresDAOFactory.getAdresDAO().updateAdres(factuurAdresPojo);            
                 break;
             case "bezorgadres":
                 if(bezorgAdresPojo != null & bezorgAdresPojo.getIdAdres() != 0) 
-                    return KlantDAOFactory.getKlantDAO().updateAdres(bezorgAdresPojo);            
+                    return AdresDAOFactory.getAdresDAO().updateAdres(bezorgAdresPojo);            
                 break;
                 
             // All 3 address types are the same

@@ -5,10 +5,6 @@
  */
 package com.boerpiet.cheeseapp.klant;
 
-import com.boerpiet.domeinapp.AdresPojo;
-import com.boerpiet.domeinapp.KlantPojo;
-import com.boerpiet.domeinapp.KlantModel;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,38 +13,32 @@ import java.util.ArrayList;
 public class FirebirdKlantDAO extends KlantDAO {
 
     @Override
-    public boolean createKlant(KlantModel klant) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getCreateKlantSQL() {
+        return "INSERT INTO \"klant\" (\"Voornaam\", \"Achternaam\", \"Tussenvoegsel\", "
+                    + "\"Telefoonnummer\", \"Emailadres\", \"Deleted\") "
+                    + "VALUES (?, ?, ?, ?, ?, '0')";
     }
 
     @Override
-    public ArrayList<KlantPojo> getAllKlanten() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getAllKlantenSQL() {
+        return "SELECT * FROM \"klant\" WHERE \"Deleted\"='0';";
+    }
+   
+    @Override
+    protected String getUpdateKlantByIdSQL() {
+        return "Update \"klant\" SET \"Voornaam\" = ?, \"Achternaam\" = ?, "
+            + "\"Tussenvoegsel\" = ?, \"Telefoonnummer\" = ?, \"Emailadres\" = ?, "
+            + "\"Deleted\" = ? WHERE \"idKlant\" = ?;";
+    } 
+      
+    @Override
+    protected String getKlantPojoByIdSQL() {
+        return "SELECT * FROM \"klant\" WHERE \"idKlant\" = ? AND \"Deleted\"='0';";
     }
 
     @Override
-    public KlantModel getKlantById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getDeleteKlantByIdSQL() {
+        return "Update \"klant\" SET \"Deleted\" = 1 WHERE \"KlantID\" = ?";
     }
-
-    @Override
-    public boolean updateKlantById(KlantPojo klant) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean deleteKlantById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean deleteKlant(KlantModel klant) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean updateAdres(AdresPojo adres) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+       
 }

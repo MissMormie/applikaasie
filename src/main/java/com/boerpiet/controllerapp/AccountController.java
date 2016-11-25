@@ -7,6 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.domeinapp.AccountPojo;
+import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.AccountView;
@@ -29,7 +30,10 @@ public class AccountController {
     
     public void newKlantAccount() {
         KlantenController kc = new KlantenController(new KlantenModel(), new KlantenView());
-        int id = kc.selectKlant().getKlantPojo().getId();
+        KlantModel klant = kc.selectKlant();
+        if(klant == null)
+            return;
+        int id = klant.getKlantPojo().getId();
         newAccount(id);
     }
     
@@ -60,8 +64,12 @@ public class AccountController {
         }
 
         // Make new account met parts[0] username, parts[1] wachtwoord, parts[2] klantID
-        if(accountModel.createAccount(parts[0], parts[1], klantId)) {
+        String createAccount = accountModel.createAccount(parts[0], parts[1], klantId);
+        if(createAccount.equalsIgnoreCase("true")) {
             accountView.showNewAccountSuccess();
+        } else if (createAccount.equalsIgnoreCase("user exists")) {
+            accountView.showUserExists();
+            newAccount(klantId);
         } else {
             accountView.showNewAccountFailed();
             newAccount(klantId);

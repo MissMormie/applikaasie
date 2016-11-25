@@ -1,5 +1,7 @@
 /target/
 /src/main/java/com/boerpiet/mainTest.java
+/src/main/java/com/boerpiet/viewapp/TestClass.java
 /nbproject/
 debug.log
-/src/main/java/com/boerpiet/viewapp/TestClass.java
+/logs/rollingfile.log
+/logs/

@@ -57,7 +57,8 @@ public class KlantenView {
     
     public void showSelectKlant() {
         showDivider();
-        System.out.println("Type het id nummer de klant die je wil kiezen.\n");        
+        System.out.println("Type het id nummer van de klant die je wil kiezen.\n" 
+                         + "Of type N om terug te gaan naar het menu.");
     }
 
     public void showDeleteKlantSuccess() {
