@@ -20,6 +20,8 @@ public abstract class SuperBestelArtikelDao {
     
     public abstract BestelArtikelPojo getBestelArtikelByBestelId (int bestelId);
     
+    public abstract boolean findBestelArtikel (int baId);
+    
     public abstract ArrayList <BestelArtikelPojo> getBestelLijstByBestelId (int bestelId);
     
     public abstract boolean updateBestelArtikel (BestelArtikelPojo bArtikel, int regelId);

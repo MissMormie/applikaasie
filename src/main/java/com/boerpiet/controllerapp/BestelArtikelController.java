@@ -27,33 +27,32 @@ public class BestelArtikelController {
     BestelArtikelController() {
     }
     
-    public int inputOrderArticleId (int bestelId) {
-        bav = new BestelArtikelView ();
-        bav.showInputOrderArticleId();
-        int oAId = inputIntPositiveAndInDatabaseCheck (bestelId);
-        return oAId;
-    }
-    
-    private int inputIntCheck () {
+    //bestelregels worden OA genoemd in klassen
+    //methods to check input for validity
+    private int inputIntCheck (String string) {
         
         bav = new BestelArtikelView ();
-        String intInput = input.nextLine();
-        if (Validator.isValidInt(intInput)) {
-            return Integer.parseInt(intInput);
+        
+        if (Validator.isValidInt(string)) {
+            return Integer.parseInt(string);
         } else {
             bav.showGiveNumber ();
-            return inputIntCheck ();
+            return inputIntCheck (string);
         }
     }
     
-    public int inputIntPositiveAndInDatabaseCheck (int bestelId) {
-        int aId = inputIntCheck();
-        if (Validator.isPositiveInt(aId) && bam.checkBestelRegelId(aId, bestelId)) {
-            return aId;
+    public int inputIdInDatabaseCheck () {
+        bav = new BestelArtikelView ();
+        bam = new BestelArtikelModel ();
+                
+        String bId = input.nextLine();
+        int id = inputIntCheck(bId);
+        
+        if (bam.checkBestelRegelId(id)) {
+            return id;
         } else {
             bav.showGiveNumber();
-            return inputIntPositiveAndInDatabaseCheck (bestelId);
+            return inputIdInDatabaseCheck ();
         }
     }
-    
 }

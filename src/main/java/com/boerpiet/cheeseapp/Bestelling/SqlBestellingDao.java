@@ -57,14 +57,13 @@ public class SqlBestellingDao extends SuperBestellingDao {
         b.setKlantKey (rs.getInt(2));
         b.setBestelDatum (rs.getDate(3));
         b.setAccountKey (rs.getInt(4));
-        b.setDeleted (rs.getBoolean(5));       
         } catch (Exception ex) {
             Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
         return b;
     }
-    
+
     @Override
     public BestellingPojo getBestellingByKlantId (int klantId) {
         BestellingPojo b = new BestellingPojo ();
@@ -80,6 +79,17 @@ public class SqlBestellingDao extends SuperBestellingDao {
         }
         return b;
     }
+    
+    @Override
+    public boolean findBestellingId (int bestelId) {
+        String sql = "SELECT idBestelling FROM Bestelling WHERE Deleted = 0 AND idBestelling = "+bestelId;
+        try {
+            ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
+            return rs != null;
+        } catch (Exception ex) {
+                return false;
+            }
+        }
     
     //wordt momenteel niet gebruikt, wijzigingen in bestelling worden gedaan met BestelArtikel
     @Override

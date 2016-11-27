@@ -16,6 +16,8 @@ public abstract class SuperArtikelDao {
     
     public abstract boolean createArtikel (ArtikelPojo artikel);
     
+    public abstract int createArtikelWithReturnId (ArtikelPojo artikel);
+    
     public abstract ArtikelPojo getArtikelById (int artikelId);
     
     public abstract boolean findArtikelId (int artikelId);

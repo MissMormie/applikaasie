@@ -18,6 +18,11 @@ public class FirebirdArtikelDao extends SuperArtikelDao {
     public boolean createArtikel(ArtikelPojo artikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public int createArtikelWithReturnId (ArtikelPojo artikel) {
+        throw new UnsupportedOperationException ("Not supported yet.");
+    }
 
     @Override
     public ArtikelPojo getArtikelById (int artikelId) {

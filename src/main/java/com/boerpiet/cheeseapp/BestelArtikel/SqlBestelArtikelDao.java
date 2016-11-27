@@ -43,7 +43,6 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
         ba.setBestelId (rs.getInt(2));
         ba.setArtikelId (rs.getInt(3));
         ba.setAantal (rs.getInt(4));
-        //ba.setDeleted (rs.getBoolean(5));       
         } catch (Exception ex) {
             Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -65,6 +64,18 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
             return null;
         }
         return ba;
+    }
+    
+    @Override
+    public boolean findBestelArtikel (int baId) {
+        String sql = "SELECT idBestelArtikel FROM BestelArtikel "+
+                "WHERE Deleted = 0 AND Bezorgd = 0 AND idBestelArtikel = "+ baId;
+        //System.out.println(sql);
+        try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
+            return rs != null;
+        } catch (Exception ex) {
+                return false;
+            }        
     }
     
     @Override

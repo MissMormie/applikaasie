@@ -24,14 +24,6 @@ public class BestellingView {
                 +"2. Terug naar het menu \n");
     }
     
-    public void showNewBestellingSucces () {
-        System.out.println("Nieuwe bestelling is aangemaakt.");
-    }
-    
-    public void showNewBestellingFailure () {
-        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-    }
-
     public void startModifyOrder() {
         System.out.println("Je bent nu in het bestelling-wijzigingsmenu.");
         System.out.println("Wat wil je doen? \n"
@@ -107,30 +99,51 @@ public class BestellingView {
                 getBestelLijstByBestelId(bestelId);
         BestellingView bvList = new BestellingView();
         bvList.showBestelLijstByBestelId(baList);
+        System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
 
     }
-
+    
+    //input messages
     public void showInputDate () {
         System.out.println("Geef besteldatum (yyyy-mm-dd):");
     }
-    
     public void showInputNumberToOrder () {
         System.out.println("Hoeveel wil je bestellen? Geef aantal:");
     }
-    
     public void showOrderIdToModify () {
-        System.out.println("Geef bestelid voor wijziging of verwijdering:");
+        System.out.println("Geef bestelid voor wijziging:");
     }
-    
+    public void showOrderIdToDelete() {
+        System.out.println("Geef bestelid voor verwijdering:");
+    }
     public void showInputKlantId () {
         System.out.println("Geef klantid:");
     }
-
     public void showGiveNumber() {
         System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
     }
-
     public void showGiveDate() {
         System.out.println("Geef een geldige datum (yyyy-MM-dd):");
+    }
+    public void showInputOrderId() {
+        System.out.println("Geef bestelid:");
+    }
+    public void showMenuKeuze() {
+        System.out.println("Geef menu-keuze (getal):");
+    }
+    public void showAddOrderSuccess () {
+        System.out.println("Bestelling is toegevoegd.");
+    }
+    public void showModifySuccess () {
+        System.out.println("Bestelling is gewijzigd");
+    }
+    public void showDeleteOrderSuccess () {
+        System.out.println("Bestelling is verwijderd uit database.");
+    }
+    public void showErrorMessage () {
+        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+    }
+    public void showAskSureToDelete() {
+        System.out.println("Weet je zeker dat je dit wilt verwijderen? J/N");
     }
 }

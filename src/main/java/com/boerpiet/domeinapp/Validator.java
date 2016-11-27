@@ -6,7 +6,6 @@
 package com.boerpiet.domeinapp;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 
 /**
@@ -17,16 +16,12 @@ public class Validator {
         
     public static boolean isValidInt(String input) {   
         try {
-            int inputInt = Integer.parseInt(input);
+            Integer.parseInt(input);
             return true;
         }
         catch (NumberFormatException ex) {
             return false;
         }
-    }
-    
-    public static boolean isPositiveInt (int input) {
-        return input > 0;
     }
     
     public static boolean isValidPhonenumber(String phoneNumber) {
@@ -51,23 +46,18 @@ public class Validator {
     
     public static boolean isValidDouble (String input) {
         try {
-            double inputDouble = Double.parseDouble (input);
-            if (inputDouble > 0) {
-                return true;
-            } else {
-            return false;
+            Double.parseDouble (input);
+            return true;
             }
-        } catch (NumberFormatException ex) {
+        catch (NumberFormatException ex) {
             return false;
         }
     }
-    
     public static boolean isValidDate (String input) {
         
         try {
             SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd");
-            Date date = sdf.parse(input);
-            if (!input.equals(sdf.format(date))) {
+            if (!input.equals(sdf.format(sdf.parse(input)))) {
                 return false;
             }
         } catch (ParseException ex) {

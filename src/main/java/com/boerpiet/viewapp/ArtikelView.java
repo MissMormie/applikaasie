@@ -15,13 +15,41 @@ import java.util.ArrayList;
  */
 public class ArtikelView {
     
-    public void showArtikelList (ArrayList<ArtikelPojo> artikelList) {
+    //show list of articles or just one article
+    public void showArticle (int artikelId) {
+        ArtikelPojo ap = ArtikelDaoFactory.getArtikelDAO("MySQL").getArtikelById(artikelId);
+        
+        showArtikelListHeader ();
+        showArticleProperties (ap);  
+    }
+    
+    private void showArticleProperties (ArtikelPojo ap) {
+        showDivider ();
+        showArtikelListHeader ();        
+        
+        System.out.printf("%-3s %-25s %-10s %s \n", 
+                ap.getId(), 
+                ap.getNaam(), 
+                ap.getPrijs(),
+                ap.getVoorraad());
+    }
+    
+    public void showAllArticles () {
+        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
+        showAllArticlesList(aList);
+    }
+    
+    private void showAllArticlesList (ArrayList<ArtikelPojo> artikelList) {
         showDivider();
         showArtikelListHeader();
         for (ArtikelPojo ap : artikelList) {
-            showArtikelListItem(ap);
+            showPropertiesOfArticles(ap);
         }
         System.out.println();
+    }
+    
+    public void showDivider() {
+        System.out.println("\n-----------------------------------------------");        
     }
 
     private void showArtikelListHeader() {
@@ -32,7 +60,7 @@ public class ArtikelView {
                 "voorraad");
     }
     
-    private void showArtikelListItem(ArtikelPojo ap) {
+    private void showPropertiesOfArticles (ArtikelPojo ap) {
         //NumberFormat nfPrijs = new DecimalFormat ("#.###,00");
         System.out.printf("%-3s %-25s %-10s %s \n", 
                 ap.getId(), 
@@ -41,15 +69,7 @@ public class ArtikelView {
                 ap.getVoorraad());       
     }
     
-    public void showDivider() {
-        System.out.println("\n-----------------------------------------------");        
-    }
-    public void showAllArticles () {
-        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
-        ArtikelView artList = new ArtikelView();
-        artList.showArtikelList(aList);
-    }
-
+    //Console messages
     public void startCreateArticle() {
         System.out.println("Wat wil je doen? \n"
                 + "1. Nieuw artikel invoeren \n"
@@ -61,7 +81,8 @@ public class ArtikelView {
                         + "1. Naam \n"
                         + "2. Prijs \n"
                         + "3. Voorraad \n"
-                        + "4. Terug naar menu \n");
+                        + "4. Alledrie \n"
+                        + "5. Terug naar menu \n");
     }
     
     public void startDeleteArticle () {
@@ -82,8 +103,15 @@ public class ArtikelView {
         System.out.println("Geef voorraad van dit artikel:");
     }
     
-    public void showInputArticleId () {
-        System.out.println("Geef artikelid:");
+    public void showInputArticleIdToAddToOrder () {
+        System.out.println("Geef artikelid voor toevoeging:");
+    }
+    
+    public void showInputArticleIdToModify () {
+        System.out.println("Geef artikelid om te bestellen in plaats van getoond artikel:");
+    }
+    public void showInputArticleIdToDelete () {
+        System.out.println("Geef artikelid voor verwijdering:");
     }
 
     public void showGiveNumber() {
@@ -96,5 +124,20 @@ public class ArtikelView {
 
     public void showMenuKeuze() {
         System.out.println("Geef menu-keuze (getal):");
+    }
+    public void showAddSuccess () {
+        System.out.println("Artikel is toegevoegd aan database.");
+    }
+    public void showModifySuccess () {
+        System.out.println("Artikel is gewijzigd");
+    }
+    public void showDeleteSuccess () {
+        System.out.println("Artikel is verwijderd uit database.");
+    }
+    public void showErrorMessage () {
+        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+    }
+    public void showAskSureToDelete() {
+        System.out.println("Weet je zeker dat je dit artikel wilt verwijderen? J/N");
     }
 }

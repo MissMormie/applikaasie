@@ -11,12 +11,19 @@ package com.boerpiet.viewapp;
  */
 public class BestelArtikelView {
     
-    public void showInputOrderArticleId () {
-        System.out.println("Geef bestelregelid waar je artikelen van wilt wijzigen of verwijderen:");
+    public void showInputOAIdToModify () {
+        System.out.println("Geef bestelregelid waar je artikelen van wilt wijzigen:");
     }
-
+    public void showInputOAIdToDelete () {
+        System.out.println("Geef bestelregelid waar je artikelen van wilt verwijderen:");
+    }
     public void showGiveNumber() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
     }
-    
+    public void showAddOASuccess () {
+        System.out.println("Artikel is toegevoegd aan bestelling.");
+    }
+    public void showDeleteOASuccess () {
+        System.out.println("Artikel is verwijderd van bestelling.");
+    }
 }

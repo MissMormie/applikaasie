@@ -33,6 +33,11 @@ public class FirebirdBestellingDao extends SuperBestellingDao {
     public BestellingPojo getBestellingByKlantId (int klantId) {
         throw new UnsupportedOperationException ("Not supported yet");
     }
+    
+    @Override
+    public boolean findBestellingId (int bestelId ) {
+        throw new UnsupportedOperationException ("Not supported yet");
+    }
 
     @Override
     public boolean updateBestelling(BestellingPojo bestelling) {

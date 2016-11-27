@@ -22,6 +22,8 @@ public abstract class SuperBestellingDao {
     public abstract BestellingPojo getBestellingById (int idBestelling);
     
     public abstract BestellingPojo getBestellingByKlantId (int klantId);
+    
+    public abstract boolean findBestellingId (int bestelId);
         
     public abstract boolean updateBestelling (BestellingPojo bestelling);
 

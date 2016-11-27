@@ -31,6 +31,11 @@ public class FirebirdBestelArtikelDao extends SuperBestelArtikelDao {
     }
     
     @Override
+    public boolean findBestelArtikel (int baId) {
+        throw new UnsupportedOperationException ("Not supported yet.");
+    }
+    
+    @Override
     public ArrayList <BestelArtikelPojo> getBestelLijstByBestelId (int bestelId) {
       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.  
     }

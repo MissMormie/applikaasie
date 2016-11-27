@@ -7,8 +7,6 @@ package com.boerpiet.domeinapp;
 
 import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.viewapp.ArtikelView;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  *
@@ -18,7 +16,6 @@ public class ArtikelModel {
     private ArtikelModel am;
     private ArtikelView av;
     private ArtikelPojo ap;
-    private final Scanner input = new Scanner (System.in);
     
     public ArtikelModel () {
     }
@@ -34,11 +31,13 @@ public class ArtikelModel {
         ap.setPrijs(prijs);
         ap.setVoorraad(voorraad);
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").createArtikel(ap)) {
-            System.out.println("Artikel is toegevoegd aan de database.");
-            av.showAllArticles();
+        int id = ArtikelDaoFactory.getArtikelDAO("MySQL").createArtikelWithReturnId(ap);
+        
+        if (id>0) {
+            av.showArticle(id);
+            av.showAddSuccess();
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            av.showErrorMessage();
         }
     }
     
@@ -49,10 +48,10 @@ public class ArtikelModel {
         ap.setNaam(naam);
         
         if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelNaam(naam, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            av.showAllArticles();
+            av.showModifySuccess();
+            av.showArticle(id);
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            av.showErrorMessage();
         }
     }
     
@@ -63,10 +62,10 @@ public class ArtikelModel {
         ap.setPrijs(prijs);
         
         if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelPrijs(prijs, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            av.showAllArticles();
+            av.showModifySuccess();
+            av.showArticle (id);
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            av.showErrorMessage();
         }
     }
     
@@ -77,10 +76,27 @@ public class ArtikelModel {
         ap.setVoorraad(voorraad);
         
         if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelVoorraad(voorraad, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            av.showAllArticles();
+            av.showModifySuccess();
+            av.showArticle (id);
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            av.showErrorMessage();
+        }
+    }
+    
+    public void modifyNPV(int id, String naam, double prijs, int voorraad) {
+        av = new ArtikelView ();
+        ap = new ArtikelPojo ();
+        
+        ap.setId(id);
+        ap.setNaam(naam);
+        ap.setPrijs(prijs);
+        ap.setVoorraad(voorraad);
+        
+        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelAll(ap)) {
+            av.showModifySuccess();
+            av.showArticle (id);
+        } else {
+            av.showErrorMessage();
         }
     }
     
@@ -90,29 +106,16 @@ public class ArtikelModel {
         ap.setId(id);
         
         if (ArtikelDaoFactory.getArtikelDAO("MySQL").deleteArtikel(id)) {
-            System.out.println("Artikel is nu verwijderd.");
-            av.showAllArticles();
+            av.showDeleteSuccess();
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            av.showErrorMessage();
         }
     }
     
     public boolean checkArticleId (int inputArtikelId) {
-        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
-        for (ArtikelPojo ap : aList) {
-            if (inputArtikelId == ap.getId()) {
-                System.out.println("Artikelid gevonden");
-                return true;
-            }
-        }
-        return false;
+        return ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(inputArtikelId);
     }
-    
-    private int idArticleList (ArtikelPojo ap) {
-        int id = ap.getId();
-        return id;
-    }
-    
+
     //Getters and setters
     public ArtikelModel getArtikelModel () {
         return am;

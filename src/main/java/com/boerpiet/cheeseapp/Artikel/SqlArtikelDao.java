@@ -34,30 +34,45 @@ public class SqlArtikelDao extends SuperArtikelDao {
     }
     
     @Override
-    public ArtikelPojo getArtikelById (int artikelId) {
-        ArtikelPojo a = new ArtikelPojo ();
-        String sql = "SELECT * FROM Artikel WHERE Deleted = 0 AND idArtikel = "+artikelId;
-        try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
-        a.setNaam(rs.getString(2));
-        a.setPrijs (rs.getDouble(3));
-        a.setVoorraad(rs.getInt(4));
-        a.setDeleted (rs.getBoolean(5));       
+    public int createArtikelWithReturnId (ArtikelPojo artikel) {
+        String sql = "INSERT INTO Artikel (Naam, Prijs, Voorraad)"
+                + " VALUES ("
+                        + "'" + artikel.getNaam () + "',"
+                        + "'" + artikel.getPrijs () + "',"
+                        + "'" + artikel.getVoorraad () + "');";
+        try {
+            int key = MySQLConnection.getMySQLConnection().createAndReturnID(sql);
+            return key;
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            System.out.println("Er is iets misgegaan, artikel is niet aangemaakt.");
+            return 0;
         }
-        return a;
     }
+    
+    @Override
+    public ArtikelPojo getArtikelById (int artikelId) {
+        ArtikelPojo ap = new ArtikelPojo ();
+        String sql = "SELECT * FROM Artikel " + "WHERE Deleted = 0 AND idArtikel = "+artikelId;
+
+        try {
+            ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
+            if (rs.next()) {
+                fillPojo (rs, ap);
+            }
+        }
+            catch (SQLException ex) {
+                System.out.println("Artikel niet gevonden");
+                    System.out.println(ex);
+                    }
+        return ap;
+    }    
     
     @Override
     public boolean findArtikelId (int artikelId) {
         String sql = "SELECT * FROM Artikel" + " WHERE Deleted = 0 AND idArtikel = " + artikelId;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
-        if (rs == null) {
-            return false;
-        } else {
-            return true;
-        }
+            return rs != null;
         } catch (Exception ex) {
                 return false;
                 }
@@ -65,11 +80,12 @@ public class SqlArtikelDao extends SuperArtikelDao {
     
     @Override
     public boolean updateArtikelAll (ArtikelPojo artikel) {
-        String sql = "UPDATE Artikel SET"
-                + " (Naam = " + artikel.getNaam()+ ","
-                + " Prijs = " + artikel.getPrijs() + ","
-                + " Voorraad = " + artikel.getVoorraad () + ");";
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
+        String sql = "UPDATE Artikel SET "
+                + "Naam = '" + artikel.getNaam()+ "', "
+                + "Prijs = '" + artikel.getPrijs() + "', "
+                + "Voorraad = '" + artikel.getVoorraad () + "'"
+                + "WHERE idArtikel = '"+artikel.getId()+ "';";
+        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
             Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
