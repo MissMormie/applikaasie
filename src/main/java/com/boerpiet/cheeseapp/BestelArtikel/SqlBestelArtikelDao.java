@@ -9,14 +9,16 @@ import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Peaq
  */
 public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
+    
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public boolean createBestelArtikel(BestelArtikelPojo bArtikel) {
@@ -27,7 +29,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                         + "'" + bArtikel.getAantal      () + "');";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
             } catch (Exception ex) {
-            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error ("Bestelregel is niet gemaakt: "+ ex);
             return false;
         }
         return true;
@@ -44,7 +46,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
         ba.setArtikelId (rs.getInt(3));
         ba.setAantal (rs.getInt(4));
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn ("Kon bestelregel niet vinden: "+ex);
             return null;
         }
         return ba;
@@ -60,7 +62,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
             ba.setArtikelId (rs.getInt(1));
             ba.setAantal(rs.getInt(2));
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn ("Kon bestelregel bij dit bestelid niet vinden: "+ex);
             return null;
         }
         return ba;
@@ -74,8 +76,20 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
             return rs != null;
         } catch (Exception ex) {
+            logger.warn ("Kon bestelregel niet vinden: "+ex);
                 return false;
             }        
+    }
+    
+    @Override
+    public int getMaxBestelArtikelId() {
+        String sql = "SELECT MAX (idBestelArtikel) FROM BestelArtikel";
+        try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
+        return rs.getInt(1);
+        } catch (Exception ex) {
+            logger.warn ("Bestelregel is is niet in database "+ ex);
+            return 0;
+        }
     }
     
     @Override
@@ -84,7 +98,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                 + "FROM BestelArtikel "
                 + "INNER JOIN Artikel ON BestelArtikel.ArtikelId = Artikel.idArtikel "
                 + "WHERE BestelArtikel.Bezorgd = 0 AND BestelArtikel.BestellingId = "+ bestelId;
-        ResultSet result  = MySQLConnection.getMySQLConnection().read(sql);//sql syntax error
+        ResultSet result  = MySQLConnection.getMySQLConnection().read(sql);
         ArrayList <BestelArtikelPojo> list = new ArrayList<>();
         if (result==null) {
           System.out.println("Kan de gevraagde selectie niet vinden.");
@@ -96,17 +110,15 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                 list.add(ba);
             }
         } catch (SQLException ex) {
-            System.out.println(ex);
-        }
+            logger.error ("Kon geen lijst van bestelregels maken met dit bestelid: "+ex);
+            }
         return list;
     }
     
     private void fillModelBestelId (ResultSet rs, BestelArtikelPojo ba) throws SQLException {
-        //bm.getArtikelPojo().setNaam (rs.getString("Naam"));
         ba.setId(rs.getInt("idBestelArtikel"));
         ba.setArtikelId(rs.getInt("ArtikelId"));
         ba.setAantal(rs.getInt("Aantal"));
-       // bm.getArtikelPojo().setNaam(rs.getString("Naam"));
         
     }
 
@@ -119,7 +131,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                         + "WHERE idBestelArtikel = " + regelId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Wijziging van bestelregel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -129,11 +141,12 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     public boolean deleteBestelArtikel(int brId) {
         String sql = "UPDATE BestelArtikel SET Deleted = 1, Bezorgd = 1 "
                 //als deleted op 1 staat dan is bezorgd =1 noodzakelijk voor het
-                //laten zien van actuele lijst in view, maar het is niet daadwerkelijk bezorgd
+                //laten zien van actuele lijst in view, maar het is niet noodzakelijk
+                //daadwerkelijk bezorgd
                     + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Verwijderen van bestelregel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -141,16 +154,11 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     //verwijdering van artikel zonder return value
     @Override
     public void deleteArticleFromOrder (int brId) {
-        String sql = "UPDATE BestelArtikel SET Deleted = 1 "
+        String sql = "UPDATE BestelArtikel SET Deleted = 1, Bezorgd = 1 "
                     + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestelArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Verwijderen van bestelregel (void methode) is mislukt: "+ex);
         }
-    }
-    
-    @Override
-    public boolean isValidLogin (BestelArtikelPojo bArtikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

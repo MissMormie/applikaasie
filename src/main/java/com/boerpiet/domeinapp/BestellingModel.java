@@ -133,8 +133,16 @@ public class BestellingModel {
     }
     
     //check bestellingid adhv klantid
-    public boolean checkOrderId (int inputOrderId) {
-        return BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(inputOrderId);
+    public boolean checkOrderIdInDatabase (int inputOrderId) {
+        if (inputOrderIdSmallerMaxId (inputOrderId)) {
+            return BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(inputOrderId);    
+        } else {
+            return false;
+        }
+    }
+    
+    private boolean inputOrderIdSmallerMaxId (int id) {
+        return id<BestellingDaoFactory.getBestellingDAO("MySQL").getMaxBestellingId();
     }
     
     //getters and setters

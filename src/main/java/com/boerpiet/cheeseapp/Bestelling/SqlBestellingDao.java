@@ -9,14 +9,16 @@ import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Peaq
  */
 public class SqlBestellingDao extends SuperBestellingDao {
+    
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public boolean createBestelling (BestellingPojo bestelling) {
@@ -27,7 +29,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
                         + "'" + bestelling.getAccountKey() + "')";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
             } catch (Exception ex) {
-            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error ("Aanmaken van nieuwe bestelling is mislukt "+ ex);
             return false;
         }
         return true;
@@ -43,7 +45,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
         try { int key = MySQLConnection.getMySQLConnection().createAndReturnID(sql);
               return key;
             } catch (Exception ex) {
-            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error ("Aanmaken van nieuwe bestelling is mislukt "+ ex);
             return 0;
         }
     }    
@@ -58,7 +60,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
         b.setBestelDatum (rs.getDate(3));
         b.setAccountKey (rs.getInt(4));
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("Geen bestelling gevonden met bestelid " +ex +sql);
             return null;
         }
         return b;
@@ -74,7 +76,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
             b.setId (rs.getInt(1));
         }
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn ("Geen bestelling(en) gevonden bij dit klantid: "+ex +sql);
             return null;
         }
         return b;
@@ -87,9 +89,21 @@ public class SqlBestellingDao extends SuperBestellingDao {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             return rs != null;
         } catch (Exception ex) {
+            logger.error ("Geen bestelling gevonden met dit id: "+ex +sql);
                 return false;
-            }
         }
+    }
+    
+    @Override
+    public int getMaxBestellingId () {
+        String sql = "SELECT MAX (idBestelling) FROM Bestelling";
+        try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
+        return rs.getInt(1);
+        } catch (Exception ex) {
+            logger.warn ("Bestelid is niet in database "+ ex);
+            return 0;
+        }
+    }
     
     //wordt momenteel niet gebruikt, wijzigingen in bestelling worden gedaan met BestelArtikel
     @Override
@@ -103,7 +117,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
                         + "'" + bestelling.isDeleted () + "')";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Wijziging is mislukt: "+ex);
             return false;
         }
         return true;
@@ -115,7 +129,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
                 + " WHERE Deleted = 0 AND idBestelling = " + bestelId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlBestellingDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Verwijderen van bestelling is mislukt: "+ex);
             return false;
         }
         return true;
@@ -136,18 +150,13 @@ public class SqlBestellingDao extends SuperBestellingDao {
             list.add(bp);
         }
         }   catch (SQLException ex) {
-                    System.out.println(ex);
-                    }
+            logger.error("Kon geen bestellingslijst maken: "+ex);
+            }
         return list;       
     }
 
     private void fillPojoKlantId (ResultSet result, BestellingPojo bp) throws SQLException {
         bp.setId(result.getInt("idBestelling"));
         bp.setBestelDatum(result.getDate("BestelDatum"));
-    }
-    
-    @Override
-    public boolean isValidLogin(BestellingPojo bestelling) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

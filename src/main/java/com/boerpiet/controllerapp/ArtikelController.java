@@ -5,8 +5,8 @@
  */
 package com.boerpiet.controllerapp;
 
+import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.ArtikelModel;
-import com.boerpiet.domeinapp.ArtikelPojo;
 import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.Scanner;
@@ -19,7 +19,6 @@ public class ArtikelController {
     private final Scanner input = new Scanner (System.in);
     private ArtikelModel am;
     private ArtikelView av;
-    private ArtikelPojo ap;
     
     public ArtikelController (ArtikelModel am) {
         this.am = am;
@@ -62,6 +61,7 @@ public class ArtikelController {
         if (prijs >0 && voorraad >0) {
             am.addArticle(naam, prijs, voorraad);
         } else {
+            av.showGiveNumber();
             addArticleToDatabase ();
         }
     }
@@ -100,7 +100,7 @@ public class ArtikelController {
         
         av.showAllArticles();
         av.showInputArticleIdToModify();
-        int id = inputIdInDatabaseCheck ();
+        int id = inputArtikelIdInDatabaseCheck ();
         
         String naam = inputNameCheck();
         
@@ -113,12 +113,15 @@ public class ArtikelController {
         
         av.showAllArticles();
         av.showInputArticleIdToModify();
-        int id = inputIdInDatabaseCheck ();
+        int id = inputArtikelIdInDatabaseCheck ();
         
         double prijs = inputPrijsCheck();
         
         if (prijs >0) {
             am.modifyPrijs(id, prijs);
+        } else {
+            av.showErrorMessage();
+            modifyArticlePrijs();
         }
     }
     
@@ -128,23 +131,26 @@ public class ArtikelController {
         
         av.showAllArticles();
         av.showInputArticleIdToModify();
-        int id = inputIdInDatabaseCheck ();
+        int id = inputArtikelIdInDatabaseCheck ();
         
         int voorraad = inputVoorraadCheck();
         
-        if (voorraad >0) {
+        if (voorraad > 0) {
+            System.out.println(voorraad);
             am.modifyVoorraad(id, voorraad);
+        } else {
+            av.showErrorMessage();
+            modifyArticleVoorraad ();
         }
     }
     
     private void modifyArticleNPV() {
         av = new ArtikelView ();
         am = new ArtikelModel ();
-        ap = new ArtikelPojo ();
         
         av.showAllArticles();
         av.showInputArticleIdToModify();
-        int id = inputIdInDatabaseCheck ();
+        int id = inputArtikelIdInDatabaseCheck ();
         
         String naam = inputNameCheck ();
         double prijs = inputPrijsCheck ();
@@ -153,6 +159,9 @@ public class ArtikelController {
         
         if (prijs >0 && voorraad>0) {
             am.modifyNPV (id, naam, prijs, voorraad);
+        } else {
+            av.showErrorMessage();
+            modifyArticleNPV ();
         }
     }
     
@@ -182,9 +191,10 @@ public class ArtikelController {
         
         av.showAllArticles();
         av.showInputArticleIdToDelete();
-        int id = inputIdInDatabaseCheck ();
         
-        if (deleteConfirmed()) {
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        if (deleteConfirmed() ) {
         am.deleteArticle(id);
         }
     }
@@ -197,7 +207,7 @@ public class ArtikelController {
     }
     
     //methods to check input for validity   
-    public String inputNameCheck () {
+    private String inputNameCheck () {
         av = new ArtikelView ();
         av.showInputName();
         
@@ -205,7 +215,7 @@ public class ArtikelController {
         return naam;
     }
     
-    public double inputPrijsCheck () {
+    private double inputPrijsCheck () {
         av = new ArtikelView ();
         av.showInputPrijs();
         
@@ -213,7 +223,7 @@ public class ArtikelController {
         return prijs;
     }
     
-    public int inputVoorraadCheck () {
+    private int inputVoorraadCheck () {
         av = new ArtikelView ();
         av.showInputVoorraad();
 
@@ -221,17 +231,17 @@ public class ArtikelController {
         return voorraad;
     }
     
-    public int inputIdInDatabaseCheck () {
+    public int inputArtikelIdInDatabaseCheck () {
         av = new ArtikelView();
         am = new ArtikelModel ();
 
         String aId = input.nextLine();
         int id = inputIntCheck(aId);
         
-        if (am.checkArticleId(id)) {
+        if (am.checkArticleIdInDatabase(id)) {
             return id;
         } else {
-            return inputIdInDatabaseCheck();
+            return inputArtikelIdInDatabaseCheck();
         }
     }
 

@@ -7,7 +7,6 @@ package com.boerpiet.domeinapp;
 
 import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
 import com.boerpiet.viewapp.BestelArtikelView;
-import java.util.Scanner;
 
 /**
  *
@@ -18,7 +17,6 @@ public class BestelArtikelModel {
     private BestelArtikelView bav;
     private BestelArtikelModel bam;
     private BestelArtikelPojo bap;
-    private final Scanner input = new Scanner (System.in);
     
     public BestelArtikelModel () {
         
@@ -28,9 +26,17 @@ public class BestelArtikelModel {
         this.bam = bam;
     }
     
-    public boolean checkBestelRegelId (int inputBaId) {
-        return BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").findBestelArtikel(inputBaId);
+    public boolean checkOAIdInDataBase (int inputOAId) {
+        if (inputOAIdSmallerMaxId(inputOAId)) {
+            return BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").findBestelArtikel(inputOAId);
+            } else {
+            return false;
         }
+    }
+    
+    private boolean inputOAIdSmallerMaxId (int id) {
+        return id<BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").getMaxBestelArtikelId();
+    }
     
     //Getters and setters
     public BestelArtikelView getBav () {

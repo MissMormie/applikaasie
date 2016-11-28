@@ -22,14 +22,15 @@ public abstract class SuperBestelArtikelDao {
     
     public abstract boolean findBestelArtikel (int baId);
     
+    public abstract int getMaxBestelArtikelId();
+    
     public abstract ArrayList <BestelArtikelPojo> getBestelLijstByBestelId (int bestelId);
     
     public abstract boolean updateBestelArtikel (BestelArtikelPojo bArtikel, int regelId);
 
     public abstract boolean deleteBestelArtikel (int brId);
     
-    public void deleteArticleFromOrder (int brId) {};
+    public abstract void deleteArticleFromOrder (int brId);
 
-    public abstract boolean isValidLogin(BestelArtikelPojo bArtikel);
-    
+    //public abstract boolean isValidLogin(BestelArtikelPojo bArtikel);
 }

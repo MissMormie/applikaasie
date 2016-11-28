@@ -112,8 +112,16 @@ public class ArtikelModel {
         }
     }
     
-    public boolean checkArticleId (int inputArtikelId) {
-        return ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(inputArtikelId);
+    public boolean checkArticleIdInDatabase (int inputArtikelId) {
+        if (inputArtikelIdSmallerMaxId (inputArtikelId)) {
+            return ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(inputArtikelId);
+            } else {
+            return false;
+        }
+    }
+    
+    private boolean inputArtikelIdSmallerMaxId (int id) {
+        return id<ArtikelDaoFactory.getArtikelDAO("MySQL").getMaxArtikelId();
     }
 
     //Getters and setters

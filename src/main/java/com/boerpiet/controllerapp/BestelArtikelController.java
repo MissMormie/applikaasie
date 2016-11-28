@@ -41,18 +41,18 @@ public class BestelArtikelController {
         }
     }
     
-    public int inputIdInDatabaseCheck () {
+    public int inputOAIdInDatabaseCheck () {
         bav = new BestelArtikelView ();
         bam = new BestelArtikelModel ();
                 
         String bId = input.nextLine();
         int id = inputIntCheck(bId);
         
-        if (bam.checkBestelRegelId(id)) {
+        if (bam.checkOAIdInDataBase(id)) {
             return id;
         } else {
             bav.showGiveNumber();
-            return inputIdInDatabaseCheck ();
+            return inputOAIdInDatabaseCheck ();
         }
     }
 }

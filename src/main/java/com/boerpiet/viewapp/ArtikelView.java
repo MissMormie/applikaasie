@@ -107,8 +107,11 @@ public class ArtikelView {
         System.out.println("Geef artikelid voor toevoeging:");
     }
     
-    public void showInputArticleIdToModify () {
+    public void showInputArticleIdToModifyInOrder () {
         System.out.println("Geef artikelid om te bestellen in plaats van getoond artikel:");
+    }
+    public void showInputArticleIdToModify () {
+        System.out.println("Geef artikelid voor wijziging:");
     }
     public void showInputArticleIdToDelete () {
         System.out.println("Geef artikelid voor verwijdering:");

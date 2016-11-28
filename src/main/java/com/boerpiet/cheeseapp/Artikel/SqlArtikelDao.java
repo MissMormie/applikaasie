@@ -9,14 +9,16 @@ import com.boerpiet.cheeseapp.MySQLConnection;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Peaq
  */
 public class SqlArtikelDao extends SuperArtikelDao {
+    
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
     @Override
     public boolean createArtikel(ArtikelPojo artikel) {
@@ -27,7 +29,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
                         + "'" + artikel.getVoorraad () + "');";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Aanmaken van nieuw artikel is mislukt: "+ ex);
             return false;
         }
         return true;
@@ -44,8 +46,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
             int key = MySQLConnection.getMySQLConnection().createAndReturnID(sql);
             return key;
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Er is iets misgegaan, artikel is niet aangemaakt.");
+            logger.error ("Aanmaken van nieuw artikel is mislukt: "+ex);
             return 0;
         }
     }
@@ -62,9 +63,8 @@ public class SqlArtikelDao extends SuperArtikelDao {
             }
         }
             catch (SQLException ex) {
-                System.out.println("Artikel niet gevonden");
-                    System.out.println(ex);
-                    }
+                logger.warn ("Artikel niet gevonden: "+ex);
+                }
         return ap;
     }    
     
@@ -72,11 +72,23 @@ public class SqlArtikelDao extends SuperArtikelDao {
     public boolean findArtikelId (int artikelId) {
         String sql = "SELECT * FROM Artikel" + " WHERE Deleted = 0 AND idArtikel = " + artikelId;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
-            return rs != null;
+            return rs != null; 
         } catch (Exception ex) {
+            logger.warn ("Artikel niet gevonden: "+ ex);
                 return false;
                 }
         }
+    
+    @Override
+    public int getMaxArtikelId () {
+        String sql = "SELECT MAX (idArtikel) FROM Artikel";
+        try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
+        return rs.getInt(1);
+        } catch (Exception ex) {
+            logger.warn ("Artikelid is niet in database "+ ex);
+            return 0;
+        }
+    }
     
     @Override
     public boolean updateArtikelAll (ArtikelPojo artikel) {
@@ -87,7 +99,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
                 + "WHERE idArtikel = '"+artikel.getId()+ "';";
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Wijzigen van artikel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -99,7 +111,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
                    + "WHERE idArtikel = " + id;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Wijzigen van naam artikel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -111,7 +123,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
                    + "WHERE idArtikel = " + id;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Wijzigen van prijs artikel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -123,7 +135,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
                    + "WHERE idArtikel = " + id;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Wijzigen van voorraad artikel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -134,7 +146,7 @@ public class SqlArtikelDao extends SuperArtikelDao {
         String sql = "UPDATE Artikel SET Deleted = 1 WHERE idArtikel = " + id;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
-            Logger.getLogger(SqlArtikelDao.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error ("Verwijderen van artikel is mislukt: "+ex);
             return false;
         }
         return true;
@@ -157,8 +169,8 @@ public class SqlArtikelDao extends SuperArtikelDao {
             }
         }
             catch (SQLException ex) {
-                    System.out.println(ex);
-                    }
+                logger.warn ("Kon geen lijst van artikelen maken: "+ex);
+            }
         return list;
     }
         
@@ -168,9 +180,4 @@ public class SqlArtikelDao extends SuperArtikelDao {
         artikelPojo.setPrijs (result.getDouble ("Prijs"));
         artikelPojo.setVoorraad (result.getInt("Voorraad"));
     }
-    
-    @Override
-    public boolean isValidLogin (ArtikelPojo artikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-}
+ }
