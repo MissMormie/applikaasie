@@ -7,8 +7,8 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.AdresByPostcode;
 import com.boerpiet.viewapp.KlantView;
 import java.util.Scanner;
 
@@ -163,8 +163,8 @@ public class KlantController {
     }
     
     private void setAdres(String type) {
-        klantView.showStraat();
-        String straat = notEmptyTextListener();
+        klantView.showPostcode();
+        String postcode = postcodeListener();
 
         klantView.showHuisnummer();
         int huisnummer = numberListener();
@@ -172,12 +172,18 @@ public class KlantController {
         klantView.showToevoeging();
         String toevoeging = textListener();
         
-        klantView.showPostcode();
-        String postcode = postcodeListener();
-
-        klantView.showWoonplaats();
-        String woonplaats = notEmptyTextListener(); 
+        String[] straatWoonplaats = AdresByPostcode.getAddress(postcode, huisnummer);
+        if(straatWoonplaats == null) { 
+            klantView.showHuisnummerPostcodeKloptNiet();
+            setAdres(type);
+            return;
+        }
         
+        String straat = straatWoonplaats[0];
+        String woonplaats = straatWoonplaats[1];
+        
+        klantView.showAdres(straat, huisnummer, toevoeging, postcode, woonplaats, type);
+
         if(type.equalsIgnoreCase("same")) {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
                     straat, huisnummer, toevoeging, postcode, woonplaats, false);

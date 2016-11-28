@@ -204,4 +204,13 @@ public class KlantView {
         System.out.println("Geef een juist nummer op.");
     }
 
+    public void showHuisnummerPostcodeKloptNiet() {
+        System.out.println("De combinatie van postcode en huisnummer klopt niet.");
+        
+    }
+
+    public void showAdres(String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, String type) {
+        System.out.println("Adres:" + straat + " " + huisnummer + " " + toevoeging + " " + postcode + " " + woonplaats);
+    }
+
 }

@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
  * @author Sonja
  */
 
-// TODO: Possibly rename Klant Model to klantRepositoryModel? Then change this to Klant 
 public class KlantModel {
     // ------------ VARIABLES ---------------------------------
 

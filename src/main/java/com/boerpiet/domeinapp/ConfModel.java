@@ -27,12 +27,6 @@ public class ConfModel {
     Document doc;
     private final String xmlFile = "xml/config.xml";
     
-    public static void main(String args[]) {
-        ConfModel configurationModel = new ConfModel();
-        configurationModel.setDefaultDatabase(1);
-        //configurationModel.setDefaultConnection(4);
-    }
-
     public ConfModel() {
         readXML();
     }
