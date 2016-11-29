@@ -221,15 +221,15 @@ public class MenuModel {
                 
             //ARTIKELEN:
             case "Nieuw artikel":
-                ArtikelController artC1 = new ArtikelController (new ArtikelModel ());
+                ArtikelController artC1 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC1.createArticle();
                 break;
             case "Wijzig artikel":
-                ArtikelController artC2 = new ArtikelController (new ArtikelModel ());
+                ArtikelController artC2 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC2.modifyArticle();
                 break;
             case "Verwijder artikel":
-                ArtikelController artC3 = new ArtikelController (new ArtikelModel ());
+                ArtikelController artC3 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC3.deleteArticleMenu();
                 break;
                 

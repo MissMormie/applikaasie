@@ -13,13 +13,14 @@ import java.text.SimpleDateFormat;
  * @author Sonja
  */
 public class Validator {
-        
+            
     public static boolean isValidInt(String input) {   
         try {
             Integer.parseInt(input);
             return true;
         }
         catch (NumberFormatException ex) {
+            System.out.println("Invoer is geen heel getal: "+ ex);
             return false;
         }
     }
@@ -50,22 +51,23 @@ public class Validator {
             return true;
             }
         catch (NumberFormatException ex) {
+            
             return false;
         }
     }
     public static boolean isValidDate (String input) {
         
-        try {
+       try {
             SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd");
             if (!input.equals(sdf.format(sdf.parse(input)))) {
                 return false;
-            }
+          }
         } catch (ParseException ex) {
-                    ex.printStackTrace();
-            }
+            ex.printStackTrace();
+        }
     return true;
     }
-
+    
     public static boolean isValidPostcode(String postcode) {
         String regex ="[1-9][0-9]{3}\\s?\\w\\w";
         return postcode.matches(regex);

@@ -13,7 +13,6 @@ import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestelArtikelView;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 /**
@@ -21,7 +20,6 @@ import java.util.Scanner;
  * @author Peaq
  */
 public class BestellingModel {
-    private final Scanner input = new Scanner (System.in);
     private BestellingModel bm;
     private BestellingView bv;
     private BestellingPojo bp;
@@ -133,16 +131,16 @@ public class BestellingModel {
     }
     
     //check bestellingid adhv klantid
-    public boolean checkOrderIdInDatabase (int inputOrderId) {
+    public boolean checkOrderIdInDatabase (int inputOrderId, int klantId) {
         if (inputOrderIdSmallerMaxId (inputOrderId)) {
-            return BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(inputOrderId);    
+            return (BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(inputOrderId, klantId));    
         } else {
             return false;
         }
     }
     
     private boolean inputOrderIdSmallerMaxId (int id) {
-        return id<BestellingDaoFactory.getBestellingDAO("MySQL").getMaxBestellingId();
+        return (id<=BestellingDaoFactory.getBestellingDAO("MySQL").getMaxBestellingId());
     }
     
     //getters and setters
