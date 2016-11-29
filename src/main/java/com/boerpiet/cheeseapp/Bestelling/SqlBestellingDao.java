@@ -83,8 +83,10 @@ public class SqlBestellingDao extends SuperBestellingDao {
     }
     
     @Override
-    public boolean findBestellingId (int bestelId) {
-        String sql = "SELECT idBestelling FROM Bestelling WHERE Deleted = 0 AND idBestelling = "+bestelId;
+    public boolean findBestellingId (int bestelId, int klantId) {
+        String sql = "SELECT idBestelling FROM Bestelling WHERE Deleted = 0 "
+                + " AND idBestelling = "+bestelId
+                + " AND KlantKey = "+klantId;
         try {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             return rs != null;
@@ -96,9 +98,12 @@ public class SqlBestellingDao extends SuperBestellingDao {
     
     @Override
     public int getMaxBestellingId () {
-        String sql = "SELECT MAX (idBestelling) FROM Bestelling";
+        String sql = "SELECT idBestelling FROM Bestelling WHERE idBestelling  = (SELECT MAX(idBestelling) FROM Bestelling)";
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
-        return rs.getInt(1);
+            int max  = 0;
+            if (rs.next()) {
+                max = rs.getInt(1);
+            } return max;
         } catch (Exception ex) {
             logger.warn ("Bestelid is niet in database "+ ex);
             return 0;

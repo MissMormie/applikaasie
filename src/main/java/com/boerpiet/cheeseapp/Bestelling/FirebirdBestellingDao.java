@@ -35,7 +35,7 @@ public class FirebirdBestellingDao extends SuperBestellingDao {
     }
     
     @Override
-    public boolean findBestellingId (int bestelId ) {
+    public boolean findBestellingId (int bestelId, int klantId ) {
         throw new UnsupportedOperationException ("Not supported yet");
     }
     

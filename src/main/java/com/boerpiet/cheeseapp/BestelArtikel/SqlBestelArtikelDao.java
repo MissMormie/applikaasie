@@ -83,11 +83,15 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     
     @Override
     public int getMaxBestelArtikelId() {
-        String sql = "SELECT MAX (idBestelArtikel) FROM BestelArtikel";
+        String sql = "SELECT idBestelArtikel FROM BestelArtikel WHERE idBestelArtikel  = "
+                + "(SELECT MAX(idBestelArtikel) FROM BestelArtikel)";
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
-        return rs.getInt(1);
+            int max = 0;
+            if (rs.next()) {
+                max = rs.getInt(1);
+            } return max;
         } catch (Exception ex) {
-            logger.warn ("Bestelregel is is niet in database "+ ex);
+            logger.warn ("Bestelregel is niet in database "+ ex);
             return 0;
         }
     }

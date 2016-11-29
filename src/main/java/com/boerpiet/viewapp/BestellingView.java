@@ -63,7 +63,7 @@ public class BestellingView {
     private void showBestelListItem(BestellingPojo bp) {
         System.out.printf("%-3s %-15s \n", 
                 bp.getId(),
-                bp.getBestelDatum() +"\n");
+                bp.getBestelDatum());
     }
     public void showAllOrdersByKlantId (int klantId) {
         ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
@@ -91,7 +91,7 @@ public class BestellingView {
         System.out.printf("%-15s %-15s %-13s \n",
                 ba.getId(),
                 ba.getArtikelId(),
-                ba.getAantal()+"\n");
+                ba.getAantal());
     }
     
     public void showAllBestelRegelsByBestelId (int bestelId) {
@@ -112,6 +112,9 @@ public class BestellingView {
     }
     public void showOrderIdToModify () {
         System.out.println("Geef bestelid voor wijziging:");
+    }
+    public void showOrderIdToAddArticle () {
+        System.out.println("Geef bestelid om artikelen aan toe te voegen:");
     }
     public void showOrderIdToDelete() {
         System.out.println("Geef bestelid voor verwijdering:");

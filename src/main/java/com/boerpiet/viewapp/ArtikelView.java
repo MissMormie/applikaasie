@@ -143,4 +143,7 @@ public class ArtikelView {
     public void showAskSureToDelete() {
         System.out.println("Weet je zeker dat je dit artikel wilt verwijderen? J/N");
     }
+    public void showInputArticleId() {
+        System.out.println("Geef artikel id:");
+    }
 }

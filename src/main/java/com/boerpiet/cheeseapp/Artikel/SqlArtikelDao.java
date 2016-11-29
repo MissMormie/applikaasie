@@ -81,9 +81,13 @@ public class SqlArtikelDao extends SuperArtikelDao {
     
     @Override
     public int getMaxArtikelId () {
-        String sql = "SELECT MAX (idArtikel) FROM Artikel";
+        String sql = "SELECT idArtikel FROM Artikel WHERE idArtikel = (SELECT MAX(idArtikel) FROM Artikel)";
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
-        return rs.getInt(1);
+            int max = 0;
+            if (rs.next()) {
+                max = rs.getInt(1);
+            }
+            return max;
         } catch (Exception ex) {
             logger.warn ("Artikelid is niet in database "+ ex);
             return 0;

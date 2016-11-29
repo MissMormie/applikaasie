@@ -22,7 +22,7 @@ public abstract class SuperBestellingDao {
     
     public abstract BestellingPojo getBestellingByKlantId (int klantId);
     
-    public abstract boolean findBestellingId (int bestelId);
+    public abstract boolean findBestellingId (int bestelId, int klantId);
     
     public abstract int getMaxBestellingId ();
         

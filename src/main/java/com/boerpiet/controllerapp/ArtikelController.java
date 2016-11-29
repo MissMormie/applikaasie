@@ -5,11 +5,14 @@
  */
 package com.boerpiet.controllerapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.ArtikelModel;
+import com.boerpiet.domeinapp.LoginManager;
 import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -19,15 +22,14 @@ public class ArtikelController {
     private final Scanner input = new Scanner (System.in);
     private ArtikelModel am;
     private ArtikelView av;
+    private final LoginManager lm;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    public ArtikelController (ArtikelModel am) {
+    public ArtikelController (ArtikelModel am, LoginManager lm) {
         this.am = am;
+        this.lm = lm;
         }
 
-    public ArtikelController() {
-        
-    }
-    
     public void createArticle () {
         av = new ArtikelView ();
         
@@ -60,6 +62,8 @@ public class ArtikelController {
         
         if (prijs >0 && voorraad >0) {
             am.addArticle(naam, prijs, voorraad);
+            logger.info (" Artikel toegevoegd door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount());
         } else {
             av.showGiveNumber();
             addArticleToDatabase ();
@@ -105,6 +109,8 @@ public class ArtikelController {
         String naam = inputNameCheck();
         
         am.modifyNaam(id, naam);
+        logger.info (" Naam artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+            +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     private void modifyArticlePrijs () {
@@ -119,6 +125,8 @@ public class ArtikelController {
         
         if (prijs >0) {
             am.modifyPrijs(id, prijs);
+            logger.info (" Prijs artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount());
         } else {
             av.showErrorMessage();
             modifyArticlePrijs();
@@ -136,8 +144,9 @@ public class ArtikelController {
         int voorraad = inputVoorraadCheck();
         
         if (voorraad > 0) {
-            System.out.println(voorraad);
             am.modifyVoorraad(id, voorraad);
+            logger.info (" Voorraad artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                    +" "+ lm.getAccountPojo().getIdAccount());
         } else {
             av.showErrorMessage();
             modifyArticleVoorraad ();
@@ -159,6 +168,8 @@ public class ArtikelController {
         
         if (prijs >0 && voorraad>0) {
             am.modifyNPV (id, naam, prijs, voorraad);
+            logger.info (" Naam/prijs/voorraad artikel "+id+"gewijzigd door "
+                    + lm.getAccountPojo().getGebruikersnaam()+" "+ lm.getAccountPojo().getIdAccount());
         } else {
             av.showErrorMessage();
             modifyArticleNPV ();
@@ -196,6 +207,8 @@ public class ArtikelController {
         
         if (deleteConfirmed() ) {
         am.deleteArticle(id);
+        logger.info (" Artikel "+id+"verwijderd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount());
         }
     }
     
@@ -234,13 +247,14 @@ public class ArtikelController {
     public int inputArtikelIdInDatabaseCheck () {
         av = new ArtikelView();
         am = new ArtikelModel ();
-
+        
         String aId = input.nextLine();
         int id = inputIntCheck(aId);
         
         if (am.checkArticleIdInDatabase(id)) {
             return id;
         } else {
+            av.showInputArticleId();
             return inputArtikelIdInDatabaseCheck();
         }
     }
