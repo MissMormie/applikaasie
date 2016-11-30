@@ -6,7 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.BestelArtikelModel;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.BestelArtikelView;
 import java.util.Scanner;
 

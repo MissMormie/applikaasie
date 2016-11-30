@@ -5,7 +5,7 @@
  */
 package com.boerpiet.viewapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
+import com.boerpiet.dao.artikel.ArtikelDaoFactory;
 import com.boerpiet.domeinapp.ArtikelPojo;
 import java.util.ArrayList;
 

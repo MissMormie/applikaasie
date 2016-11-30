@@ -10,7 +10,7 @@ import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.LoginManager;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestelArtikelView;
 import com.boerpiet.viewapp.BestellingView;

@@ -6,8 +6,8 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.adres.AdresDAOFactory;
-import com.boerpiet.cheeseapp.klant.KlantDAOFactory;
+import com.boerpiet.dao.adres.AdresDAOFactory;
+import com.boerpiet.dao.klant.KlantDAOFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

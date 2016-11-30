@@ -5,7 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
+import com.boerpiet.dao.artikel.ArtikelDaoFactory;
 import com.boerpiet.viewapp.ArtikelView;
 
 /**

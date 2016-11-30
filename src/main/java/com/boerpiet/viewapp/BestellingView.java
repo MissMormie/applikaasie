@@ -5,8 +5,8 @@
  */
 package com.boerpiet.viewapp;
 
-import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
-import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.dao.bestelartikel.BestelArtikelDaoFactory;
+import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.util.ArrayList;

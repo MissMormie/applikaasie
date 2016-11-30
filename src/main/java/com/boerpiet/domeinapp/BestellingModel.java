@@ -5,9 +5,9 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
-import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
-import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.dao.artikel.ArtikelDaoFactory;
+import com.boerpiet.dao.bestelartikel.BestelArtikelDaoFactory;
+import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.ArtikelView;
 import com.boerpiet.viewapp.BestelArtikelView;

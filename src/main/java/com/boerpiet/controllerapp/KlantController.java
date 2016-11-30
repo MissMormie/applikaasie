@@ -7,7 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.utility.AdresByPostcode;
 import com.boerpiet.viewapp.KlantView;
 import java.util.Scanner;

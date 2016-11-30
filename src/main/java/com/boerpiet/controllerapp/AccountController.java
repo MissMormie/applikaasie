@@ -9,7 +9,7 @@ import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantenModel;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.AccountView;
 import com.boerpiet.viewapp.KlantenView;
 import java.util.Scanner;

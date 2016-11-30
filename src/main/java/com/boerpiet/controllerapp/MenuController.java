@@ -7,7 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.*;
 import com.boerpiet.domeinapp.MenuModel;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import java.util.Scanner;
 import com.boerpiet.viewapp.MenuView;
 

@@ -7,7 +7,7 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.ConfModel;
 import com.boerpiet.domeinapp.LoginManager;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.ConfView;
 import java.util.Scanner;
 

@@ -5,8 +5,8 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.account.AccountDAO;
-import com.boerpiet.cheeseapp.account.AccountDAOFactory;
+import com.boerpiet.dao.account.AccountDAO;
+import com.boerpiet.dao.account.AccountDAOFactory;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;

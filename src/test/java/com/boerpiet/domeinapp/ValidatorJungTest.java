@@ -5,6 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.utility.Validator;
 import java.text.ParseException;
 import java.time.format.DateTimeParseException;
 import org.junit.After;

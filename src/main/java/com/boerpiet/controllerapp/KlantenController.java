@@ -8,7 +8,7 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.KlantenView;
 import com.boerpiet.viewapp.KlantView;
