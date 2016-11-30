@@ -18,6 +18,11 @@ public class FirebirdArtikelDao extends SuperArtikelDao {
     public boolean createArtikel(ArtikelPojo artikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public int createArtikelWithReturnId (ArtikelPojo artikel) {
+        throw new UnsupportedOperationException ("Not supported yet.");
+    }
 
     @Override
     public ArtikelPojo getArtikelById (int artikelId) {
@@ -26,6 +31,11 @@ public class FirebirdArtikelDao extends SuperArtikelDao {
     
     @Override
     public boolean findArtikelId (int artikelId) {
+        throw new UnsupportedOperationException("Not supported yet");
+    }
+    
+    @Override
+    public int getMaxArtikelId () {
         throw new UnsupportedOperationException("Not supported yet");
     }
 
@@ -51,11 +61,6 @@ public class FirebirdArtikelDao extends SuperArtikelDao {
 
     @Override
     public boolean deleteArtikel(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isValidLogin(ArtikelPojo artikel) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

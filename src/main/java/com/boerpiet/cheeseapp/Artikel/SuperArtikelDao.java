@@ -16,9 +16,13 @@ public abstract class SuperArtikelDao {
     
     public abstract boolean createArtikel (ArtikelPojo artikel);
     
+    public abstract int createArtikelWithReturnId (ArtikelPojo artikel);
+    
     public abstract ArtikelPojo getArtikelById (int artikelId);
     
     public abstract boolean findArtikelId (int artikelId);
+    
+    public abstract int getMaxArtikelId ();
         
     public abstract boolean updateArtikelAll (ArtikelPojo artikel);
     
@@ -32,6 +36,6 @@ public abstract class SuperArtikelDao {
     
     public abstract ArrayList <ArtikelPojo> getAllArticles();
 
-    public abstract boolean isValidLogin(ArtikelPojo artikel);
+    //public abstract boolean isValidLogin(ArtikelPojo artikel);
     
 }

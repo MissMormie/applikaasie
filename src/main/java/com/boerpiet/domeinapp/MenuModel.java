@@ -191,19 +191,19 @@ public class MenuModel {
                 BestellingController bc1 = new BestellingController (new BestellingModel (), loginManager);
                 //medewerkers en admins hebben klantId = 0 als het goed is
                 if (loginManager.getAccountPojo().getKlantId() !=0) {
-                    bc1.startNewOrderKlant();
+                    bc1.startNewOrderByKlant();
                 }
                 break;
             case "Bestelling wijzigen door klant": //artikelen toevoegen aan of wijzigen in een bestelling
                 BestellingController bc2 = new BestellingController (new BestellingModel (), loginManager);
                 if (loginManager.getAccountPojo().getKlantId() !=0) {
-                    bc2.modifyOrderKlant();
+                    bc2.modifyOrderByKlant();
                 }
                 break;
             case "Bestelling verwijderen door klant": //artikelen verwijderen van bestelling of totale bestelling verwijderen
                 BestellingController bc3 = new BestellingController (new BestellingModel (), loginManager);
                 if (loginManager.getAccountPojo().getKlantId() !=0) {
-                    bc3.deleteOrderOptionsKlant();
+                    bc3.deleteOrderByKlant();
                 }
                 break;
             case "Nieuwe bestelling door medewerker of admin":
@@ -221,15 +221,15 @@ public class MenuModel {
                 
             //ARTIKELEN:
             case "Nieuw artikel":
-                ArtikelController artC1 = new ArtikelController (new ArtikelModel ());
+                ArtikelController artC1 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC1.createArticle();
                 break;
             case "Wijzig artikel":
-                ArtikelController artC2 = new ArtikelController (new ArtikelModel ());
+                ArtikelController artC2 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC2.modifyArticle();
                 break;
             case "Verwijder artikel":
-                ArtikelController artC3 = new ArtikelController (new ArtikelModel ());
+                ArtikelController artC3 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC3.deleteArticleMenu();
                 break;
                 

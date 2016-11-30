@@ -5,7 +5,6 @@
  */
 package com.boerpiet.cheeseapp.Bestelling;
 
-import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.util.ArrayList;
 
@@ -22,6 +21,10 @@ public abstract class SuperBestellingDao {
     public abstract BestellingPojo getBestellingById (int idBestelling);
     
     public abstract BestellingPojo getBestellingByKlantId (int klantId);
+    
+    public abstract boolean findBestellingId (int bestelId, int klantId);
+    
+    public abstract int getMaxBestellingId ();
         
     public abstract boolean updateBestelling (BestellingPojo bestelling);
 
@@ -29,6 +32,6 @@ public abstract class SuperBestellingDao {
     
     public abstract ArrayList <BestellingPojo> getAllByKlantId (int klantId);
 
-    public abstract boolean isValidLogin(BestellingPojo bestelling);
+    //public abstract boolean isValidLogin(BestellingPojo bestelling);
     
 }

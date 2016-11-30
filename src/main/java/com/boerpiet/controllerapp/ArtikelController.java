@@ -6,10 +6,13 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.ArtikelModel;
-import com.boerpiet.domeinapp.ArtikelPojo;
+import com.boerpiet.domeinapp.LoginManager;
 import com.boerpiet.domeinapp.Validator;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -18,23 +21,23 @@ import java.util.Scanner;
 public class ArtikelController {
     private final Scanner input = new Scanner (System.in);
     private ArtikelModel am;
-    private ArtikelPojo ap;
     private ArtikelView av;
+    private final LoginManager lm;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    public ArtikelController (ArtikelModel am) {
+    public ArtikelController (ArtikelModel am, LoginManager lm) {
         this.am = am;
+        this.lm = lm;
         }
 
-    public ArtikelController() {
-        
-    }
-    
     public void createArticle () {
         av = new ArtikelView ();
         
         av.startCreateArticle ();
         av.showMenuKeuze();
-        int keuze  = inputIntCheck(input.nextLine());
+        
+        String intKeuze = input.nextLine ();
+        int keuze  = inputIntCheck(intKeuze);
         
         switch (keuze) {
             case 1: addArticleToDatabase ();
@@ -48,14 +51,23 @@ public class ArtikelController {
     }
     
     private void addArticleToDatabase () {
-                
-        String naam = inputName();
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        double prijs = inputPrijs();
+        String naam = inputNameCheck();
         
-        int voorraad = inputVoorraad();
+        double prijs = inputPrijsCheck();
         
-        am.addArticle(naam, prijs, voorraad);
+        int voorraad = inputVoorraadCheck();
+        
+        if (prijs >0 && voorraad >0) {
+            am.addArticle(naam, prijs, voorraad);
+            logger.info (" Artikel toegevoegd door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount());
+        } else {
+            av.showGiveNumber();
+            addArticleToDatabase ();
+        }
     }
     
     public void modifyArticle () {
@@ -63,7 +75,8 @@ public class ArtikelController {
         
         av.articleModifyOptions();
         av.showMenuKeuze();
-        int keuze = inputIntCheck (input.nextLine());
+        String intKeuze = input.nextLine ();
+        int keuze  = inputIntCheck(intKeuze);
         
         switch (keuze) {
             case 1: modifyArticleNaam ();
@@ -75,7 +88,10 @@ public class ArtikelController {
             case 3: modifyArticleVoorraad ();
                     modifyArticle ();
                 break;
-            case 4:
+            case 4: modifyArticleNPV ();
+                    modifyArticle ();
+                break;
+            case 5:
                 return;
             default: modifyArticle ();
                 break;
@@ -83,30 +99,81 @@ public class ArtikelController {
     }
     
     private void modifyArticleNaam () {
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        int id = inputIntPositiveAndInDatabaseCheck ();
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
         
-        String naam = inputName();
+        String naam = inputNameCheck();
         
         am.modifyNaam(id, naam);
+        logger.info (" Naam artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+            +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     private void modifyArticlePrijs () {
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        int id = inputIntPositiveAndInDatabaseCheck ();
-
-        double prijs = inputPrijs();
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
         
-        am.modifyPrijs(id, prijs);
+        double prijs = inputPrijsCheck();
+        
+        if (prijs >0) {
+            am.modifyPrijs(id, prijs);
+            logger.info (" Prijs artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount());
+        } else {
+            av.showErrorMessage();
+            modifyArticlePrijs();
+        }
     }
     
     private void modifyArticleVoorraad () {
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        int id = inputIntPositiveAndInDatabaseCheck ();
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
         
-        int voorraad = inputVoorraad();
+        int voorraad = inputVoorraadCheck();
         
-        am.modifyVoorraad(id, voorraad);
+        if (voorraad > 0) {
+            am.modifyVoorraad(id, voorraad);
+            logger.info (" Voorraad artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                    +" "+ lm.getAccountPojo().getIdAccount());
+        } else {
+            av.showErrorMessage();
+            modifyArticleVoorraad ();
+        }
+    }
+    
+    private void modifyArticleNPV() {
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
+        
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        String naam = inputNameCheck ();
+        double prijs = inputPrijsCheck ();
+        int voorraad = inputVoorraadCheck ();
+        
+        
+        if (prijs >0 && voorraad>0) {
+            am.modifyNPV (id, naam, prijs, voorraad);
+            logger.info (" Naam/prijs/voorraad artikel "+id+"gewijzigd door "
+                    + lm.getAccountPojo().getGebruikersnaam()+" "+ lm.getAccountPojo().getIdAccount());
+        } else {
+            av.showErrorMessage();
+            modifyArticleNPV ();
+        }
     }
     
     public void deleteArticleMenu () {
@@ -115,7 +182,8 @@ public class ArtikelController {
         av.startDeleteArticle();
         av.showMenuKeuze();
         
-        int keuze = inputIntCheck (input.nextLine());
+        String intKeuze = input.nextLine ();
+        int keuze = inputIntCheck (intKeuze);
         
         switch (keuze) {
             case 1: deleteArticleFromDatabase ();
@@ -129,37 +197,70 @@ public class ArtikelController {
     }
     
     private void deleteArticleFromDatabase () {
-        int id = inputIntPositiveAndInDatabaseCheck ();
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
+        av.showAllArticles();
+        av.showInputArticleIdToDelete();
+        
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        if (deleteConfirmed() ) {
         am.deleteArticle(id);
+        logger.info (" Artikel "+id+"verwijderd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount());
+        }
     }
     
-    //input methods    
-    public String inputName () {
+    private boolean deleteConfirmed () {
+        av = new ArtikelView ();
+        av.showAskSureToDelete();
+        
+        return input.nextLine().equalsIgnoreCase("J");
+    }
+    
+    //methods to check input for validity   
+    private String inputNameCheck () {
         av = new ArtikelView ();
         av.showInputName();
+        
         String naam = notEmptyNameInput ();
         return naam;
     }
     
-    public double inputPrijs () {
+    private double inputPrijsCheck () {
         av = new ArtikelView ();
         av.showInputPrijs();
-        double prijs = inputDoubleCheck();
+        
+        double prijs = inputDoubleCheck (input.nextLine());
         return prijs;
     }
     
-    public int inputVoorraad () {
+    private int inputVoorraadCheck () {
         av = new ArtikelView ();
         av.showInputVoorraad();
+
         int voorraad = inputIntCheck(input.nextLine());
         return voorraad;
     }
     
-    //validate input methods
+    public int inputArtikelIdInDatabaseCheck () {
+        av = new ArtikelView();
+        am = new ArtikelModel ();
+        
+        String aId = input.nextLine();
+        int id = inputIntCheck(aId);
+        
+        if (am.checkArticleIdInDatabase(id)) {
+            return id;
+        } else {
+            av.showInputArticleId();
+            return inputArtikelIdInDatabaseCheck();
+        }
+    }
+
     private int inputIntCheck (String string) {
         av = new ArtikelView ();
-        //String intInput = input.nextLine();
         if (Validator.isValidInt(string)) {
             return Integer.parseInt(string);
         } else {
@@ -168,35 +269,21 @@ public class ArtikelController {
         }
     }
     
-    public int inputIntPositiveAndInDatabaseCheck () {
-        av = new ArtikelView();
-        av.showAllArticles();
-        av.showInputArticleId();
-        String aId = input.nextLine();
-        int id = inputIntCheck(aId);
-        if (id >0 && am.checkArticleId(id)) {
-            return id;
-        } else {
-            return inputIntPositiveAndInDatabaseCheck();
-        }
-    }
-    
-    private double inputDoubleCheck () {
+    private double inputDoubleCheck (String string) {
         av = new ArtikelView ();
         
-        String doubleInput = input.nextLine();
-        if (Validator.isValidDouble(doubleInput)) {
-            return Double.parseDouble(doubleInput);
+        if (Validator.isValidDouble(string)) {
+            return Double.parseDouble(string);
         } else {
             av.showGivePrijs ();
-            return inputDoubleCheck ();
+            return inputDoubleCheck (string);
         }
     }
     
     private String notEmptyNameInput () {
         String text = input.nextLine();
         if(text.isEmpty()) {
-            return inputName ();
+            return inputNameCheck ();
         } else {
         return text;
         }
