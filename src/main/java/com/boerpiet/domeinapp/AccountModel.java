@@ -7,9 +7,11 @@ package com.boerpiet.domeinapp;
 
 import com.boerpiet.dao.account.AccountDAO;
 import com.boerpiet.dao.account.AccountDAOFactory;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,23 +36,18 @@ public class AccountModel {
         return loginManager;
     }
     
-    // TODO niet als 1 string meegeven maar in controller splitsen.
-    public boolean validateLogin(String usernamePassword) {
-        String[] parts = usernamePassword.split(" ");
-        if (parts.length < 2) {
-            return false;
-        }
-        AccountPojo login = new AccountPojo(parts[0], parts[1]);
+    public boolean validateLogin(String username, String password) {
+        password = makeWachtwoordHash(password);
+        AccountPojo login = new AccountPojo(username, password);
         if(AccountDAOFactory.getAccountDAO().fillAccountPojoByUsernamePassword(login)) { 
             loginManager = new LoginManager(login);
-            logger.info("new login from user id:" + login.getKlantId() + " " + parts[0]);
+            logger.info("new login from user id:" + login.getKlantId() + " " + username);
             return true;
         }
         else
             return false;
     }
     
-    // TODO make sure username is unique.
     public String createAccount(String username, String password, int klantId) {
         AccountDAO ad = AccountDAOFactory.getAccountDAO();
         try {
@@ -60,6 +57,7 @@ public class AccountModel {
             return "exception";
         }
         
+        password = makeWachtwoordHash(password);
         AccountPojo account = new AccountPojo(username, password);
         account.setKlantId(klantId);
         if (klantId == 0)
@@ -101,8 +99,9 @@ public class AccountModel {
         return updateAccountById(account);
     }
 
-    public boolean updatePassword(AccountPojo account, String in) {
-        account.setWachtwoordPlainText(in);
+    public boolean updatePassword(AccountPojo account, String password) {
+        password = makeWachtwoordHash(password);
+        account.setWachtwoord(password);
         return updateAccountById(account);
     }
 
@@ -115,4 +114,29 @@ public class AccountModel {
         account.setKlantId(id);
         return updateAccountById(account);
     }
+    
+    /** 
+     * Hash function from: http://stackoverflow.com/questions/3103652/hash-string-via-sha-256-in-java
+     * 
+     * @param base
+     * @return 
+     */
+    private String makeWachtwoordHash(String base) {
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch(NoSuchAlgorithmException | UnsupportedEncodingException ex){
+           throw new RuntimeException(ex);
+        }
+    }    
+    
 }

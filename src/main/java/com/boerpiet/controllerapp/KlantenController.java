@@ -8,6 +8,7 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.domeinapp.KlantModel;
+import com.boerpiet.utility.ConsoleInput;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.KlantenView;
@@ -21,7 +22,6 @@ import java.util.Scanner;
 public class KlantenController {
     private final KlantenModel klantModel;
     private final KlantenView klantView;
-    private final Scanner input = new Scanner(System.in);
     
     public KlantenController(KlantenModel klantModel, KlantenView klantView) {
         this.klantModel = klantModel;
@@ -47,7 +47,7 @@ public class KlantenController {
     }
 
     private void selectKlantToModifyListener() {
-        String in = textListener();
+        String in = ConsoleInput.notEmptyTextInput();
 
         if (in.equalsIgnoreCase("n")) 
             return;
@@ -70,9 +70,10 @@ public class KlantenController {
     }
     
     private KlantModel selectKlantListener() {
-        String in = textListener();
+        String in = ConsoleInput.notEmptyTextInput();
         if (in.equalsIgnoreCase("n")) 
             return null;
+        
         if(!Validator.isValidInt(in)) {
             klantView.showSelectKlantfailed();
             return selectKlantListener();
@@ -90,7 +91,7 @@ public class KlantenController {
     }
 
     private void selectKlantToDeleteListener() {
-        String in = textListener();
+        String in = ConsoleInput.notEmptyTextInput();
         if (in.equalsIgnoreCase("n")) 
             return;
         
@@ -107,22 +108,5 @@ public class KlantenController {
                 skc.deleteKlant();
             }
         }
-    }
-
-    private String textListener() {
-        String text = input.nextLine();
-        if(text.isEmpty())
-            return textListener();
-        return text;
     }    
-    
-    private int numberListener() {
-        String number = input.nextLine();
-        if(Validator.isValidInt(number))
-            return Integer.parseInt(number);
-        
-        klantView.showValidNumber();
-        return numberListener();
-    }
-    
 }

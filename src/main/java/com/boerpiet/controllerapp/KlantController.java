@@ -9,8 +9,8 @@ import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.utility.AdresByPostcode;
+import com.boerpiet.utility.ConsoleInput;
 import com.boerpiet.viewapp.KlantView;
-import java.util.Scanner;
 
 /**
  *
@@ -21,7 +21,6 @@ public class KlantController {
 
     private final KlantModel klantModel; // MVC model
     private final KlantView klantView;   // MVC view
-    private final Scanner input = new Scanner(System.in);
 
     // ------------ CONSTRUCTORS ---------------------------------
 
@@ -44,17 +43,17 @@ public class KlantController {
      */
     public void newKlant() {
         klantView.showNewKlant();
-        String voornaam = notEmptyTextListener();
+        String voornaam = ConsoleInput.notEmptyTextInput();
         if (voornaam.equalsIgnoreCase("n"))
             return; 
 
         klantModel.getKlantPojo().setVoornaam(voornaam);
 
         klantView.showTussenvoegsel();
-        klantModel.getKlantPojo().setTussenvoegsel(textListener());
+        klantModel.getKlantPojo().setTussenvoegsel(ConsoleInput.textInput());
         
         klantView.showAchternaam();
-        klantModel.getKlantPojo().setAchternaam(notEmptyTextListener());
+        klantModel.getKlantPojo().setAchternaam(ConsoleInput.notEmptyTextInput());
         
         klantView.showTelefoonnummer();
         klantModel.getKlantPojo().setTelefoonnummer(phoneListener());
@@ -92,52 +91,7 @@ public class KlantController {
     
     // ------------ PRIVATE FUNCTIONS ---------------------------------
 
-    private String textListener() {
-        return input.nextLine();
-    }    
-    
-    private String notEmptyTextListener() {
-        String text = input.nextLine();
-        if(text.isEmpty())
-            return textListener();
-        return text;        
-    }
-    
-    private int numberListener() {
-        String number = input.nextLine();
-        if(Validator.isValidInt(number))
-            return Integer.parseInt(number);
-        
-        klantView.showValidNumber();
-        return numberListener();
-    }    
-    
-    private String phoneListener() {
-        String phone = input.nextLine();
-        if(phone.equals("") || Validator.isValidPhonenumber(phone))
-            return phone;
-        
-        klantView.showTelefoonnummer();
-        return phoneListener();
-    }
-    
-    private String emailListener() {
-        String email = input.nextLine();
-        if (email.equals("") || Validator.isValidEmailadres(email))
-            return email;
-        
-        klantView.showEmailAdres();
-        return emailListener();
-    }
-       
-    private String postcodeListener() {
-        String postcode = input.nextLine();
-        if (Validator.isValidPostcode(postcode))
-            return postcode;
-        
-        klantView.showEmailAdres();
-        return emailListener();
-    }
+
     
     /**
     * Asks if user wants to use the same address voor all addresstypes
@@ -146,7 +100,7 @@ public class KlantController {
     */
     private void setAdresses() {
         klantView.showAskSameAdres();
-        String sameAdres = input.nextLine();
+        String sameAdres = ConsoleInput.textInput();
         if(sameAdres.equalsIgnoreCase("j")) {
             klantView.showSameAdres();
             setAdres("Same");
@@ -170,7 +124,7 @@ public class KlantController {
         int huisnummer = numberListener();
 
         klantView.showToevoeging();
-        String toevoeging = textListener();
+        String toevoeging = ConsoleInput.textInput();
         
         String[] straatWoonplaats = AdresByPostcode.getAddress(postcode, huisnummer);
         if(straatWoonplaats == null) { 
@@ -197,7 +151,7 @@ public class KlantController {
     }
 
     private void modifyKlantListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
         if (in.equalsIgnoreCase("n")) 
             return;
         
@@ -260,7 +214,7 @@ public class KlantController {
     }
     
     private void modifyVoornaamListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -277,7 +231,7 @@ public class KlantController {
     }
 
     private void modifyTussenvoegselListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -294,7 +248,7 @@ public class KlantController {
     }
 
     private void modifyAchternaamListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -311,7 +265,7 @@ public class KlantController {
     }
 
     private void modifyTelefoonnummerListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -328,7 +282,7 @@ public class KlantController {
     }
 
     private void modifyEmailadresListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -345,7 +299,7 @@ public class KlantController {
     }
     
     private void deleteSureListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         if (in.equalsIgnoreCase("n")) 
             return;
@@ -358,5 +312,41 @@ public class KlantController {
         } else {
             deleteKlant();
         }
+    }
+    
+    private String phoneListener() {
+        String phone = ConsoleInput.phoneInput();
+        if (phone != null)
+            return phone;
+        
+        klantView.showTelefoonnummer();
+        return phoneListener();
+    }
+    
+    private String emailListener() {
+        String email = ConsoleInput.emailInput();
+        if (email != null)
+            return email;
+        
+        klantView.showEmailAdres();
+        return emailListener();
+    }
+       
+    private String postcodeListener() {
+        String postcode = ConsoleInput.postcodeInput();
+        if(postcode != null && !postcode.isEmpty())
+            return postcode;
+        
+        klantView.showEmailAdres();
+        return emailListener();
+    }
+    
+    private Integer numberListener() {
+        Integer number = ConsoleInput.numberInput();
+        if (number != null)
+            return number;
+            
+        klantView.showValidNumber();
+        return numberListener();
     }
 }

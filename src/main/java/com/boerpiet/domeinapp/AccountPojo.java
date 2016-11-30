@@ -19,7 +19,7 @@ import java.util.GregorianCalendar ;
 public class AccountPojo {
     private int idAccount;
     private String gebruikersnaam;
-    private String wachtwoordHash; // moet deze hierin? Slaan we dit ooit middellange termijn op?
+    private String wachtwoord; 
     private String accountStatus = "customer";
     private GregorianCalendar datum_aanmaak = new GregorianCalendar();
     private int klantId = 0;
@@ -28,19 +28,19 @@ public class AccountPojo {
     
     // -------------- Constructor ----------------
 
-    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoordHash, String accountStatus, GregorianCalendar datum_aanmaak, int klantId, boolean deleted) {
+    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoord, String accountStatus, GregorianCalendar datum_aanmaak, int klantId, boolean deleted) {
         this.idAccount = idAccount;
         this.gebruikersnaam = gebruikersnaam;
-        this.wachtwoordHash = wachtwoordHash;
+        this.wachtwoord = wachtwoord;
         this.accountStatus = accountStatus;
         this.datum_aanmaak = datum_aanmaak;
         this.klantId = klantId;
         this.deleted = deleted;
     }
 
-    public AccountPojo(String gebruikersnaam, String plainTextWachtwoord) {
+    public AccountPojo(String gebruikersnaam, String wachtwoord) {
         this.gebruikersnaam = gebruikersnaam;
-        this.setWachtwoordPlainText(plainTextWachtwoord);
+        this.wachtwoord = wachtwoord;
     }
     
     public AccountPojo() {
@@ -48,17 +48,18 @@ public class AccountPojo {
     }
     // -------------- Getters and Setters ----------------
     
-    public void setWachtwoordHash(String wachtwoord) {
-        this.wachtwoordHash = wachtwoord;
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
     }
     
-    public String getWachtwoordHash() {
-        return wachtwoordHash;
+    public String getWachtwoord() {
+        return wachtwoord;
     }
-
+/*
     public void setWachtwoordPlainText(String wachtwoord) {
-        this.wachtwoordHash = makeWachtwoordHash(wachtwoord);
+        this.wachtwoord = makeWachtwoordHash(wachtwoord);
     }
+*/
     
     public int getIdAccount() {
         return idAccount;
@@ -113,33 +114,11 @@ public class AccountPojo {
     // ------------------ Public functions -------------------------
 
     // ------------------ Private functions -------------------------
-    /** 
-     * Hash function from: http://stackoverflow.com/questions/3103652/hash-string-via-sha-256-in-java
-     * 
-     * @param base
-     * @return 
-     */
-    private String makeWachtwoordHash(String base) {
-        try{
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(base.getBytes("UTF-8"));
-            StringBuilder hexString = new StringBuilder();
 
-            for (int i = 0; i < hash.length; i++) {
-                String hex = Integer.toHexString(0xff & hash[i]);
-                if(hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch(NoSuchAlgorithmException | UnsupportedEncodingException ex){
-           throw new RuntimeException(ex);
-        }
-    }    
 
     @Override
     public String toString() {
-        return "AccountPojo{" + "idAccount=" + idAccount + ", gebruikersnaam=" + gebruikersnaam + ", wachtwoordHash=" + wachtwoordHash + ", accountStatus=" + accountStatus + ", datum_aanmaak=" + datum_aanmaak + ", klantId=" + klantId + ", deleted=" + deleted + '}';
+        return "AccountPojo{" + "idAccount=" + idAccount + ", gebruikersnaam=" + gebruikersnaam + ", wachtwoordHash=" + wachtwoord + ", accountStatus=" + accountStatus + ", datum_aanmaak=" + datum_aanmaak + ", klantId=" + klantId + ", deleted=" + deleted + '}';
     }
     
 }

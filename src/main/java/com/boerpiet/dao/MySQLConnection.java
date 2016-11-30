@@ -5,7 +5,7 @@
  */
 package com.boerpiet.dao;
 
-import com.boerpiet.dao.account.MySQLAccountDAO;
+
 import java.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +16,11 @@ import org.slf4j.LoggerFactory;
  * Use MySQLConnection.getMySQLConnection().close() to end connection.
  * @author Sonja
  * 
- * TODO: Change class to open and close connection when needed instead of 
- * keeping it open.
- * - createupdatedelete is already changed.
  */
 public class MySQLConnection {
     // ------------ VARIABLES ---------------------------------
     
-    private String url = "jdbc:mysql://localhost/Applikaasie"; //TODO place these in config file
+    private String url = "jdbc:mysql://localhost/Applikaasie"; 
     private String username = "boerpiet";
     private String password = "kaaskop";
     private final static MySQLConnection mysqlConnection = new MySQLConnection();
@@ -51,6 +48,7 @@ public class MySQLConnection {
     
     /**
      * Return instance of the singleton MySQLConnection
+     * @deprecated use connector class instead.
      * @return MySQLConnection the instance of {@link MySQLConnection}
      */
     public static MySQLConnection getMySQLConnection() {

@@ -55,7 +55,7 @@ public abstract class AccountDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);        
             
             pstmt.setString(1, accountPojo.getGebruikersnaam());
-            pstmt.setString(2, accountPojo.getWachtwoordHash());
+            pstmt.setString(2, accountPojo.getWachtwoord());
             pstmt.setString(3, accountPojo.getAccountStatus());
             
             // TODO check if this works for firebird
@@ -114,7 +114,7 @@ public abstract class AccountDAO {
             
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, accountPojo.getGebruikersnaam()); 
-            pstmt.setString(2, accountPojo.getWachtwoordHash());
+            pstmt.setString(2, accountPojo.getWachtwoord());
             pstmt.setString(3, accountPojo.getAccountStatus());
             pstmt.setString(4, createCalendarString(accountPojo.getDatum_aanmaak()));
             if(accountPojo.getKlantId()== 0)
@@ -173,14 +173,13 @@ public abstract class AccountDAO {
         }
     }
 
-    // TODO Change return type to AccountPojo? 
     public boolean fillAccountPojoByUsernamePassword(AccountPojo accountPojo) {
          try (Connection conn = Connector.getConnection();) {
             String sql =  getFillAccountPojoByUsernamePasswordSQL();
             
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, accountPojo.getGebruikersnaam());
-            pstmt.setString(2, accountPojo.getWachtwoordHash());
+            pstmt.setString(2, accountPojo.getWachtwoord());
             
             ResultSet rs = pstmt.executeQuery();
             
@@ -231,7 +230,7 @@ public abstract class AccountDAO {
     protected void fillPojo(ResultSet result, AccountPojo accountPojo) throws SQLException {
         accountPojo.setIdAccount(result.getInt("idAccount"));
         accountPojo.setGebruikersnaam(result.getString("Gebruikersnaam"));
-        accountPojo.setWachtwoordHash(result.getString("Wachtwoord"));
+        accountPojo.setWachtwoord(result.getString("Wachtwoord"));
         accountPojo.setAccountStatus(result.getString("Accountstatus"));
         accountPojo.setKlantId(result.getInt("KlantId"));
         accountPojo.setDeleted(result.getBoolean("Deleted"));    

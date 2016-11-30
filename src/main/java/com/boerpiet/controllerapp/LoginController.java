@@ -7,9 +7,9 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.domeinapp.MenuModel;
+import com.boerpiet.utility.ConsoleInput;
 import com.boerpiet.viewapp.LoginView;
 import com.boerpiet.viewapp.MenuView;
-import java.util.Scanner;
 
 /**
  *
@@ -18,22 +18,28 @@ import java.util.Scanner;
 public class LoginController {
     AccountModel accountModel;
     LoginView loginView;
-    Scanner input = new Scanner(System.in);
 
     public LoginController(AccountModel accountModel, LoginView loginView) {
         this.accountModel = accountModel;
         this.loginView = loginView;
         login();
     }
-    
+ 
     private void login() {
         loginView.showLogin();
         
-        String login = listenForLogin();
-        if(login.equalsIgnoreCase("exit") || login.equals("9"))
+        String usernamePassword = listenForLogin();
+        if(usernamePassword.equalsIgnoreCase("exit") || usernamePassword.equals("9"))
             return;
 
-        if (accountModel.validateLogin(login)) {
+        String[] parts = usernamePassword.split(" ");
+        if (parts.length < 2) {
+            loginView.showLoginFailed();
+            login();
+            return;
+        }        
+
+        if (accountModel.validateLogin(parts[0], parts[1])) {
             loginView.showLoginSuccess();
             MenuController mc = new MenuController(new MenuModel(accountModel.getLogin()), new MenuView());
             mc.showMenu();
@@ -47,7 +53,7 @@ public class LoginController {
     }
         
     private String listenForLogin() {
-        String usernamePassword = input.nextLine();
+        String usernamePassword = ConsoleInput.textInput();
         if(usernamePassword.isEmpty())
             return listenForLogin();
         return usernamePassword;

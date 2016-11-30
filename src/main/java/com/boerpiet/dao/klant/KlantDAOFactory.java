@@ -13,7 +13,6 @@ import com.boerpiet.utility.ConfigVars;
  * KlantDAOFactory.getKlantDAO();
  */
 public class KlantDAOFactory {
-    // TODO get this variable from console input or config.
    
     public static KlantDAO getKlantDAO() {
         String type = ConfigVars.getDbType();

@@ -10,7 +10,7 @@ package com.boerpiet.dao.account;
  * @author Sonja
  */
 public class FirebirdAccountDAO extends AccountDAO {
-
+        
     @Override
     protected String getCreateAccountSQL() {
         // I have no clue why but Firebird automatically changes the column name Datum_Aanmaak into DATUM_AANMAAK.

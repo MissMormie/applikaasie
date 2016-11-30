@@ -9,10 +9,10 @@ import com.boerpiet.domeinapp.AccountModel;
 import com.boerpiet.domeinapp.AccountPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantenModel;
+import com.boerpiet.utility.ConsoleInput;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.AccountView;
 import com.boerpiet.viewapp.KlantenView;
-import java.util.Scanner;
 
 /**
  *
@@ -21,7 +21,6 @@ import java.util.Scanner;
 public class AccountController {
     private final AccountModel accountModel;
     private final AccountView accountView;
-    private final Scanner input = new Scanner(System.in);
     
     public AccountController(AccountModel accountModel, AccountView accountView) {
         this.accountModel = accountModel;
@@ -49,7 +48,7 @@ public class AccountController {
     // TODO write comments
     private void newAccountListener(int klantId) {
         String usernamePasswordType = "";
-        usernamePasswordType = input.nextLine();
+        usernamePasswordType = ConsoleInput.textInput();
 
         // Check if input is N, if so, stop with new account
         if(usernamePasswordType.compareToIgnoreCase("n") == 0) 
@@ -76,7 +75,6 @@ public class AccountController {
         }
     }
 
-    // TODO finish selectAccountToModify
     public void selectAccountToModify() {
         accountView.showAccountList(accountModel.fetchAccountList());
         accountView.showSelectAccountToModify();
@@ -84,7 +82,7 @@ public class AccountController {
     }
 
     private void selectAccountToModifyListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // Check if back to menu.
         if (in.equalsIgnoreCase("n")) 
@@ -112,7 +110,7 @@ public class AccountController {
     }
 
     private void deleteAccountListener() {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
         if (in.equalsIgnoreCase("n")) 
             return;
         
@@ -149,7 +147,7 @@ public class AccountController {
     // Listen for account update options 
     // based on choice select correct modify function.
     private void modifyAccountListener(AccountPojo account) {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
         if (in.equalsIgnoreCase("n")) 
             return;
         
@@ -185,7 +183,7 @@ public class AccountController {
     // Listen for new Username and pass this to model for update
     // Show success or fail message, on fail ask for new Username.
     private void modifyUsernameListener(AccountPojo account) {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
 
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -204,7 +202,7 @@ public class AccountController {
     // Listen for new Accountstatus and pass this to model for update
     // Show success or fail message, on fail ask for new Accountstatus.
     private void modifyPasswordListener(AccountPojo account) {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
         
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -223,7 +221,7 @@ public class AccountController {
     // Listen for new Accountstatus and pass this to model for update
     // Show success or fail message, on fail ask for new Accountstatus.
     private void modifyAccountStatusListener(AccountPojo account) {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
         
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -242,7 +240,7 @@ public class AccountController {
     // Listen for new KlantId and pass this to model for update
     // Show success or fail message, on fail ask for new klantId.
     private void modifyKlantIdListener(AccountPojo account) {
-        String in = input.nextLine();
+        String in = ConsoleInput.textInput();
         
         // check if user wants to go back
         if (in.equalsIgnoreCase("n")) 
@@ -264,7 +262,5 @@ public class AccountController {
                 modifyKlantIdListener(account);
             }
         }
-    }
-   
-    
+    }   
 }

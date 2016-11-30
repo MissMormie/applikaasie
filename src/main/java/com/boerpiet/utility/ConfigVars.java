@@ -35,10 +35,8 @@ public class ConfigVars {
     private static String driver;
     private static String connectionType;
     
-    // Connection variables TODO
     
     private final Logger logger = LoggerFactory.getLogger(ConfigVars.class);
-
 
     public static String getDbType() {
         if(dbType == null)
@@ -130,7 +128,6 @@ public class ConfigVars {
                 throw new Exception("No databases defined in config file");
 
             // Get information from nodelist.
-            // TODO once different connections in use.
             connectionType = resultNode.getAttribute("type");
 
             
