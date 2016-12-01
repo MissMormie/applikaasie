@@ -16,14 +16,14 @@ public class FirebirdAccountDAO extends AccountDAO {
         // I have no clue why but Firebird automatically changes the column name Datum_Aanmaak into DATUM_AANMAAK.
         return "INSERT INTO \"account\" "
              + "(\"Gebruikersnaam\", \"Wachtwoord\", \"Accountstatus\", "
-             + "\"DATUM_AANMAAK\", \"KlantId\", \"Deleted\") "
-             + "VALUES (?, ?, ?, ?, ?, ?);";
+             + "\"KlantId\", \"Deleted\") "
+             + "VALUES (?, ?, ?, ?, ?);";
     }
 
     @Override
     protected String getUpdateAccountByIdSQL() {
         return "UPDATE \"account\" SET \"Gebruikersnaam\"=?,"
-             + " \"Wachtwoord\"=?, \"Accountstatus\"=?, \"DATUM_AANMAAK\"=?, "
+             + " \"Wachtwoord\"=?, \"Accountstatus\"=?, "
              + "\"KlantId\"=?, \"Deleted\"=? WHERE \"idAccount\"=?;";
     }
 

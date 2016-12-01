@@ -14,15 +14,15 @@ public class MySQLAccountDAO extends AccountDAO {
     @Override
     protected String getCreateAccountSQL() {
         return "INSERT INTO Account "
-                + "(Gebruikersnaam, Wachtwoord, AccountStatus, Datum_Aanmaak, KlantID, deleted) "
-                + "VALUES (?, ?, ?, ?, ?, ?);";
+                + "(Gebruikersnaam, Wachtwoord, AccountStatus, KlantID, deleted) "
+                + "VALUES (?, ?, ?, ?, ?);";
     }
 
     @Override
     protected String getUpdateAccountByIdSQL() {
         return "UPDATE Account SET "
              + " Gebruikersnaam = ?, Wachtwoord = ?, AccountStatus = ?,"
-             + " Datum_Aanmaak = ?, KlantId = ?, Deleted = ? "
+             + " KlantId = ?, Deleted = ? "
              + " WHERE idAccount = ?;";    
     }
 

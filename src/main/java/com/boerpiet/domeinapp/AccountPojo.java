@@ -5,9 +5,6 @@
  */
 package com.boerpiet.domeinapp;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.GregorianCalendar ;
 
@@ -21,14 +18,15 @@ public class AccountPojo {
     private String gebruikersnaam;
     private String wachtwoord; 
     private String accountStatus = "customer";
-    private GregorianCalendar datum_aanmaak = new GregorianCalendar();
+    private Date datum_aanmaak;
+    // private GregorianCalendar datum_aanmaak = new GregorianCalendar();
     private int klantId = 0;
     private boolean deleted = false;
 
     
     // -------------- Constructor ----------------
 
-    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoord, String accountStatus, GregorianCalendar datum_aanmaak, int klantId, boolean deleted) {
+    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoord, String accountStatus, Date datum_aanmaak, int klantId, boolean deleted) {
         this.idAccount = idAccount;
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
@@ -86,11 +84,11 @@ public class AccountPojo {
     }
 
     //TODO
-    public GregorianCalendar getDatum_aanmaak() {
+    public Date getDatum_aanmaak() {
         return datum_aanmaak;
     }
 
-    public void setDatum_aanmaak(GregorianCalendar Datum_aanmaak) {
+    public void setDatum_aanmaak(Date Datum_aanmaak) {
         this.datum_aanmaak = Datum_aanmaak;
     }
 

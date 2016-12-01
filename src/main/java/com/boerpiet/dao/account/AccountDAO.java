@@ -57,15 +57,12 @@ public abstract class AccountDAO {
             pstmt.setString(1, accountPojo.getGebruikersnaam());
             pstmt.setString(2, accountPojo.getWachtwoord());
             pstmt.setString(3, accountPojo.getAccountStatus());
-            
-            // TODO check if this works for firebird
-            pstmt.setString(4, createCalendarString(accountPojo.getDatum_aanmaak()));
-            
+                       
             if(accountPojo.getKlantId() == 0)
-                pstmt.setNull(5, java.sql.Types.INTEGER);
+                pstmt.setNull(4, java.sql.Types.INTEGER);
             else 
-                pstmt.setInt(5, accountPojo.getKlantId());
-            pstmt.setString(6, "0"); 
+                pstmt.setInt(4, accountPojo.getKlantId());
+            pstmt.setString(5, "0"); 
 
             if( pstmt.executeUpdate() == 0)
                 throw new Exception("No account created.");
@@ -116,15 +113,14 @@ public abstract class AccountDAO {
             pstmt.setString(1, accountPojo.getGebruikersnaam()); 
             pstmt.setString(2, accountPojo.getWachtwoord());
             pstmt.setString(3, accountPojo.getAccountStatus());
-            pstmt.setString(4, createCalendarString(accountPojo.getDatum_aanmaak()));
             if(accountPojo.getKlantId()== 0)
-                pstmt.setNull(5, java.sql.Types.INTEGER);
+                pstmt.setNull(4, java.sql.Types.INTEGER);
             else 
-                pstmt.setInt(5, accountPojo.getKlantId());
+                pstmt.setInt(4, accountPojo.getKlantId());
             
             String deleted = accountPojo.isDeleted() ? "1" : "0";
-            pstmt.setString(6, deleted);
-            pstmt.setInt(7, accountPojo.getIdAccount());
+            pstmt.setString(5, deleted);
+            pstmt.setInt(6, accountPojo.getIdAccount());
             
             pstmt.executeUpdate();
             return true;
