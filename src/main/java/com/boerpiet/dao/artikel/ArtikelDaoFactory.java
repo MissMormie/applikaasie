@@ -11,10 +11,10 @@ package com.boerpiet.dao.artikel;
 public class ArtikelDaoFactory {
     public static SuperArtikelDao getArtikelDAO(String type){
             if (type.equals("MySQL")) {
-                    return new SqlArtikelDao();
-            } else if (type.equals("Firebird")) {
-                    return new FirebirdArtikelDao();
+                    return new MySqlArtikelDao();
+            } else if (type.equals("Mimer")) {
+                    return new MimerArtikelDao();
             } 
-            return new SqlArtikelDao();
+            return new MySqlArtikelDao();
     }    
 }

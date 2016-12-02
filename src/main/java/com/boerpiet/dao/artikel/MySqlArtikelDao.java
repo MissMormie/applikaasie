@@ -16,23 +16,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Peaq
  */
-public class SqlArtikelDao extends SuperArtikelDao {
+public class MySqlArtikelDao extends SuperArtikelDao {
     
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
     @Override
-    public boolean createArtikel(ArtikelPojo artikel) {
-        String sql = "INSERT INTO Artikel (Naam, Prijs, Voorraad)"
-                + " VALUES ("
-                        + "'" + artikel.getNaam () + "',"
-                        + "'" + artikel.getPrijs () + "',"
-                        + "'" + artikel.getVoorraad () + "');";
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
-        } catch (Exception ex) {
-            logger.error ("Aanmaken van nieuw artikel is mislukt: "+ ex);
-            return false;
-        }
-        return true;
+    protected String getCreateArtikelMySQL () {
+        return "INSERT INTO Artikel (Naam, Prijs, Voorraad) VALUES (?, ?, ?)";
     }
     
     @Override

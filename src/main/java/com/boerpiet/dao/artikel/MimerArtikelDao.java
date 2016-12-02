@@ -12,12 +12,24 @@ import java.util.ArrayList;
  *
  * @author Peaq
  */
-public class FirebirdArtikelDao extends SuperArtikelDao {
-
+public class MimerArtikelDao extends SuperArtikelDao {
+    
     @Override
-    public boolean createArtikel(ArtikelPojo artikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getCreateArtikelMySQL () {
+        throw new UnsupportedOperationException ("Not supported here.");
     }
+        
+    @Override
+    protected String getCreateArtikelMimerSQL () {
+        return "INSERT INTO Artikel (idArtikel, Naam, Prijs, Voorraad) VALUES (?, ?, ?, ?)";
+    }
+    
+    @Override
+    protected String getMaxIdArtikelSQL () {
+        return "Select max(idArtikel) FROM Artikel;";
+    }
+    
+    private
     
     @Override
     public int createArtikelWithReturnId (ArtikelPojo artikel) {
