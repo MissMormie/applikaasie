@@ -56,6 +56,18 @@
             <artifactId>jsoup</artifactId>
             <version>1.10.1</version>
         </dependency>
+<!--    TODO omzetten naar hibernate 5. Configuratie is anders, lukt nog niet.  -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.3.6.Final</version>
+        </dependency> 
+        <!--
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.4.Final</version>
+        </dependency> -->
     </dependencies>    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

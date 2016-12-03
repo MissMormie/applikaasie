@@ -9,6 +9,7 @@ import com.boerpiet.domeinapp.AccountPojo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  *
@@ -39,7 +40,7 @@ public class AccountView {
         System.out.println("Er was een probleem bij het maken van het account, probeer het nog eens");
     }
 
-    public void showAccountList(ArrayList<AccountPojo> accountList) {
+    public void showAccountList(List<AccountPojo> accountList) {
         showDivider();
         showAccountListHeader();
         for (AccountPojo ap : accountList) {

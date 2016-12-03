@@ -6,21 +6,38 @@
 package com.boerpiet.domeinapp;
 
 import java.util.Date;
-import java.util.GregorianCalendar ;
+import javax.persistence.*;
 
 
 /**
  *
  * @author Sonja
  */
+@Entity
+@Table(name = "account") // if removed the class name will be used as database name. 
 public class AccountPojo {
+    @Id 
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private int idAccount;
+
+    @Column (name = "Gebruikersnaam", nullable = false)
     private String gebruikersnaam;
+    
+    @Column (name =  "Wachtwoord", nullable = false)
     private String wachtwoord; 
-    private String accountStatus = "customer";
+    
+    @Column (name = "Accountstatus", nullable = false)
+    private String accountStatus;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column (name = "Datum_Aanmaak", nullable = false)
     private Date datum_aanmaak;
-    // private GregorianCalendar datum_aanmaak = new GregorianCalendar();
-    private int klantId = 0;
+
+    @Column (name = "KlantId", nullable = true)
+    @ManyToOne
+    private Integer klantId = 0;
+    
+    @Column (name = "Deleted", nullable = false)
     private boolean deleted = false;
 
     
@@ -42,7 +59,6 @@ public class AccountPojo {
     }
     
     public AccountPojo() {
-        
     }
     // -------------- Getters and Setters ----------------
     
@@ -92,11 +108,11 @@ public class AccountPojo {
         this.datum_aanmaak = Datum_aanmaak;
     }
 
-    public int getKlantId() {
+    public Integer getKlantId() {
         return klantId;
     }
 
-    public void setKlantId(int klantId) {
+    public void setKlantId(Integer klantId) {
         this.klantId = klantId;
     }
 

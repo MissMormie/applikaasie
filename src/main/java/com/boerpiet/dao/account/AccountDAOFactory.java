@@ -10,19 +10,22 @@ import com.boerpiet.utility.ConfigVars;
 /**
  *
  * @author Sonja
- * UsageExample: AccountDAO dao = AccountDAOFactory.getAccountDAO();
- * Takes info from config.xml to determine the database type.
+ UsageExample: AccountDAO dao = AccountDAOFactory.getAccountDAO();
+ Takes info from config.xml to determine the database type.
  */
 public class AccountDAOFactory {
     
     public static AccountDAO getAccountDAO(){
+        return new AccountDAO();
+        /*
         String type = ConfigVars.getDbType();
         if (type.equals("MySQL")) {
-                return new MySQLAccountDAO();
+                return (AccountDAO) new MySQLAccountDAO();
         } else if (type.equals("Firebird")) {
-                return new FirebirdAccountDAO();
+                return (AccountDAO) new FirebirdAccountDAO();
         }
-        return new MySQLAccountDAO();
+        return (AccountDAO) new MySQLAccountDAO();
+        */
     }
     
 }

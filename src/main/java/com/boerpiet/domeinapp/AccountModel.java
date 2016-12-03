@@ -12,6 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,15 +38,15 @@ public class AccountModel {
     }
     
     public boolean validateLogin(String username, String password) {
+        AccountDAO ad = AccountDAOFactory.getAccountDAO();
         password = makeWachtwoordHash(password);
-        AccountPojo login = new AccountPojo(username, password);
-        if(AccountDAOFactory.getAccountDAO().fillAccountPojoByUsernamePassword(login)) { 
-            loginManager = new LoginManager(login);
-            logger.info("new login from user id:" + login.getKlantId() + " " + username);
-            return true;
-        }
-        else
+        AccountPojo login = ad.getAccountByUsernamePassword(username, password);
+        if(login == null) 
             return false;
+
+        loginManager = new LoginManager(login);
+        logger.info("new login from user id:" + login.getKlantId() + " " + username);
+        return true;
     }
     
     public String createAccount(String username, String password, int klantId) {
@@ -82,7 +83,7 @@ public class AccountModel {
         return AccountDAOFactory.getAccountDAO().updateAccountById(account);
     }
     
-    public ArrayList<AccountPojo> fetchAccountList() {
+    public List<AccountPojo> fetchAccountList() {
         return AccountDAOFactory.getAccountDAO().getAllAccounts();
     }
 
