@@ -17,7 +17,7 @@ import javax.sql.DataSource;
  * @author Sonja
  */
 public class Connector {
-    
+    /*
     private static DataSource dataSource;
 
     public static Connection getConnection() throws SQLException {
@@ -59,5 +59,5 @@ public class Connector {
 
             dataSource = new HikariDataSource(config);
     }
-    
+ */   
 }

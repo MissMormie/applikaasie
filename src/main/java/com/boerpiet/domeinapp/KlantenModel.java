@@ -6,7 +6,7 @@
 package com.boerpiet.domeinapp;
 
 import com.boerpiet.dao.klant.KlantDAOFactory;
-import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Sonja
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 public class KlantenModel {
 
     
-    public ArrayList<KlantPojo> fetchKlantList() {
+    public List<KlantPojo> fetchKlantList() {
         return KlantDAOFactory.getKlantDAO().getAllKlanten();
     }
 
-    public KlantModel getKlantById(int id) {
+    public KlantPojo getKlantPojoById(int id) {
         return KlantDAOFactory.getKlantDAO().getKlantById(id);  
     }
 }

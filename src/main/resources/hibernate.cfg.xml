@@ -11,6 +11,14 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/applikaasie</property>
         <property name="show_sql">true</property>
         <property name="format_sql">false</property>
+        <property name="hibernate.id.new_generator_mappings">false</property>
         <mapping class="com.boerpiet.domeinapp.AccountPojo"/>
+        <mapping class="com.boerpiet.domeinapp.KlantPojo"/>
+        <mapping class="com.boerpiet.domeinapp.AdresPojo"/>
+        <mapping class="com.boerpiet.domeinapp.AdresTypePojo"/>
+        <mapping class="com.boerpiet.domeinapp.KlantHeeftAdresPojo"/>
+
+
+
     </session-factory>
 </hibernate-configuration>

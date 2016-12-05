@@ -5,25 +5,55 @@
  */
 package com.boerpiet.domeinapp;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
+
 /**
  *
  * @author Sonja
  */
-public class KlantPojo {
+@Entity
+@Table(name = "klant")
+public class KlantPojo implements Serializable {
     
     // ------------ VARIABLES ---------------------------------
-    private int id = 0;
+    
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    @Id
+    private int idKlant = 0;
+    
+    @Column (name = "Voornaam") 
     private String voornaam;
+    
+    @Column (name = "Achternaam")
     private String achternaam;
+    
+    @Column (name = "Tussenvoegsel")
     private String tussenvoegsel;
+    
+    @Column (name = "Telefoonnummer")
     private String telefoonnummer;
+    
+    @Column (name = "Emailadres")
     private String emailadres;
+    
+    @Column (name = "Deleted")
     private boolean deleted = false;
-
+    
+    // TODO change fetch type to lazy, because most of the time we dont' need all info. 
+    // http://stackoverflow.com/a/22645558/7172179
+    
+    // mapped by  references the variable name in the KlantHeeftAdresPojo class that it's mapped to. 
+    // Beware, this won't change when using refactor.
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "klant")
+    private Set<KlantHeeftAdresPojo> adressen = new HashSet<>(0);
+    
     // ------------ CONSTRUCTORS ---------------------------------
     
     /**
-     * Initates empty KlantPojo
+     * Initiates empty KlantPojo
      */
     public KlantPojo() { }
     
@@ -48,12 +78,12 @@ public class KlantPojo {
 
     // ------------ Getters and Setters ---------------------------------
 
-    public int getId() {
-        return id;
+    public int getIdKlant() {
+        return idKlant;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdKlant(int idKlant) {
+        this.idKlant = idKlant;
     }
 
     public String getVoornaam() {
@@ -104,9 +134,17 @@ public class KlantPojo {
         this.deleted = deleted;
     }
 
+    public Set<KlantHeeftAdresPojo> getAdressen() {
+        return adressen;
+    }
+
+    public void setAdressen(Set<KlantHeeftAdresPojo> adressen) {
+        this.adressen = adressen;
+    }
+
     @Override
     public String toString() {
-        return "KlantPojo{" + "id=" + id + ", voornaam=" + voornaam + ", achternaam=" + achternaam + ", tussenvoegsel=" + tussenvoegsel + ", telefoonnummer=" + telefoonnummer + ", emailadres=" + emailadres + ", deleted=" + deleted + '}';
+        return "KlantPojo{" + "id=" + idKlant + ", voornaam=" + voornaam + ", achternaam=" + achternaam + ", tussenvoegsel=" + tussenvoegsel + ", telefoonnummer=" + telefoonnummer + ", emailadres=" + emailadres + ", deleted=" + deleted + '}';
     }
     
 }

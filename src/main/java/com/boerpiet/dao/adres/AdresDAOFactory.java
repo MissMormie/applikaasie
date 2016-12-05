@@ -13,6 +13,7 @@ import com.boerpiet.utility.ConfigVars;
  */
 public class AdresDAOFactory {
     public static AdresDAO getAdresDAO(){
+        /*
         String type = ConfigVars.getDbType();
         if (type.equals("MySQL")) {
             return new AdresMySQLDAO();
@@ -20,6 +21,8 @@ public class AdresDAOFactory {
                 return new AdresFirebirdDAO();
         }
         return new AdresMySQLDAO();
+        */
+        return new AdresDAO();
     }
 }
 

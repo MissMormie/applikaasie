@@ -58,7 +58,7 @@ public class KlantenController {
         } else {
             int id = Integer.parseInt(in);
 
-            KlantModel klant = klantModel.getKlantById(id);
+            KlantModel klant = new KlantModel(klantModel.getKlantPojoById(id));
             if (klant == null) {
                 klantView.showSelectKlantfailed();
                 selectKlantToModify();
@@ -80,7 +80,7 @@ public class KlantenController {
         } else {
             int id = Integer.parseInt(in);
 
-            KlantModel klant = klantModel.getKlantById(id);
+            KlantModel klant = new KlantModel(klantModel.getKlantPojoById(id));
             if (klant == null ) {
                 klantView.showSelectKlantfailed();
                 return selectKlantListener();
@@ -100,7 +100,7 @@ public class KlantenController {
         } else {
             int id = Integer.parseInt(in);
 
-            KlantModel klant = klantModel.getKlantById(id);
+            KlantModel klant = new KlantModel(klantModel.getKlantPojoById(id));
             if (klant == null) {
                 selectKlantToDelete();
             } else {

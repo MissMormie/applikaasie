@@ -145,8 +145,8 @@ public class KlantController {
         } 
         else {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
-                straat, huisnummer, toevoeging, postcode, woonplaats, false, type);
-            klantModel.setAdres(adres);
+                straat, huisnummer, toevoeging, postcode, woonplaats, false);
+            klantModel.setAdres(adres, type);
         }
     }
 

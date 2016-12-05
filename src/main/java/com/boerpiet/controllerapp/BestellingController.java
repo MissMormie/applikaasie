@@ -49,7 +49,7 @@ public class BestellingController {
     public void startNewOrderByKlant () {
         bv = new BestellingView ();
         
-        int klantId = lm.getAccountPojo().getKlantId();
+        int klantId = lm.getAccountPojo().getKlant();
         int accountId = lm.getAccountPojo().getIdAccount();
         bv.showNewBestelling();
         bv.showMenuKeuze();
@@ -98,7 +98,7 @@ public class BestellingController {
         
         bv = new BestellingView ();
         
-        int klantId = lm.getAccountPojo().getKlantId();
+        int klantId = lm.getAccountPojo().getKlant();
         bv.startModifyOrder ();
         bv.showMenuKeuze();
         
@@ -184,7 +184,7 @@ public class BestellingController {
         
         bv = new BestellingView ();
         
-        int klantId = lm.getAccountPojo().getKlantId();
+        int klantId = lm.getAccountPojo().getKlant();
         
         bv.startDeleteOrder();
         bv.showMenuKeuze();
@@ -519,7 +519,7 @@ public class BestellingController {
         KlantModel klant = kc.selectKlant();
         if(klant == null)
             return 0; // afhandelen geen klant geselecteerd.
-        int id = klant.getKlantPojo().getId();
+        int id = klant.getKlantPojo().getIdKlant();
         return id;
     }
 }

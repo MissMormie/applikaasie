@@ -179,7 +179,7 @@ public class MenuModel {
                 break;
             case "wijzigKlantZelf": // Change logged in Klant
                 KlantenModel km = new KlantenModel();
-                KlantModel km2 = km.getKlantById(loginManager.getAccountPojo().getKlantId());
+                KlantModel km2 = new KlantModel(km.getKlantPojoById(loginManager.getAccountPojo().getKlant()));
                 KlantController kc4 = new KlantController(km2, new KlantView());
                 kc4.modifyKlant();
                 break;
@@ -190,19 +190,19 @@ public class MenuModel {
             case "Nieuwe bestelling door klant": //nieuwe bestelling
                 BestellingController bc1 = new BestellingController (new BestellingModel (), loginManager);
                 //medewerkers en admins hebben klantId = 0 als het goed is
-                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                if (loginManager.getAccountPojo().getKlant() !=0) {
                     bc1.startNewOrderByKlant();
                 }
                 break;
             case "Bestelling wijzigen door klant": //artikelen toevoegen aan of wijzigen in een bestelling
                 BestellingController bc2 = new BestellingController (new BestellingModel (), loginManager);
-                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                if (loginManager.getAccountPojo().getKlant() !=0) {
                     bc2.modifyOrderByKlant();
                 }
                 break;
             case "Bestelling verwijderen door klant": //artikelen verwijderen van bestelling of totale bestelling verwijderen
                 BestellingController bc3 = new BestellingController (new BestellingModel (), loginManager);
-                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                if (loginManager.getAccountPojo().getKlant() !=0) {
                     bc3.deleteOrderByKlant();
                 }
                 break;

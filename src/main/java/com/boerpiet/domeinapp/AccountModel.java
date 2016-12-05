@@ -45,7 +45,7 @@ public class AccountModel {
             return false;
 
         loginManager = new LoginManager(login);
-        logger.info("new login from user id:" + login.getKlantId() + " " + username);
+        logger.info("new login from user id:" + login.getKlant() + " " + username);
         return true;
     }
     
@@ -60,13 +60,13 @@ public class AccountModel {
         
         password = makeWachtwoordHash(password);
         AccountPojo account = new AccountPojo(username, password);
-        account.setKlantId(klantId);
+        account.setKlant(klantId);
         if (klantId == 0)
             account.setAccountStatus("medewerker");
         else 
             account.setAccountStatus("klant");
         if (ad.createAccount(account)) {
-            logger.info("new account created id: " + account.getKlantId() + account.getGebruikersnaam());
+            logger.info("new account created id: " + account.getKlant() + account.getGebruikersnaam());
             return "true";
         }
         return "exception";
@@ -112,7 +112,7 @@ public class AccountModel {
     }
 
     public boolean updateAccountKlantId(AccountPojo account, int id) {
-        account.setKlantId(id);
+        account.setKlant(id);
         return updateAccountById(account);
     }
     

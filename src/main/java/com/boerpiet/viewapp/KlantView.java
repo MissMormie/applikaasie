@@ -6,6 +6,7 @@
 package com.boerpiet.viewapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
+import com.boerpiet.domeinapp.KlantHeeftAdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantPojo;
 
@@ -122,7 +123,6 @@ public class KlantView {
 
     public void showUpdateSuccess(KlantModel klant) {
         showDivider();
-        showKlant(klant);
         System.out.println("Update is geslaagd.");
     }
 
@@ -135,17 +135,20 @@ public class KlantView {
     
     private void showKlant(KlantModel klant) {
         
-        System.out.println(klant.getKlantPojo().getId() + " " + klant.getKlantPojo().getVoornaam() + " " +  
+        System.out.println(klant.getKlantPojo().getIdKlant() + " " + klant.getKlantPojo().getVoornaam() + " " +  
                 klant.getKlantPojo().getTussenvoegsel() + " " + klant.getKlantPojo().getAchternaam() + " " +
                 klant.getKlantPojo().getTelefoonnummer() + " " + klant.getKlantPojo().getEmailadres());
-        showAdres(klant.getBezorgAdresPojo());
-        showAdres(klant.getFactuurAdresPojo());
-        showAdres(klant.getPostAdresPojo());
+        for (KlantHeeftAdresPojo adres : klant.getKlantPojo().getAdressen()) {
+            showAdres(adres);
+        }
+
+        System.out.println("");
     }
     
-    private void showAdres(AdresPojo adres) {
+    private void showAdres(KlantHeeftAdresPojo khAdres) {
+        AdresPojo adres = khAdres.getAdres();
         if(adres != null)
-        System.out.println( adres.getAdresType() + ": " + adres.getStraat() + " " + adres.getHuisnummer() +
+        System.out.println( khAdres.getAdres_type().getSoort() + ": " + adres.getStraat() + " " + adres.getHuisnummer() +
                             adres.getToevoeging() + " " + adres.getWoonplaats());
     }
     

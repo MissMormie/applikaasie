@@ -32,7 +32,7 @@ public class AccountController {
         KlantModel klant = kc.selectKlant();
         if(klant == null)
             return;
-        int id = klant.getKlantPojo().getId();
+        int id = klant.getKlantPojo().getIdKlant();
         newAccount(id);
     }
     

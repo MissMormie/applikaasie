@@ -5,24 +5,39 @@
  */
 package com.boerpiet.domeinapp;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.io.Serializable;
+import javax.persistence.*;
 /**
  *
  * @author Sonja
  */
-public class AdresPojo implements Cloneable {
+@Entity
+@Table (name = "adres")
+public class AdresPojo implements Cloneable, Serializable {
 
     // ------------ VARIABLES ---------------------------------
+    @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private int idAdres;
+    
+    @Column (name = "Straat", nullable = false)
     private String straat;
+    
+    @Column (name = "Huisnummer", nullable = false)
     private int huisnummer;
+    
+    @Column (name = "Toevoeging", nullable = true)
     private String toevoeging;
+    
+    @Column (name = "Postcode", nullable = false)
     private String postcode;
+    
+    @Column (name = "Woonplaats", nullable = false)
     private String woonplaats;
-    private boolean deleted;
-    private String adresType; // Deze staat niet direct in deze database tabel maar hoort hier wel bij. Eigenlijk zou adres_type tabel bij adres moeten en niet bij klant heeft adres omdat het iets zegt over het type adres niet over de relatie met klant. 
+    
+    @Column (name = "Deleted")
+    private boolean deleted = false;
+    
 
     // ------------ CONSTRUCTORS ---------------------------------
     /**
@@ -33,19 +48,7 @@ public class AdresPojo implements Cloneable {
      * @param toevoeging String
      * @param woonplaats String
      * @param deleted boolean
-     * @param adresType String 
      */
-    public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, boolean deleted, String adresType) {
-        this.idAdres = idAdres;
-        this.straat = straat;
-        this.huisnummer = huisnummer;
-        this.toevoeging = toevoeging;
-        this.postcode = postcode;
-        this.woonplaats = woonplaats;
-        this.deleted = deleted;
-        this.adresType = adresType;
-    }
-    
     public AdresPojo(int idAdres, String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, boolean deleted) {
         this.idAdres = idAdres;
         this.straat = straat;
@@ -55,6 +58,8 @@ public class AdresPojo implements Cloneable {
         this.woonplaats = woonplaats;
         this.deleted = deleted;
     }    
+    
+    public AdresPojo() {    }
     
     // ------------ Getters and Setters ---------------------------------
 
@@ -105,14 +110,6 @@ public class AdresPojo implements Cloneable {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }   
-    
-    public String getAdresType() {
-        return adresType;
-    }
-
-    public void setAdresType(String adresType) {
-        this.adresType = adresType;
-    }
 
     public String getPostcode() {
         return postcode;
@@ -137,7 +134,7 @@ public class AdresPojo implements Cloneable {
 
     @Override
     public String toString() {
-        return "AdresPojo{" + "idAdres=" + idAdres + ", straat=" + straat + ", huisnummer=" + huisnummer + ", toevoeging=" + toevoeging + ", woonplaats=" + woonplaats + ", deleted=" + deleted + ", adresType=" + adresType + '}';
+        return "AdresPojo{" + "idAdres=" + idAdres + ", straat=" + straat + ", huisnummer=" + huisnummer + ", toevoeging=" + toevoeging + ", woonplaats=" + woonplaats + ", deleted=" + deleted +"}";
     }
     
     

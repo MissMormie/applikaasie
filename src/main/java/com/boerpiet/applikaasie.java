@@ -16,5 +16,7 @@ import com.boerpiet.viewapp.LoginView;
 public class applikaasie {
     public static void main(String[] args) {
         new LoginController(new AccountModel(), new LoginView());
+        HibernateUtil.closeSession();
+     
     }
 }

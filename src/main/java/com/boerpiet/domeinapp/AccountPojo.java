@@ -5,6 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -14,13 +15,14 @@ import javax.persistence.*;
  * @author Sonja
  */
 @Entity
-@Table(name = "account") // if removed the class name will be used as database name. 
-public class AccountPojo {
+@Table(name = "account", uniqueConstraints = {
+    @UniqueConstraint (columnNames = "Gebruikersnaam")}) 
+public class AccountPojo implements Serializable {
     @Id 
     @GeneratedValue (strategy = GenerationType.AUTO)
     private int idAccount;
 
-    @Column (name = "Gebruikersnaam", nullable = false)
+    @Column (name = "Gebruikersnaam", nullable = false, unique = true)
     private String gebruikersnaam;
     
     @Column (name =  "Wachtwoord", nullable = false)
@@ -32,10 +34,9 @@ public class AccountPojo {
     @Temporal(TemporalType.TIMESTAMP)
     @Column (name = "Datum_Aanmaak", nullable = false)
     private Date datum_aanmaak;
-
+    
     @Column (name = "KlantId", nullable = true)
-    @ManyToOne
-    private Integer klantId = 0;
+    private Integer klant;
     
     @Column (name = "Deleted", nullable = false)
     private boolean deleted = false;
@@ -43,13 +44,13 @@ public class AccountPojo {
     
     // -------------- Constructor ----------------
 
-    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoord, String accountStatus, Date datum_aanmaak, int klantId, boolean deleted) {
+    public AccountPojo(int idAccount, String gebruikersnaam, String wachtwoord, String accountStatus, Date datum_aanmaak, int klant, boolean deleted) {
         this.idAccount = idAccount;
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
         this.accountStatus = accountStatus;
         this.datum_aanmaak = datum_aanmaak;
-        this.klantId = klantId;
+        this.klant = klant = 0;
         this.deleted = deleted;
     }
 
@@ -108,12 +109,12 @@ public class AccountPojo {
         this.datum_aanmaak = Datum_aanmaak;
     }
 
-    public Integer getKlantId() {
-        return klantId;
+    public Integer getKlant() {
+        return klant;
     }
 
-    public void setKlantId(Integer klantId) {
-        this.klantId = klantId;
+    public void setKlant(Integer klant) {
+        this.klant = klant;
     }
 
     public boolean isDeleted() {
@@ -132,7 +133,7 @@ public class AccountPojo {
 
     @Override
     public String toString() {
-        return "AccountPojo{" + "idAccount=" + idAccount + ", gebruikersnaam=" + gebruikersnaam + ", wachtwoordHash=" + wachtwoord + ", accountStatus=" + accountStatus + ", datum_aanmaak=" + datum_aanmaak + ", klantId=" + klantId + ", deleted=" + deleted + '}';
+        return "AccountPojo{" + "idAccount=" + idAccount + ", gebruikersnaam=" + gebruikersnaam + ", wachtwoordHash=" + wachtwoord + ", accountStatus=" + accountStatus + ", datum_aanmaak=" + datum_aanmaak + ", klantId=" + klant + ", deleted=" + deleted + '}';
     }
     
 }

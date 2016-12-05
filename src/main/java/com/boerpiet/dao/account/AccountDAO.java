@@ -29,32 +29,29 @@ public class AccountDAO {
     }
 
     public boolean deleteAccountsByKlantId(int id) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-
-        String hql = "delete FROM AccountPojo WHERE"
-                   + "klantId = :klantId";
-        
-        int result = session .createQuery(hql)
-                             .setInteger("klantId", id)
-                             .executeUpdate();
-        
-        session.getTransaction().commit();
-        session.close(); 
-        // TODO look at this return value, is it necessary
-        // should it mean all accounts even if it's 0 have been deleted, or min 1 has been deleted.
+        try (Session session = HibernateUtil.getSession()) {
+            session.beginTransaction();
+            
+            String hql = "delete FROM AccountPojo WHERE"
+                    + "klantId = :klantId";
+            
+            session .createQuery(hql)
+                    .setParameter("klantId", id)
+                    .executeUpdate();
+            
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            return false;
+        }
         return true;
     }
 
     public boolean updateAccountById(AccountPojo accountPojo) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        
-        session.saveOrUpdate(accountPojo);
-        
-        session.getTransaction().commit();
-        session.close(); 
-        
+        try (Session session = HibernateUtil.getSession()) {
+            session.beginTransaction();
+            session.saveOrUpdate(accountPojo);
+            session.getTransaction().commit();
+        } 
         return true;
     }
 
@@ -81,13 +78,12 @@ public class AccountDAO {
     }
 
     public AccountPojo getAccountById(int accountId) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-
-        AccountPojo ap = (AccountPojo) session.get(AccountPojo.class, accountId);
-
-        session.getTransaction().commit();
-        session.close(); 
+        AccountPojo ap;
+        try (Session session = HibernateUtil.getSession()) {
+            session.beginTransaction();
+            ap = (AccountPojo) session.get(AccountPojo.class, accountId);
+            session.getTransaction().commit();
+        } 
 
         return ap;
     }

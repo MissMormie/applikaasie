@@ -15,13 +15,15 @@ import com.boerpiet.utility.ConfigVars;
 public class KlantDAOFactory {
    
     public static KlantDAO getKlantDAO() {
+        /*
         String type = ConfigVars.getDbType();
         if (type.equals("MySQL")) {
             return new MySQLKlantDAO();
         } else if (type.equals("Firebird")) {
             return new FirebirdKlantDAO();
         }
-        return new MySQLKlantDAO();
+        return new MySQLKlantDAO(); */
+        return new KlantDAO();
     }
 
 }

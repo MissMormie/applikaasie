@@ -8,6 +8,7 @@ package com.boerpiet.domeinapp;
 
 import com.boerpiet.dao.adres.AdresDAOFactory;
 import com.boerpiet.dao.klant.KlantDAOFactory;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +21,12 @@ public class KlantModel {
     // ------------ VARIABLES ---------------------------------
 
     private KlantPojo klantPojo = new KlantPojo();
+    private final Logger logger = LoggerFactory.getLogger(KlantModel.class);
+    /*
+    private AdresPojo bezorgAdresPojo;
     private AdresPojo factuurAdresPojo;
     private AdresPojo postAdresPojo;
-    private AdresPojo bezorgAdresPojo;
-    private final Logger logger = LoggerFactory.getLogger(KlantModel.class);
-    
+    */
        
     // ------------ CONSTRUCTORS ---------------------------------
     
@@ -44,22 +46,7 @@ public class KlantModel {
      */
     public KlantModel() { 
     }
-    
-    /**
-     * Initiate filled klantModel 
-     * 
-     * @param klantPojo         the klant instance {@link KlantPojo}
-     * @param factuurAdresPojo  the factuur adress instance {@link AdresPojo}
-     * @param postAdresPojo     the post address instance {@code AdresPojo}
-     * @param bezorgAdresPojo   the bezorg address instance {@link AdresPojo}
-     */
-    public KlantModel(KlantPojo klantPojo, AdresPojo factuurAdresPojo, AdresPojo postAdresPojo, AdresPojo bezorgAdresPojo) {
-        this.klantPojo = klantPojo;
-        this.factuurAdresPojo = factuurAdresPojo;
-        this.postAdresPojo = postAdresPojo;
-        this.bezorgAdresPojo = bezorgAdresPojo;
-    }
-
+  
     // ------------ Getters and Setters ---------------------------------
 
     public KlantPojo getKlantPojo() {
@@ -71,27 +58,27 @@ public class KlantModel {
     }
 
     public AdresPojo getFactuurAdresPojo() {
-        return factuurAdresPojo;
+        return getAdresPojo("Factuuradres");
     }
 
     public void setFactuurAdresPojo(AdresPojo factuurAdresPojo) {
-        this.factuurAdresPojo = factuurAdresPojo;
+        setAdres(factuurAdresPojo, "Factuuradres");
     }
 
     public AdresPojo getPostAdresPojo() {
-        return postAdresPojo;
+        return getAdresPojo("Postadres");
     }
-
+    
     public void setPostAdresPojo(AdresPojo postAdresPojo) {
-        this.postAdresPojo = postAdresPojo;
+        setAdres(postAdresPojo, "Postadres");
     }
 
     public AdresPojo getBezorgAdresPojo() {
-        return bezorgAdresPojo;
+        return getAdresPojo("Postadres");
     }
-
+    
     public void setBezorgAdresPojo(AdresPojo bezorgAdresPojo) {
-        this.bezorgAdresPojo = bezorgAdresPojo;
+        setAdres(bezorgAdresPojo, "Bezorgadres");
     }
 
     // ------------ PUBLIC FUNCTIONS ---------------------------------
@@ -171,37 +158,36 @@ public class KlantModel {
      * 
      * @param adresPojo 
      */
-    public void setAdres(AdresPojo adresPojo) {
-        switch(adresPojo.getAdresType().toLowerCase()) {
-            case "postadres":
-                if(postAdresPojo != null && postAdresPojo.getIdAdres() != 0)
-                    adresPojo.setIdAdres(postAdresPojo.getIdAdres());
-                this.postAdresPojo = adresPojo;
-                break;
-            case "factuuradres":
-                if(factuurAdresPojo != null && factuurAdresPojo.getIdAdres() != 0)
-                    adresPojo.setIdAdres(factuurAdresPojo.getIdAdres());
-                this.factuurAdresPojo = adresPojo;
-                break;
-            case "bezorgadres":
-                if(bezorgAdresPojo != null && bezorgAdresPojo.getIdAdres() != 0)
-                    adresPojo.setIdAdres(bezorgAdresPojo.getIdAdres());
-                this.bezorgAdresPojo = adresPojo;
-                break;                
+    public void setAdres(AdresPojo adresPojo, String adresType) {
+        // Check if adrestype already exists, if so replace, but copy id.
+        for (KlantHeeftAdresPojo khAdres : klantPojo.getAdressen()) {
+            if(khAdres.getAdres_type().getSoort().equals(adresType)) {
+                adresPojo.setIdAdres(khAdres.getAdres().getIdAdres());
+                khAdres.setAdres(adresPojo);
+                return;
+            }
         }
+        
+        // if adrestype doesn't exist create one.
+        KlantHeeftAdresPojo khap = new KlantHeeftAdresPojo();
+        khap.setKlant(klantPojo);
+        khap.setAdres(adresPojo);
+        khap.setAdres_type(getAdresTypePojo(adresType));
+        
+        // Add klant HeeftAdresPojo to klant Pojo.
+        klantPojo.getAdressen().add(khap);
     }
     
     public void setAllAdresses(AdresPojo adresPojo) {
-        cloneAdress(adresPojo, "Bezorgadres");
-        cloneAdress(adresPojo, "Factuuradres");
-        cloneAdress(adresPojo, "Postadres");
+        cloneAndSetAdress(adresPojo, "Bezorgadres");
+        cloneAndSetAdress(adresPojo, "Factuuradres");
+        cloneAndSetAdress(adresPojo, "Postadres");
     }
     
-    public void cloneAdress(AdresPojo adresPojo, String type) {
+    public void cloneAndSetAdress(AdresPojo adresPojo, String adresType) {
         try {
             AdresPojo adres = adresPojo.clone();
-            adres.setAdresType(type);        
-            setAdres(adres);
+            setAdres(adres, adresType);
         } catch (CloneNotSupportedException ex) {
             logger.debug("failed to clone adres: " + adresPojo.toString());
         }
@@ -213,17 +199,11 @@ public class KlantModel {
      * @param type String (Postadres, Factuuradres, Bezorgadres)
      * @return int the adresid
      */    
-    public int getAdresId(String type) {
-        switch(type) {
-            case "Postadres":
-                if(postAdresPojo != null)
-                    return postAdresPojo.getIdAdres();
-            case "Factuuradres":
-                if(factuurAdresPojo != null)
-                    return factuurAdresPojo.getIdAdres();
-            case "Bezorgadres":
-                if(bezorgAdresPojo != null)
-                    return bezorgAdresPojo.getIdAdres();
+    public int getAdresId(String adresType) {
+        for (KlantHeeftAdresPojo adres : klantPojo.getAdressen()) {
+            if(adres.getAdres_type().getSoort().equals(adresType)) {
+                return adres.getAdres().getIdAdres();
+            }
         }
         return 0;
     }
@@ -234,8 +214,8 @@ public class KlantModel {
      * @return boolean true on succesfull delete
      */
     public boolean delete() {
-        if(klantPojo.getId() != 0)
-            return KlantDAOFactory.getKlantDAO().deleteKlantAndAdressenById(klantPojo.getId());
+        if(klantPojo.getIdKlant() != 0)
+            return KlantDAOFactory.getKlantDAO().deleteKlantAndAdressesAndAccounts(klantPojo);
         return false;
     }
 
@@ -247,41 +227,48 @@ public class KlantModel {
      * @return boolean true on succesfull update
      * 
      */
-    public boolean updateAdres(String type) {
-        switch(type.toLowerCase()) {
-            case "postadres":
-                if(postAdresPojo != null & postAdresPojo.getIdAdres() != 0) 
-                    return AdresDAOFactory.getAdresDAO().updateAdres(postAdresPojo);            
-                break;
-            case "factuuradres":
-                if(factuurAdresPojo != null & factuurAdresPojo.getIdAdres() != 0) 
-                    return AdresDAOFactory.getAdresDAO().updateAdres(factuurAdresPojo);            
-                break;
-            case "bezorgadres":
-                if(bezorgAdresPojo != null & bezorgAdresPojo.getIdAdres() != 0) 
-                    return AdresDAOFactory.getAdresDAO().updateAdres(bezorgAdresPojo);            
-                break;
-                
-            // All 3 address types are the same
-            case "same":
-                if(updateAdres("Postadres") && updateAdres("Factuuradres") && updateAdres("Bezorgadres")) 
-                    return true;
+    public boolean updateAdres(String adresType) {
+        boolean success = false;
+        for (KlantHeeftAdresPojo adres : klantPojo.getAdressen()) {
+            if(adres.getAdres_type().getSoort().equals(adresType) || adresType.equalsIgnoreCase("same")) {
+                success = AdresDAOFactory.getAdresDAO().updateAdres(adres.getAdres());
+            }
         }
-        return false;
+        return success;
     }
     
     
     // ------------ PRIVATE FUNCTIONS ---------------------------------
     
     private boolean updateKlant() {
-        if (klantPojo.getId() == 0)
+        if (klantPojo.getIdKlant() == 0)
             return false;
         return KlantDAOFactory.getKlantDAO().updateKlantById(klantPojo);
     }
 
     @Override
     public String toString() {
-        return "KlantModel{" + "klantPojo=" + klantPojo + ", factuurAdresPojo=" + factuurAdresPojo + ", postAdresPojo=" + postAdresPojo + ", bezorgAdresPojo=" + bezorgAdresPojo + ", logger=" + logger + '}';
+        return "KlantModel{" + "klantPojo=" + klantPojo + "}";
+    }
+    
+    private AdresPojo getAdresPojo(String adresType) {
+        for (KlantHeeftAdresPojo adres : klantPojo.getAdressen()) {
+            if(adres.getAdres_type().getSoort().equals(adresType))
+                return adres.getAdres();
+        }
+        return null;
     }
 
+    // TODO get this from the database instead.
+    private AdresTypePojo getAdresTypePojo(String adresType) {
+        AdresTypePojo atp = new AdresTypePojo();
+        atp.setSoort(adresType);
+        if(adresType.equals("Bezorgadres"))
+            atp.setIdAdres_type(3);
+        if(adresType.equals("Factuuradres"))
+            atp.setIdAdres_type(2);
+        if(adresType.equals("Postadres"))
+            atp.setIdAdres_type(1);
+        return atp;
+    }
 }

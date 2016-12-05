@@ -6,7 +6,7 @@
 package com.boerpiet.viewapp;
 
 import com.boerpiet.domeinapp.KlantPojo;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,7 +20,7 @@ public class KlantenView {
     }
 
 
-    public void showKlantList(ArrayList<KlantPojo> klantList) {
+    public void showKlantList(List<KlantPojo> klantList) {
         showDivider();
         showKlantListHeader();
         for(KlantPojo kp : klantList) {
@@ -35,7 +35,7 @@ public class KlantenView {
 
     private void showKlantListItem(KlantPojo kp) {
         System.out.printf("%-3d %-15s %-13s %s %s %s \n", 
-                kp.getId(),
+                kp.getIdKlant(),
                 kp.getVoornaam(), 
                 kp.getTussenvoegsel(),
                 kp.getAchternaam(),
