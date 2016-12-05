@@ -46,7 +46,7 @@ public class BestellingModel {
         bp = new BestellingPojo ();
         bv = new BestellingView ();
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(klantId)) {
+        if (ArtikelDaoFactory.getArtikelDAO().isArtikelInDatabase(artikelId)) {
             bp.setKlantKey (klantId);
             bp.setBestelDatum (sqlDatum);
             bp.setAccountKey (accountKey);

@@ -7,6 +7,7 @@ package com.boerpiet.dao.artikel;
 
 import com.boerpiet.dao.Connector;
 import com.boerpiet.domeinapp.ArtikelPojo;
+import com.boerpiet.utility.ConfigVars;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,226 +24,101 @@ public abstract class SuperArtikelDao {
     
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
+    // utility strings
+    protected abstract String getIsArtikelInDatabaseSQL ();
+    
+    protected abstract String getArtikelByIdSQL ();
+    
+    protected abstract String getMaxArtikelIdSQL ();
+        
+    protected abstract String getArtikelForArrayListSQL ();
+    
+    // CRUD strings  
     protected abstract String getCreateArtikelMySQL ();
     
     protected abstract String getCreateArtikelMimerSQL ();
     
-    protected abstract String getMaxIdArtikelSQL ();
+    protected abstract String getUpdateArtikelNPVSQL ();
     
-    public abstract int createArtikelWithReturnId (ArtikelPojo artikel);
+    protected abstract String getUpdateArtikelNaamSQL ();
     
-    public abstract ArtikelPojo getArtikelById (int artikelId);
+    protected abstract String getUpdateArtikelPrijsSQL ();
     
-    public abstract boolean findArtikelId (int artikelId);
-    
-    public abstract int getMaxArtikelId ();
-        
-    public abstract boolean updateArtikelAll (ArtikelPojo artikel);
-    
-    public abstract boolean updateArtikelNaam (String naam, int id);
-    
-    public abstract boolean updateArtikelPrijs (double prijs, int id);
-    
-    public abstract boolean updateArtikelVoorraad (int voorraad, int id);
+    protected abstract String getUpdateArtikelVoorraadSQL ();
 
-    public abstract boolean deleteArtikel (int id);
+    protected abstract String getDeleteArtikelSQL ();
     
-    public abstract ArrayList <ArtikelPojo> getAllArticles();
-
-//method calls    
-    public boolean createArtikelMySQL (ArtikelPojo artikel) {
-        try (Connection conn = Connector.getConnection()) {
-            String sql = getCreateArtikelMySQL();
-            PreparedStatement pstmt = conn.prepareStatement (sql);
-            
-            pstmt.setString (1, artikel.getNaam());
-            pstmt.setDouble (2, artikel.getPrijs());
-            pstmt.setInt (3, artikel.getVoorraad());
-            
-            if( pstmt.executeUpdate() == 0) {
-                throw new Exception("Adding article to database failed.");
-            }            
-            return true;
-
-        } catch (Exception ex) {
-            logger.error("Create article failed: " + ex );
-            return false;
-            }
-        }
-    
-    public boolean createArtikelMimerSQL (ArtikelPojo artikel) {
+    // utility methods    
+    public boolean isArtikelInDatabase (int artikelId) {
         
         try (Connection conn = Connector.getConnection()) {
-            String sql = getCreateArtikelMimerSQL();
-            PreparedStatement pstmt = conn.prepareStatement (sql);
             
-            artikel.setId(getMaxIdArtikel(artikel)+1);
-            pstmt.setInt (1, artikel.getId());
-            pstmt.setString (2, artikel.getNaam());
-            pstmt.setDouble (3, artikel.getPrijs());
-            pstmt.setInt (4, artikel.getVoorraad());
+            String sql = getIsArtikelInDatabaseSQL();
+            PreparedStatement pstmt = conn.prepareStatement(sql);            
+            pstmt.setInt (1, artikelId);
             
-            if (pstmt.executeUpdate() == 0) {
-                throw new Exception ("Adding article to database failed.");
-            }
-            return true;
+            pstmt.executeQuery();
+            
+            if (pstmt.executeQuery() != null) {
+                return true;
+            } 
         } catch (Exception ex) {
-            logger.error ("Create article failed: "+ex);
-            return false;
+            logger.warn ("Article not found: "+ ex);
         }
+        return false;
     }
     
-    private int getMaxIdArtikel (ArtikelPojo artikel) {
+    public int getMaxIdArtikel () {
+        int max = 0;
         try (Connection conn = Connector.getConnection()) {
-            String sql = getMaxIdArtikelSQL();
+            String sql = getMaxArtikelIdSQL();
             PreparedStatement pstmt = conn.prepareStatement (sql);
-            if(pstmt.executeQuery() == null) {
-                throw new Exception ("Niet gevonden.");
-                }
-            //pstmt.setInt(1, artikel.getId());
-            int max = artikel.getId();
-            return max;
+      
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                max = rs.getInt(1); //probably nullpointer as it is?
             }
+        }
         catch (Exception ex) {
             logger.error ("Geen artikelen gevonden: "+ex);
             return 0;
         }
+        return max;
     }
     
-    @Override
-    public int createArtikelWithReturnId (ArtikelPojo artikel) {
-        String sql = "INSERT INTO Artikel (Naam, Prijs, Voorraad)"
-                + " VALUES ("
-                        + "'" + artikel.getNaam () + "',"
-                        + "'" + artikel.getPrijs () + "',"
-                        + "'" + artikel.getVoorraad () + "');";
-        try {
-            int key = MySQLConnection.getMySQLConnection().createAndReturnID(sql);
-            return key;
-        } catch (Exception ex) {
-            logger.error ("Aanmaken van nieuw artikel is mislukt: "+ex);
-            return 0;
-        }
-    }
-    
-    @Override
-    public ArtikelPojo getArtikelById (int artikelId) {
-        ArtikelPojo ap = new ArtikelPojo ();
-        String sql = "SELECT * FROM Artikel " + "WHERE Deleted = 0 AND idArtikel = "+artikelId;
-
-        try {
-            ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
+    public ArtikelPojo getArtikel (int id) {
+        ArtikelPojo ap  = new ArtikelPojo ();
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getArtikelByIdSQL ();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setInt (1, id);
+            
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 fillPojo (rs, ap);
             }
+        } catch (SQLException ex) {
+            logger.error("Artikel niet gevonden." +ex);
+            return null;
         }
-            catch (SQLException ex) {
-                logger.warn ("Artikel niet gevonden: "+ex);
-                }
         return ap;
-    }    
-    
-    @Override
-    public boolean findArtikelId (int artikelId) {
-        String sql = "SELECT * FROM Artikel" + " WHERE Deleted = 0 AND idArtikel = " + artikelId;
-        try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
-            return rs != null; 
-        } catch (Exception ex) {
-            logger.warn ("Artikel niet gevonden: "+ ex);
-                return false;
-                }
-        }
-    
-    @Override
-    public int getMaxArtikelId () {
-        String sql = "SELECT idArtikel FROM Artikel WHERE idArtikel = (SELECT MAX(idArtikel) FROM Artikel)";
-        try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
-            int max = 0;
-            if (rs.next()) {
-                max = rs.getInt(1);
-            }
-            return max;
-        } catch (Exception ex) {
-            logger.warn ("Artikelid is niet in database "+ ex);
-            return 0;
-        }
     }
     
-    @Override
-    public boolean updateArtikelAll (ArtikelPojo artikel) {
-        String sql = "UPDATE Artikel SET "
-                + "Naam = '" + artikel.getNaam()+ "', "
-                + "Prijs = '" + artikel.getPrijs() + "', "
-                + "Voorraad = '" + artikel.getVoorraad () + "'"
-                + "WHERE idArtikel = '"+artikel.getId()+ "';";
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
-        } catch (Exception ex) {
-            logger.error ("Wijzigen van artikel is mislukt: "+ex);
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean updateArtikelNaam (String naam, int id) {
-        String sql = "UPDATE Artikel SET Naam = '" + naam + "' "
-                   + "WHERE idArtikel = " + id;
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
-        } catch (Exception ex) {
-            logger.error ("Wijzigen van naam artikel is mislukt: "+ex);
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean updateArtikelPrijs (double prijs, int id) {
-        String sql = "UPDATE Artikel SET Prijs = '" + prijs + "' "
-                   + "WHERE idArtikel = " + id;
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
-        } catch (Exception ex) {
-            logger.error ("Wijzigen van prijs artikel is mislukt: "+ex);
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean updateArtikelVoorraad (int voorraad, int id) {
-        String sql = "UPDATE Artikel SET Voorraad = '" + voorraad + "' "
-                   + "WHERE idArtikel = " + id;
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql); //syntax error
-        } catch (Exception ex) {
-            logger.error ("Wijzigen van voorraad artikel is mislukt: "+ex);
-            return false;
-        }
-        return true;
-    }   
-
-    @Override
-    public boolean deleteArtikel (int id) {
-        String sql = "UPDATE Artikel SET Deleted = 1 WHERE idArtikel = " + id;
-        try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
-        } catch (Exception ex) {
-            logger.error ("Verwijderen van artikel is mislukt: "+ex);
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
     public ArrayList <ArtikelPojo> getAllArticles() {
-        String sql = "SELECT * FROM Artikel WHERE Deleted = 0";
-        ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
+        
         ArrayList <ArtikelPojo> list = new ArrayList <>();
         
-        if (result == null) {
-            System.out.println("Geen artikelen gevonden.");
-        }
-        try {
-            while (result.next()) {       
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getArtikelForArrayListSQL ();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {       
                 ArtikelPojo am = new ArtikelPojo();
-                fillPojo (result, am);
+                fillPojo (rs, am);
                 list.add(am);
             }
         }
@@ -251,12 +127,209 @@ public abstract class SuperArtikelDao {
             }
         return list;
     }
-        
+    
     private void fillPojo (ResultSet result, ArtikelPojo artikelPojo) throws SQLException {
         artikelPojo.setId (result.getInt ("idArtikel"));
         artikelPojo.setNaam (result.getString ("Naam"));
         artikelPojo.setPrijs (result.getDouble ("Prijs"));
         artikelPojo.setVoorraad (result.getInt("Voorraad"));
     }
- }
+    
+    // CRUD methods    
+    public int createArtikelWithReturnId (ArtikelPojo artikel) {            
+            //MySQL and Mimer need different handling of creating an article
+            //because Mimer free version can only handle one statement per query
+            //and trigger for auto-increment needs (to be) a sequence for which
+            //databank rights are needed (which seemingly cannot be granted to
+            //development user.
+            String type = ConfigVars.getDbType();
+            
+            if (type.equals("MySQL")) {
+                return createArticleWithReturnIdMySQL(artikel);
+            } else {
+                if (type.equals("Mimer")) {
+                    return returnCreatedArticleIdMimerSQL(artikel);
+            }
+        } return 0;
+    }
+    
+    private int createArticleWithReturnIdMySQL (ArtikelPojo artikel) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getCreateArtikelMySQL();
+            PreparedStatement pstmt = conn.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            
+            pstmt.setString (1, artikel.getNaam());
+            pstmt.setDouble (2, artikel.getPrijs());
+            pstmt.setInt (3, artikel.getVoorraad());
+            
+            pstmt.executeUpdate();
+            ResultSet generatedKeys = pstmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            logger.error ("Create article failed: "+ex);
+            return 0;
+        }
+    }
+    
+    private boolean createArtikelMimerSQL (ArtikelPojo artikel) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getCreateArtikelMimerSQL();
+            PreparedStatement pstmt = conn.prepareStatement (sql);
+            
+            artikel.setId(getMaxIdArtikel()+1); //workaround for auto-increment which Mimer does not have
+            pstmt.setInt (1, artikel.getId());
+            pstmt.setString (2, artikel.getNaam());
+            pstmt.setDouble (3, artikel.getPrijs());
+            pstmt.setInt (4, artikel.getVoorraad());
+            
+            if (pstmt.executeUpdate() == 0) {
+                throw new SQLException();
+            }
+            return true;
+        } catch (Exception ex) {
+            logger.error ("Create article failed: "+ex);
+            return false;
+        }
+    }
+    
+    private int returnCreatedArticleIdMimerSQL (ArtikelPojo artikel) {
+        
+        if (createArtikelMimerSQL(artikel)) {
+            return getMaxIdArtikel();
+        } else {
+            return 0;
+        }
+    }
+    
+    public boolean updateArtikelNPV (ArtikelPojo artikel) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getUpdateArtikelNPVSQL();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setString (1, artikel.getNaam());
+            pstmt.setDouble(2, artikel.getPrijs());
+            pstmt.setInt(3, artikel.getVoorraad());
+            pstmt.setInt (4, artikel.getId());
+            
+            pstmt.executeUpdate();
+        }            
+        catch (Exception ex) {
+            logger.error ("Wijzigen van artikel is mislukt: "+ex);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean updateArtikelNaam (String naam, int id) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getUpdateArtikelNaamSQL ();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setString (1, naam);
+            pstmt.setInt (2, id);
+            
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            logger.error ("Wijzigen van naam artikel is mislukt: "+ex);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean updateArtikelPrijs (double prijs, int id) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getUpdateArtikelPrijsSQL();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setDouble(1, prijs);
+            pstmt.setInt (2, id);
+            
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            logger.error ("Wijzigen van prijs artikel is mislukt: "+ex);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean updateArtikelVoorraad (int voorraad, int id) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getUpdateArtikelVoorraadSQL();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setInt (1, voorraad);
+            pstmt.setInt (2, id);
+            
+            pstmt.executeUpdate();
+            
+        } catch (Exception ex) {
+            logger.error ("Wijzigen van voorraad artikel is mislukt: "+ex);
+            return false;
+        }
+        return true;
+    }   
 
+    public boolean deleteArtikel (int id) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = getDeleteArtikelSQL();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setInt(1, id);
+            
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            logger.error ("Verwijderen van artikel is mislukt: "+ex);
+            return false;
+        }
+        return true;
+    }
+    
+    //public ArtikelPojo getArtikelForArrayList (int artikelId) {
+    //    ArtikelPojo ap = new ArtikelPojo ();
+        
+    //    try (Connection conn = Connector.getConnection()) {
+    //        String sql = getArtikelForArrayListSQL ();
+    //        PreparedStatement pstmt = conn.prepareStatement(sql);
+    //        pstmt.setInt(1, artikelId);
+    //        
+    //        ResultSet rs = pstmt.executeQuery();
+    //        
+    //        if (rs.next()) {
+    //            fillPojo (rs, ap);
+    //        }
+    //    }
+    //        catch (SQLException ex) {
+    //            logger.warn ("Artikel niet gevonden: "+ex);
+    //            }
+    //    return ap;
+    //}
+    
+    //public boolean createArtikelMySQL (ArtikelPojo artikel) {
+    //    try (Connection conn = Connector.getConnection()) {
+    //        String sql = getCreateArtikelMySQL();
+    //        PreparedStatement pstmt = conn.prepareStatement (sql);
+    //      pstmt.setString (1, artikel.getNaam());
+    //      pstmt.setDouble (2, artikel.getPrijs());
+    //      pstmt.setInt (3, artikel.getVoorraad());
+    //      if( pstmt.executeUpdate() == 0) {
+    //            throw new Exception("Adding article to database failed.");
+    //        }            
+    //        return true;
+    //    } catch (Exception ex) {
+    //        logger.error("Create article failed: " + ex );
+    //        return false;
+    //        }
+    //    }
+}

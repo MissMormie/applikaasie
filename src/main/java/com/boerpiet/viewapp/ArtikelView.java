@@ -5,9 +5,8 @@
  */
 package com.boerpiet.viewapp;
 
-import com.boerpiet.dao.artikel.ArtikelDaoFactory;
+import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.ArtikelPojo;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,15 +16,14 @@ public class ArtikelView {
     
     //show list of articles or just one article
     public void showArticle (int artikelId) {
-        ArtikelPojo ap = ArtikelDaoFactory.getArtikelDAO("MySQL").getArtikelById(artikelId);
+        ArtikelModel am = new ArtikelModel();
         
+        ArtikelPojo ap = am.getArtikel(artikelId);
         showArtikelListHeader ();
         showArticleProperties (ap);  
     }
     
     private void showArticleProperties (ArtikelPojo ap) {
-        showDivider ();
-        showArtikelListHeader ();        
         
         System.out.printf("%-3s %-25s %-10s %s \n", 
                 ap.getId(), 
@@ -33,17 +31,15 @@ public class ArtikelView {
                 ap.getPrijs(),
                 ap.getVoorraad());
     }
-    
+
     public void showAllArticles () {
-        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
-        showAllArticlesList(aList);
-    }
-    
-    private void showAllArticlesList (ArrayList<ArtikelPojo> artikelList) {
+        ArtikelModel am = new ArtikelModel ();
+        
         showDivider();
         showArtikelListHeader();
-        for (ArtikelPojo ap : artikelList) {
-            showPropertiesOfArticles(ap);
+       
+        for (ArtikelPojo ap : am.getAllArticles()) {
+            showPropertiesOfArticles (ap);
         }
         System.out.println();
     }

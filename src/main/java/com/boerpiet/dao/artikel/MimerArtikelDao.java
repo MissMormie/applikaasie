@@ -5,79 +5,65 @@
  */
 package com.boerpiet.dao.artikel;
 
-import com.boerpiet.domeinapp.ArtikelPojo;
-import java.util.ArrayList;
-
 /**
  *
  * @author Peaq
  */
 public class MimerArtikelDao extends SuperArtikelDao {
+    //utility strings
+    @Override
+    protected String getIsArtikelInDatabaseSQL () {
+        return "SELECT idArtikel FROM Artikel WHERE idArtikel = ?";
+    }
     
+    @Override
+    protected String getArtikelByIdSQL () {
+        return "SELECT * FROM Artikel WHERE Deleted = false AND idArtikel = ?;";
+    }
+    
+    @Override
+    protected String getMaxArtikelIdSQL () {
+        return "SELECT idArtikel FROM Artikel WHERE idArtikel = (SELECT MAX(idArtikel) FROM Artikel);";
+    }
+    
+    @Override
+    protected String getArtikelForArrayListSQL () {
+        return "SELECT * FROM Artikel WHERE Deleted = false;";
+    }
+    
+    //CRUD strings    
     @Override
     protected String getCreateArtikelMySQL () {
-        throw new UnsupportedOperationException ("Not supported here.");
+        throw new UnsupportedOperationException ("Not valid here.");
     }
-        
+    
     @Override
     protected String getCreateArtikelMimerSQL () {
-        return "INSERT INTO Artikel (idArtikel, Naam, Prijs, Voorraad) VALUES (?, ?, ?, ?)";
+        return "INSERT INTO Artikel (idArtikel, Naam, Prijs, Voorraad) VALUES (?, ?, ?, ?);";
     }
     
     @Override
-    protected String getMaxIdArtikelSQL () {
-        return "Select max(idArtikel) FROM Artikel;";
+    protected String getUpdateArtikelNPVSQL () {
+        return "UPDATE Artikel SET (Naam, Prijs, Voorraad) = (?, ?, ?) WHERE idArtikel = ?;";
     }
-    
-    private
     
     @Override
-    public int createArtikelWithReturnId (ArtikelPojo artikel) {
-        throw new UnsupportedOperationException ("Not supported yet.");
+    protected String getUpdateArtikelNaamSQL () {
+        return "UPDATE Artikel SET Naam = ? WHERE idArtikel = ?;";
     }
+    
+    @Override
+    protected String getUpdateArtikelPrijsSQL () {
+        return "UPDATE Artikel SET Prijs = ? WHERE idArtikel = ?;";
+    }
+    
+    @Override
+    protected String getUpdateArtikelVoorraadSQL () {
+        return "UPDATE Artikel SET Voorraad = ? WHERE idArtikel = ?;";
+    }   
 
     @Override
-    public ArtikelPojo getArtikelById (int artikelId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected String getDeleteArtikelSQL () {
+        return "UPDATE Artikel SET Deleted = true WHERE Deleted = false AND idArtikel = ?;";
     }
-    
-    @Override
-    public boolean findArtikelId (int artikelId) {
-        throw new UnsupportedOperationException("Not supported yet");
-    }
-    
-    @Override
-    public int getMaxArtikelId () {
-        throw new UnsupportedOperationException("Not supported yet");
-    }
-
-    @Override
-    public boolean updateArtikelAll (ArtikelPojo artikel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public boolean updateArtikelNaam (String naam, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public boolean updateArtikelPrijs (double prijs, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public boolean updateArtikelVoorraad (int voorraad, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean deleteArtikel(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public ArrayList <ArtikelPojo> getAllArticles(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-}
+ }
