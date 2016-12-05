@@ -7,7 +7,6 @@ package com.boerpiet.dao;
 
 import com.boerpiet.utility.ConfigVars;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.mchange.v2.c3p0.impl.C3P0Defaults;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.beans.PropertyVetoException;
@@ -36,7 +35,7 @@ public class Connector {
         if(ConfigVars.getConnectionType().equals("JDBC"))
             setUpJDBC();
         else if (ConfigVars.getConnectionType().equals("c3po"))
-            setUpC3po();
+            setUpC3p0();
         else if (ConfigVars.getConnectionType().equals("HikariCP"))
             setUpHikariCP();
     }
@@ -45,7 +44,7 @@ public class Connector {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private static void setUpC3po() {
+    private static void setUpC3p0() {
         
         Logger logger = LoggerFactory.getLogger(Connector.class);
         
