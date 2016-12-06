@@ -53,7 +53,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
     @Override
     public BestellingPojo getBestellingById (int idBestelling) {
         BestellingPojo b = new BestellingPojo ();
-        String sql = "SELECT * FROM Bestelling" + " WHERE Deleted = 0 AND Bezorgd = 0 AND idBestelling = "+idBestelling;
+        String sql = "SELECT * FROM Bestelling" + " WHERE Deleted = 0 AND "
+                + "Afgehandeld = 0 AND idBestelling = "+idBestelling;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
         b.setId (rs.getInt(1));
         b.setKlantKey (rs.getInt(2));
@@ -98,7 +99,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
     
     @Override
     public int getMaxBestellingId () {
-        String sql = "SELECT idBestelling FROM Bestelling WHERE idBestelling  = (SELECT MAX(idBestelling) FROM Bestelling)";
+        String sql = "SELECT idBestelling FROM Bestelling WHERE idBestelling  = "
+                + "(SELECT MAX(idBestelling) FROM Bestelling)";
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             int max  = 0;
             if (rs.next()) {
@@ -153,10 +155,13 @@ public class SqlBestellingDao extends SuperBestellingDao {
             BestellingPojo bp = new BestellingPojo();
             fillPojoKlantId (result, bp);
             list.add(bp);
-        }
-        }   catch (SQLException ex) {
-            logger.error("Kon geen bestellingslijst maken: "+ex);
+            if (list.isEmpty()) {
+                return null;
             }
+        }
+    }   catch (SQLException ex) {
+            logger.error("Kon geen bestellingslijst maken: "+ex);
+        }
         return list;       
     }
 

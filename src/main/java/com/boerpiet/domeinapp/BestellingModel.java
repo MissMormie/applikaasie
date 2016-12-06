@@ -125,9 +125,23 @@ public class BestellingModel {
     private void deleteArticlesFromOrder (int bestelId) {
         ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
-        for (BestelArtikelPojo baPojo : baList) {
-            BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
+        
+        if (checkOAIdByOrderId (bestelId)) {       
+            for (BestelArtikelPojo baPojo : baList) {
+                BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
             }
+        }
+    }
+    
+    public boolean checkOAIdByOrderId (int bestelId) {
+        ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId(bestelId);
+        if (baList.isEmpty()) {
+            bv.showNoOAIdById();
+            
+            return false;
+        }
+        return true;
     }
     
     //check bestellingid adhv klantid

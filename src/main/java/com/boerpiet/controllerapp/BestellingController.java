@@ -16,7 +16,6 @@ import com.boerpiet.viewapp.BestelArtikelView;
 import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.KlantenView;
 import java.sql.Date;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -160,9 +159,14 @@ public class BestellingController {
         bv.showOrderIdToModify();
         int bestelId = inputOrderIdInDatabaseCheck(klantId);
         
+        if (!bm.checkOAIdByOrderId(bestelId)) {
+            modifyArticleFromOrderByKlant(klantId);
+        }
+        
         bv.showAllBestelRegelsByBestelId(bestelId);
+        
         bav.showInputOAIdToModify();
-        int regelId = bac.inputOAIdInDatabaseCheck();
+        int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
         
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
@@ -173,12 +177,12 @@ public class BestellingController {
         if (aantal >0) {
             bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
             logger.info (" Bestelregel gewijzigd door "
-                    + lm.getAccountPojo().getGebruikersnaam() +" " + klantId);
-        } else {
-            av.showGiveNumber();
-            modifyArticleFromOrderByKlant (klantId);
+                + lm.getAccountPojo().getGebruikersnaam() +" " + klantId);
+            } else {
+                av.showGiveNumber();
+                modifyArticleFromOrderByKlant (klantId);
+            }
         }
-    }
     
     public void deleteOrderByKlant () {
         
@@ -219,9 +223,13 @@ public class BestellingController {
         bv.showOrderIdToDelete();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkOAIdByOrderId(bestelId)) {
+            deleteOAFromOrderByKlant (klantId);
+        }
+        
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();
-        int brId = bac.inputOAIdInDatabaseCheck();
+        int brId = bac.inputOAIdInDatabaseCheck(bestelId);
         
         if (deleteConfirmed()) {
             bm.deleteOA (klantId, brId, bestelId);
@@ -364,9 +372,13 @@ public class BestellingController {
         bv.showOrderIdToModify();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkOAIdByOrderId(bestelId)) {
+            modifyArticleFromOrder ();
+        }
+        
         bv.showAllBestelRegelsByBestelId(bestelId);        
         bav.showInputOAIdToModify();
-        int regelId = bac.inputOAIdInDatabaseCheck();
+        int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
         
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
@@ -423,9 +435,13 @@ public class BestellingController {
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkOAIdByOrderId(bestelId)) {
+            deleteOneTupelFromOrder ();
+        }
+        
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();        
-        int brId = bac.inputOAIdInDatabaseCheck();
+        int brId = bac.inputOAIdInDatabaseCheck(bestelId);
         
         if (deleteConfirmed ()) {
             bm.deleteOA(klantId, brId, bestelId); 
