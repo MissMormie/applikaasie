@@ -27,9 +27,9 @@ and open the template in the editor.
     <connections>
         <connection default="false" type="jdbc">
         </connection>
-        <connection default="true" type="c3po">
+        <connection default="false" type="c3po">
         </connection>
-        <connection default="false" type="HikariCP">
+        <connection default="true" type="HikariCP">
         </connection>
     </connections>
 </root>

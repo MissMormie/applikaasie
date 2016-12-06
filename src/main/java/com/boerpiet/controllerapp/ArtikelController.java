@@ -272,7 +272,7 @@ public class ArtikelController {
     private double inputDoubleCheck (String string) {
         av = new ArtikelView ();
         
-        if (Validator.isValidDouble(string)) {
+        if (Validator.isValidDouble(string) && Validator.doubleHasMaxTwoDecimals(string)) {
             return Double.parseDouble(string);
         } else {
             av.showGivePrijs ();

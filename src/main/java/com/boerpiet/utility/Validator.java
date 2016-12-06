@@ -5,6 +5,7 @@
  */
 package com.boerpiet.utility;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -71,5 +72,20 @@ public class Validator {
     public static boolean isValidPostcode(String postcode) {
         String regex ="[1-9][0-9]{3}\\s?\\w\\w";
         return postcode.matches(regex);
-    }    
+    }
+    
+    public static boolean doubleHasMaxTwoDecimals (String input) {
+        
+        try {
+            DecimalFormat df = new DecimalFormat ("#.00");
+            int decimals = (df.format(df.parse(input)).length() -1);
+            if (decimals >= 0 && decimals <=2) {
+                return true;
+            }
+        }
+        catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }

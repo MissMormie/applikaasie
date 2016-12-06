@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 public abstract class SuperArtikelDao {
     
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    //DecimalFormat df = new DecimalFormat("#.00");
     
     // utility strings
     protected abstract String getIsArtikelInDatabaseSQL ();
@@ -212,14 +213,14 @@ public abstract class SuperArtikelDao {
     }
     
     public boolean updateArtikelNPV (ArtikelPojo artikel) {
-        
+
         try (Connection conn = Connector.getConnection()) {
             String sql = getUpdateArtikelNPVSQL();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             
             pstmt.setString (1, artikel.getNaam());
-            pstmt.setDouble(2, artikel.getPrijs());
-            pstmt.setInt(3, artikel.getVoorraad());
+            pstmt.setDouble (2, artikel.getPrijs());
+            pstmt.setInt (3, artikel.getVoorraad());
             pstmt.setInt (4, artikel.getId());
             
             pstmt.executeUpdate();
@@ -254,7 +255,7 @@ public abstract class SuperArtikelDao {
             String sql = getUpdateArtikelPrijsSQL();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             
-            pstmt.setDouble(1, prijs);
+            pstmt.setDouble (1, prijs);
             pstmt.setInt (2, id);
             
             pstmt.executeUpdate();
@@ -298,41 +299,4 @@ public abstract class SuperArtikelDao {
         }
         return true;
     }
-    
-    //public ArtikelPojo getArtikelForArrayList (int artikelId) {
-    //    ArtikelPojo ap = new ArtikelPojo ();
-        
-    //    try (Connection conn = Connector.getConnection()) {
-    //        String sql = getArtikelForArrayListSQL ();
-    //        PreparedStatement pstmt = conn.prepareStatement(sql);
-    //        pstmt.setInt(1, artikelId);
-    //        
-    //        ResultSet rs = pstmt.executeQuery();
-    //        
-    //        if (rs.next()) {
-    //            fillPojo (rs, ap);
-    //        }
-    //    }
-    //        catch (SQLException ex) {
-    //            logger.warn ("Artikel niet gevonden: "+ex);
-    //            }
-    //    return ap;
-    //}
-    
-    //public boolean createArtikelMySQL (ArtikelPojo artikel) {
-    //    try (Connection conn = Connector.getConnection()) {
-    //        String sql = getCreateArtikelMySQL();
-    //        PreparedStatement pstmt = conn.prepareStatement (sql);
-    //      pstmt.setString (1, artikel.getNaam());
-    //      pstmt.setDouble (2, artikel.getPrijs());
-    //      pstmt.setInt (3, artikel.getVoorraad());
-    //      if( pstmt.executeUpdate() == 0) {
-    //            throw new Exception("Adding article to database failed.");
-    //        }            
-    //        return true;
-    //    } catch (Exception ex) {
-    //        logger.error("Create article failed: " + ex );
-    //        return false;
-    //        }
-    //    }
 }
