@@ -116,7 +116,7 @@ public class BestellingModel {
         
         if (BestellingDaoFactory.getBestellingDAO("MySQL").deleteBestelling(bestelId)) {
             bv.showDeleteOrderSuccess();
-            bv.showAllOrdersByKlantId(klantId);            
+            bv.orderListByKlantId(klantId);            
         } else {
             bv.showErrorMessage();
         }
@@ -126,14 +126,12 @@ public class BestellingModel {
         ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
         
-        if (checkOAIdByOrderId (bestelId)) {       
-            for (BestelArtikelPojo baPojo : baList) {
+        for (BestelArtikelPojo baPojo : baList) {
                 BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
             }
         }
-    }
     
-    public boolean checkOAIdByOrderId (int bestelId) {
+    public boolean checkNotEmptyOAListByOrderId (int bestelId) {
         ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
         if (baList.isEmpty()) {
@@ -143,14 +141,36 @@ public class BestellingModel {
         return true;
     }
     
-    public boolean checkOrderIdByKlantId (int klantId) {
+    public boolean checkOAIdByOrderId (int bestelId, int OAId) {
+        ArrayList<BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId (bestelId);
+        for (BestelArtikelPojo bp : baList) {
+            if (bp.getId() == OAId) {
+                return true;                
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkNotEmptyOrderListByKlantId (int klantId) {
         ArrayList<BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").
                 getAllByKlantId(klantId);
         if (bList.isEmpty()) {
-            bv.showNoOrderIdByKlantId (klantId);
+            bv.showEmptyOrderListByKlantId (klantId);
             return false;
         }
         return true;
+    }
+    
+    public boolean checkOrderIdByKlantId (int klantId, int bestelId) {
+        ArrayList<BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").
+                getAllByKlantId(klantId);
+        for (BestellingPojo bp  : bList) {
+            if (bp.getId() == bestelId) {
+                return true;
+            }
+        }
+        return false;
     }
     
     //check bestellingid adhv klantid

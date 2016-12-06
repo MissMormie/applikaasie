@@ -127,14 +127,20 @@ public class BestellingController {
         ac = new ArtikelController (new ArtikelModel(), lm);
         av = new ArtikelView ();
         
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            addArticleToOrderByKlant (klantId);
-        }
-        
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId (klantId);
+        bv.orderListByKlantId(klantId);
+
         bv.showOrderIdToAddArticle();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            addArticleToOrderByKlant (klantId);
+        }
+        
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            addArticleToOrderByKlant (klantId);
+        }
+                
         av.showAllArticles();
         av.showInputArticleIdToAddToOrder();
         int artikelId = ac.inputArtikelIdInDatabaseCheck();
@@ -159,22 +165,25 @@ public class BestellingController {
         bac = new BestelArtikelController ();
         ac = new ArtikelController (new ArtikelModel(), lm);
         
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            modifyArticleFromOrderByKlant (klantId);
-        }
-        
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToModify();
         int bestelId = inputOrderIdInDatabaseCheck(klantId);
         
-        if (!bm.checkOAIdByOrderId(bestelId)) {
-            modifyArticleFromOrderByKlant(klantId);
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            modifyArticleFromOrderByKlant (klantId);
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            modifyArticleFromOrderByKlant (klantId);
         }
         
         bv.showAllBestelRegelsByBestelId(bestelId);
-        
-        bav.showInputOAIdToModify();
+        bav.showInputOAIdToModify();        
         int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
+        
+        if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
+            modifyArticleFromOrderByKlant(klantId);
+        }
         
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
@@ -227,15 +236,15 @@ public class BestellingController {
         av = new ArtikelView ();
         bav = new BestelArtikelView ();
         
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            deleteOAFromOrderByKlant (klantId);
-        }
+        bv.orderListByKlantId(klantId);
+        bv.showOrderIdToDelete();
         
-        bv.showAllOrdersByKlantId(klantId);
-        bv.showOrderIdToDelete();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
-        if (!bm.checkOAIdByOrderId(bestelId)) {
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            deleteOAFromOrderByKlant (klantId);
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
             deleteOAFromOrderByKlant (klantId);
         }
         
@@ -243,6 +252,10 @@ public class BestellingController {
         bav.showInputOAIdToDelete();
         int brId = bac.inputOAIdInDatabaseCheck(bestelId);
         
+        if (!bm.checkOAIdByOrderId(bestelId, brId)) {
+            deleteOAFromOrderByKlant (klantId);
+        }
+
         if (deleteConfirmed()) {
             bm.deleteOA (klantId, brId, bestelId);
             logger.info (" Bestelregel " + brId + "verwijderd van bestelling door " 
@@ -254,13 +267,17 @@ public class BestellingController {
     private void deleteTotalOrderByKlant (int klantId) {
         bv = new BestellingView ();
         
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            deleteTotalOrderByKlant (klantId);
-        }
-        
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
+        
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            deleteTotalOrderByKlant (klantId);
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteTotalOrderByKlant (klantId);
+        }
         
         if (deleteConfirmed()) {
             bm.deleteOrder (klantId, bestelId);
@@ -299,7 +316,7 @@ public class BestellingController {
         ac = new ArtikelController (new ArtikelModel(), lm);
         av = new ArtikelView ();
          
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
         
         Date sqlDatum = inputDateCheck();
         
@@ -311,6 +328,8 @@ public class BestellingController {
         
         if (aantal >0) {
             bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
+            logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
+                    +" "+ lm.getAccountPojo().getIdAccount());
         } else {
             av.showGiveNumber();
             makeNewOrder (accountId);
@@ -350,16 +369,20 @@ public class BestellingController {
         bav = new BestelArtikelView ();
         bac = new BestelArtikelController ();
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
         
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            addArticleToOrder ();
-        }
-
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToAddArticle();
         int bestelId = inputOrderIdInDatabaseCheck(klantId);
-                
+        
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            addArticleToOrder ();
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            addArticleToOrder ();
+        }
+        
         av.showAllArticles();
         av.showInputArticleIdToAddToOrder();
         int artikelId = ac.inputArtikelIdInDatabaseCheck();
@@ -386,23 +409,29 @@ public class BestellingController {
         bav = new BestelArtikelView ();
         av = new ArtikelView ();
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
         
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            modifyArticleFromOrder ();
-        }
-        
-        bv.showAllOrdersByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToModify();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
-        if (!bm.checkOAIdByOrderId(bestelId)) {
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            modifyArticleFromOrder ();
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
             modifyArticleFromOrder ();
         }
         
         bv.showAllBestelRegelsByBestelId(bestelId);        
         bav.showInputOAIdToModify();
         int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
+        
+        if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
+            modifyArticleFromOrder ();
+        }
+        if (!bm.checkOAIdByOrderId(bestelId, regelId)) {
+            modifyArticleFromOrder ();
+        }
         
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
@@ -432,7 +461,7 @@ public class BestellingController {
         
         switch (keuze) {
             case 1:
-                deleteOneTupelFromOrder ();
+                deleteOAIdFromOrderId ();
                 deleteOrderOptions ();
                 break;
             case 2:
@@ -447,29 +476,33 @@ public class BestellingController {
         }
     }
     
-    private void deleteOneTupelFromOrder () {
+    private void deleteOAIdFromOrderId () {
         
         bv = new BestellingView ();
         bav = new BestelArtikelView ();
         bac = new BestelArtikelController ();
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
 
-        if (!bm.checkOrderIdByKlantId(klantId)) {
-            deleteOneTupelFromOrder ();
-        }
-
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
-        if (!bm.checkOAIdByOrderId(bestelId)) {
-            deleteOneTupelFromOrder ();
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            deleteOAIdFromOrderId ();
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteOAIdFromOrderId ();
         }
         
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();        
         int brId = bac.inputOAIdInDatabaseCheck(bestelId);
+        
+        if (!bm.checkOAIdByOrderId(bestelId, brId)) {
+            deleteOAIdFromOrderId ();
+        }
         
         if (deleteConfirmed ()) {
             bm.deleteOA(klantId, brId, bestelId); 
@@ -477,18 +510,28 @@ public class BestellingController {
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
-            deleteOneTupelFromOrder ();
+            deleteOAIdFromOrderId ();
         }
     }
 
     private void deleteTotalOrder() {
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            deleteTotalOrder ();
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteTotalOrder ();
+        }
+        if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
+            deleteTotalOrder ();
+        }
         if (deleteConfirmed()) {
             bm.deleteOrder(klantId, bestelId);
             logger.info (" Bestelling " + bestelId + "verwijderd door " 
@@ -558,7 +601,7 @@ public class BestellingController {
     }
     
     //show list of clients and check klantidinput
-    private int klantLijst () {
+    private int selectKlantFromList () {
         KlantenController kc = new KlantenController(new KlantenModel(), new KlantenView());
         KlantModel klant = kc.selectKlant();
         if(klant == null)

@@ -132,7 +132,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
 
     @Override
     public boolean deleteBestelling(int bestelId) {
-        String sql = "UPDATE Bestelling SET Deleted = 1 "
+        String sql = "UPDATE Bestelling SET Deleted = 1 AND Afgehandeld = 1"
                 + " WHERE Deleted = 0 AND idBestelling = " + bestelId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {

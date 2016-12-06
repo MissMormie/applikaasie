@@ -6,6 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.BestelArtikelModel;
+import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.BestelArtikelView;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public class BestelArtikelController {
     
     private BestelArtikelModel bam;
     private BestelArtikelView bav;
+    private BestellingModel bm;
     private final Scanner input = new Scanner (System.in);
     
     public BestelArtikelController (BestelArtikelModel bam) {
@@ -44,11 +46,12 @@ public class BestelArtikelController {
     public int inputOAIdInDatabaseCheck (int bestelId) {
         bav = new BestelArtikelView ();
         bam = new BestelArtikelModel ();
+        bm = new BestellingModel ();
                 
         String bId = input.nextLine();
         int id = inputIntCheck(bId);
         
-        if (bam.checkOAIdInDataBase(bestelId, id)) {
+        if (bm.checkOAIdByOrderId(bestelId, id)) {
             return id;
         } else {
             bav.showOAIdNotBelongingToBestelId ();
