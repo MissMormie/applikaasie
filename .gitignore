@@ -5,3 +5,4 @@
 debug.log
 /logs/rollingfile.log
 /logs/
+/src/main/java/com/boerpiet/viewapp/MimerConnTest.java

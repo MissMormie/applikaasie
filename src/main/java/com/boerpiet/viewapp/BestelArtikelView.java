@@ -26,4 +26,8 @@ public class BestelArtikelView {
     public void showDeleteOASuccess () {
         System.out.println("Artikel is verwijderd van bestelling.");
     }
+    public void showOAIdNotBelongingToBestelId() {
+        System.out.println("Ingevoerde bestelregel hoort niet bij opgegeven bestelid.");
+        System.out.println("Geef bestelregelid: ");
+    }
 }

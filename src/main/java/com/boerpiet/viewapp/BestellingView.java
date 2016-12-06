@@ -97,6 +97,10 @@ public class BestellingView {
     public void showAllBestelRegelsByBestelId (int bestelId) {
         ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
+        if (baList.isEmpty()) {
+            System.out.println("Er zijn geen bestelregels bij dit id.");
+            return;
+        }
         BestellingView bvList = new BestellingView();
         bvList.showBestelLijstByBestelId(baList);
         System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
@@ -148,5 +152,9 @@ public class BestellingView {
     }
     public void showAskSureToDelete() {
         System.out.println("Weet je zeker dat je dit wilt verwijderen? J/N");
+    }
+    public void showNoOAIdById() {
+        System.out.println("Er zijn geen bestelregels bij dit bestelid.");
+        System.out.println("Probeer het opnieuw.");
     }
 }
