@@ -157,7 +157,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                 //als deleted op 1 staat dan is bezorgd =1 noodzakelijk voor het
                 //laten zien van actuele lijst in view, maar het is niet noodzakelijk
                 //daadwerkelijk bezorgd
-                    + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
+                    + "WHERE idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             logger.error ("Verwijderen van bestelregel is mislukt: "+ex);
@@ -169,7 +169,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     @Override
     public void deleteArticleFromOrder (int brId) {
         String sql = "UPDATE BestelArtikel SET Deleted = 1, Bezorgd = 1 "
-                    + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
+                    + "WHERE idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             logger.error ("Verwijderen van bestelregel (void methode) is mislukt: "+ex);

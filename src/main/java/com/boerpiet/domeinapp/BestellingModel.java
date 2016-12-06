@@ -110,7 +110,7 @@ public class BestellingModel {
     public void deleteOrder (int klantId, int bestelId) {
         bv = new BestellingView ();
         bp = new BestellingPojo ();
-        bp.setId(bestelId);
+        //bp.setId(bestelId);
         
         deleteArticlesFromOrder(bestelId);
         

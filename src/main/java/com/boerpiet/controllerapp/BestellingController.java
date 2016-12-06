@@ -258,7 +258,7 @@ public class BestellingController {
 
         if (deleteConfirmed()) {
             bm.deleteOA (klantId, brId, bestelId);
-            logger.info (" Bestelregel " + brId + "verwijderd van bestelling door " 
+            logger.info (" Bestelregel " + brId + " verwijderd van bestelling door " 
                     + klantId + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         }
@@ -281,7 +281,7 @@ public class BestellingController {
         
         if (deleteConfirmed()) {
             bm.deleteOrder (klantId, bestelId);
-            logger.info (" Bestelling " + bestelId + "verwijderd door "
+            logger.info (" Bestelling " + bestelId + " verwijderd door "
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         }
@@ -391,7 +391,7 @@ public class BestellingController {
         
         if (aantal >0) {
             bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
-            logger.info (" Bestelregel " + bestelId + "toegevoegd aan bestelling door " 
+            logger.info (" Artikel " + artikelId + " toegevoegd aan bestelling door " 
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
             
@@ -441,8 +441,8 @@ public class BestellingController {
         
         if (aantal >0) {
             bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
-            logger.info (" Bestelregel " + bestelId + "gewijzigd in bestelling door " 
-                    + lm.getAccountPojo().getGebruikersnaam()
+            logger.info (" Bestelregel " + regelId + " gewijzigd in bestelling "+bestelId
+                    + " door "+ lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
             av.showGiveNumber();
@@ -506,8 +506,8 @@ public class BestellingController {
         
         if (deleteConfirmed ()) {
             bm.deleteOA(klantId, brId, bestelId); 
-            logger.info (" Bestelregel " + bestelId + "verwijderd van bestelling door " 
-                    + lm.getAccountPojo().getGebruikersnaam()
+            logger.info (" Bestelregel " + brId + "verwijderd van bestelling "
+                    + bestelId + "door " + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
             deleteOAIdFromOrderId ();
@@ -529,12 +529,10 @@ public class BestellingController {
         if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
             deleteTotalOrder ();
         }
-        if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
-            deleteTotalOrder ();
-        }
+
         if (deleteConfirmed()) {
             bm.deleteOrder(klantId, bestelId);
-            logger.info (" Bestelling " + bestelId + "verwijderd door " 
+            logger.info (" Bestelling " + bestelId + " verwijderd door " 
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {

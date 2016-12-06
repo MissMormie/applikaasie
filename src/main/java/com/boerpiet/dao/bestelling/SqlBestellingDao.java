@@ -5,6 +5,7 @@
  */
 package com.boerpiet.dao.bestelling;
 
+import com.boerpiet.dao.Connector;
 import com.boerpiet.dao.MySQLConnection;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;
@@ -132,8 +133,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
 
     @Override
     public boolean deleteBestelling(int bestelId) {
-        String sql = "UPDATE Bestelling SET Deleted = 1 AND Afgehandeld = 1"
-                + " WHERE Deleted = 0 AND idBestelling = " + bestelId;
+        String sql = "UPDATE Bestelling SET Deleted = 1, Afgehandeld = 1"
+                + " WHERE idBestelling = " + bestelId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
             logger.error ("Verwijderen van bestelling is mislukt: "+ex);
@@ -146,12 +147,15 @@ public class SqlBestellingDao extends SuperBestellingDao {
     public ArrayList <BestellingPojo> getAllByKlantId (int klantId) {
         String sql = "SELECT idBestelling, BestelDatum FROM Bestelling "
                    + "WHERE Deleted = 0 AND Afgehandeld = 0 AND KlantKey = "+klantId;
-        ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
+            
         ArrayList<BestellingPojo> list = new ArrayList<>();
-        if (result == null) {
+       
+        try {
+            ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
+            if (result == null) {
             System.out.println("Geen bestelling gevonden voor dit klantid.");
-        }
-        try { while (result.next()) {
+            }            
+            while (result.next()) {
             BestellingPojo bp = new BestellingPojo();
             fillPojoKlantId (result, bp);
             list.add(bp);
