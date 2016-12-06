@@ -70,7 +70,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     }
 
     @Override
-    public boolean findOAIdByBestelId (int bestelId, int baId) {
+    public boolean findOAIdByOrderId (int bestelId, int baId) {
         
         try (Connection conn = Connector.getConnection()) {
             String sql = "SELECT idBestelArtikel FROM BestelArtikel "+

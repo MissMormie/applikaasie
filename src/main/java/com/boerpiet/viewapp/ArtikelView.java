@@ -87,22 +87,19 @@ public class ArtikelView {
                 + "2. Terug naar menu \n");
     }
     
+    //inputmessages
     public void showInputName () {
         System.out.println("Geef naam voor artikel:");
     }
-    
     public void showInputPrijs () {
         System.out.println("Geef prijs voor artikel:");
     }
-    
     public void showInputVoorraad () {
         System.out.println("Geef voorraad van dit artikel:");
     }
-    
     public void showInputArticleIdToAddToOrder () {
         System.out.println("Geef artikelid voor toevoeging:");
     }
-    
     public void showInputArticleIdToModifyInOrder () {
         System.out.println("Geef artikelid om te bestellen in plaats van getoond artikel:");
     }
@@ -112,15 +109,12 @@ public class ArtikelView {
     public void showInputArticleIdToDelete () {
         System.out.println("Geef artikelid voor verwijdering:");
     }
-
     public void showGiveNumber() {
         System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
     }
-
     public void showGivePrijs() {
         System.out.println("Geef een geldige prijs (twee decimalen):");
     }
-
     public void showMenuKeuze() {
         System.out.println("Geef menu-keuze (getal):");
     }

@@ -28,7 +28,7 @@ public class BestelArtikelModel {
     
     public boolean checkOAIdInDataBase (int bestelId, int inputOAId) {
         if (inputOAIdSmallerMaxId(inputOAId)) {
-            return BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").findOAIdByBestelId(bestelId, inputOAId);
+            return BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").findOAIdByOrderId(bestelId, inputOAId);
             } else {
             return false;
         }

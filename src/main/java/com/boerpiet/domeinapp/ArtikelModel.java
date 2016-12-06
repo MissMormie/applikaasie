@@ -6,7 +6,6 @@
 package com.boerpiet.domeinapp;
 
 import com.boerpiet.dao.artikel.ArtikelDaoFactory;
-import com.boerpiet.dao.artikel.SuperArtikelDao;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.ArrayList;
 

@@ -120,6 +120,9 @@ public abstract class SuperArtikelDao {
                 ArtikelPojo am = new ArtikelPojo();
                 fillPojo (rs, am);
                 list.add(am);
+                if (list.isEmpty()) {
+                    return null;
+                }
             }
         }
             catch (SQLException ex) {

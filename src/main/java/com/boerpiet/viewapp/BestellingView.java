@@ -67,6 +67,9 @@ public class BestellingView {
     }
     public void showAllOrdersByKlantId (int klantId) {
         ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
+        if (bList.isEmpty()) {
+            return;
+        }
         BestellingView bvList = new BestellingView();
         bvList.showBestellingListByKlantId(bList);
     }
@@ -98,13 +101,11 @@ public class BestellingView {
         ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
         if (baList.isEmpty()) {
-            System.out.println("Er zijn geen bestelregels bij dit id.");
             return;
         }
         BestellingView bvList = new BestellingView();
         bvList.showBestelLijstByBestelId(baList);
-        System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
-
+        showOAIdByOrderId (bestelId);
     }
     
     //input messages
@@ -153,8 +154,14 @@ public class BestellingView {
     public void showAskSureToDelete() {
         System.out.println("Weet je zeker dat je dit wilt verwijderen? J/N");
     }
-    public void showNoOAIdById() {
+    public void showNoOAIdByOrderId(int bestelId) {
         System.out.println("Er zijn geen bestelregels bij dit bestelid.");
         System.out.println("Probeer het opnieuw.");
+    }
+    public void showNoOrderIdByKlantId(int klantId) {
+        System.out.println("Er zijn geen bestellingen bij dit klantid.");
+    }
+    private void showOAIdByOrderId(int bestelId) {
+        System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
     }
 }

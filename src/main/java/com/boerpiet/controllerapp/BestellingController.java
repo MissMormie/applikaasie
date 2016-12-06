@@ -127,6 +127,10 @@ public class BestellingController {
         ac = new ArtikelController (new ArtikelModel(), lm);
         av = new ArtikelView ();
         
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            addArticleToOrderByKlant (klantId);
+        }
+        
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToAddArticle();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
@@ -154,6 +158,10 @@ public class BestellingController {
         av = new ArtikelView ();
         bac = new BestelArtikelController ();
         ac = new ArtikelController (new ArtikelModel(), lm);
+        
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            modifyArticleFromOrderByKlant (klantId);
+        }
         
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToModify();
@@ -219,6 +227,10 @@ public class BestellingController {
         av = new ArtikelView ();
         bav = new BestelArtikelView ();
         
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            deleteOAFromOrderByKlant (klantId);
+        }
+        
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToDelete();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
@@ -241,6 +253,10 @@ public class BestellingController {
 
     private void deleteTotalOrderByKlant (int klantId) {
         bv = new BestellingView ();
+        
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            deleteTotalOrderByKlant (klantId);
+        }
         
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToDelete();
@@ -336,6 +352,10 @@ public class BestellingController {
         
         int klantId = klantLijst();
         
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            addArticleToOrder ();
+        }
+
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToAddArticle();
         int bestelId = inputOrderIdInDatabaseCheck(klantId);
@@ -367,6 +387,10 @@ public class BestellingController {
         av = new ArtikelView ();
         
         int klantId = klantLijst();
+        
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            modifyArticleFromOrder ();
+        }
         
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToModify();        
@@ -430,7 +454,11 @@ public class BestellingController {
         bac = new BestelArtikelController ();
         
         int klantId = klantLijst();
-        
+
+        if (!bm.checkOrderIdByKlantId(klantId)) {
+            deleteOneTupelFromOrder ();
+        }
+
         bv.showAllOrdersByKlantId(klantId);
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);

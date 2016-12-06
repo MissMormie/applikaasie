@@ -137,8 +137,17 @@ public class BestellingModel {
         ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
         if (baList.isEmpty()) {
-            bv.showNoOAIdById();
-            
+            bv.showNoOAIdByOrderId(bestelId);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean checkOrderIdByKlantId (int klantId) {
+        ArrayList<BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").
+                getAllByKlantId(klantId);
+        if (bList.isEmpty()) {
+            bv.showNoOrderIdByKlantId (klantId);
             return false;
         }
         return true;

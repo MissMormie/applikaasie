@@ -31,7 +31,7 @@ public class FirebirdBestelArtikelDao extends SuperBestelArtikelDao {
     }
     
     @Override
-    public boolean findOAIdByBestelId (int bestelId, int baId) {
+    public boolean findOAIdByOrderId (int bestelId, int baId) {
         throw new UnsupportedOperationException ("Not supported yet.");
     }
     

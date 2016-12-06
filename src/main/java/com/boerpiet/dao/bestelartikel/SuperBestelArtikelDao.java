@@ -20,7 +20,7 @@ public abstract class SuperBestelArtikelDao {
     
     public abstract BestelArtikelPojo getBestelArtikelByBestelId (int bestelId);
     
-    public abstract boolean findOAIdByBestelId (int bestelId, int baId);
+    public abstract boolean findOAIdByOrderId (int bestelId, int baId);
     
     public abstract int getMaxBestelArtikelId();
     
