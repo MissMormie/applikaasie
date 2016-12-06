@@ -6,7 +6,9 @@
 package com.boerpiet.domeinapp;
 
 import com.boerpiet.dao.artikel.ArtikelDaoFactory;
+import com.boerpiet.dao.artikel.SuperArtikelDao;
 import com.boerpiet.viewapp.ArtikelView;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,7 +33,8 @@ public class ArtikelModel {
         ap.setPrijs(prijs);
         ap.setVoorraad(voorraad);
         
-        int id = ArtikelDaoFactory.getArtikelDAO("MySQL").createArtikelWithReturnId(ap);
+        
+        int id = ArtikelDaoFactory.getArtikelDAO().createArtikelWithReturnId(ap);
         
         if (id>0) {
             av.showArticle(id);
@@ -47,7 +50,7 @@ public class ArtikelModel {
         ap.setId(id);
         ap.setNaam(naam);
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelNaam(naam, id)) {
+        if (ArtikelDaoFactory.getArtikelDAO().updateArtikelNaam(naam, id)) {
             av.showModifySuccess();
             av.showArticle(id);
         } else {
@@ -61,7 +64,7 @@ public class ArtikelModel {
         ap.setId(id);
         ap.setPrijs(prijs);
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelPrijs(prijs, id)) {
+        if (ArtikelDaoFactory.getArtikelDAO().updateArtikelPrijs(prijs, id)) {
             av.showModifySuccess();
             av.showArticle (id);
         } else {
@@ -75,7 +78,7 @@ public class ArtikelModel {
         ap.setId(id);
         ap.setVoorraad(voorraad);
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelVoorraad(voorraad, id)) {
+        if (ArtikelDaoFactory.getArtikelDAO().updateArtikelVoorraad(voorraad, id)) {
             av.showModifySuccess();
             av.showArticle (id);
         } else {
@@ -92,7 +95,7 @@ public class ArtikelModel {
         ap.setPrijs(prijs);
         ap.setVoorraad(voorraad);
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelAll(ap)) {
+        if (ArtikelDaoFactory.getArtikelDAO().updateArtikelNPV(ap)) {
             av.showModifySuccess();
             av.showArticle (id);
         } else {
@@ -105,7 +108,7 @@ public class ArtikelModel {
         ap = new ArtikelPojo ();
         ap.setId(id);
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").deleteArtikel(id)) {
+        if (ArtikelDaoFactory.getArtikelDAO().deleteArtikel(id)) {
             av.showDeleteSuccess();
         } else {
             av.showErrorMessage();
@@ -114,16 +117,24 @@ public class ArtikelModel {
     
     public boolean checkArticleIdInDatabase (int inputArtikelId) {
         if (inputArtikelIdSmallerMaxId (inputArtikelId)) {
-            return (ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(inputArtikelId));
+            return (ArtikelDaoFactory.getArtikelDAO().isArtikelInDatabase(inputArtikelId));
             } else {
             return false;
         }
     }
     
     private boolean inputArtikelIdSmallerMaxId (int id) {
-        return (id<=ArtikelDaoFactory.getArtikelDAO("MySQL").getMaxArtikelId());
+        return (id<=ArtikelDaoFactory.getArtikelDAO().getMaxIdArtikel());
     }
-
+    
+    public ArtikelPojo getArtikel (int artId) {
+        return ArtikelDaoFactory.getArtikelDAO().getArtikel(artId);
+    }
+    
+    public ArrayList<ArtikelPojo> getAllArticles () {
+        return ArtikelDaoFactory.getArtikelDAO().getAllArticles();
+    }
+    
     //Getters and setters
     public ArtikelModel getArtikelModel () {
         return am;

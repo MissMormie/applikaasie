@@ -17,6 +17,12 @@ and open the template in the editor.
             <password>kaaskop</password>
             <driver>com.mysql.jdbc.Driver</driver>
         </database>
+        <database default="false" type="Mimer">
+            <location>jdbc:mimer:/Applikaasie</location>
+            <username>boerpiet</username>
+            <password>kaaskop</password>
+            <driver>com.mimer.jdbc.Driver</driver>
+        </database>
     </databases>
     <connections>
         <connection default="false" type="jdbc">

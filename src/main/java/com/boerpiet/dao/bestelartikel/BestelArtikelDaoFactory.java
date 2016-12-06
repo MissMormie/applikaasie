@@ -5,8 +5,8 @@
  */
 package com.boerpiet.dao.bestelartikel;
 
-import com.boerpiet.dao.artikel.FirebirdArtikelDao;
-import com.boerpiet.dao.artikel.SqlArtikelDao;
+import com.boerpiet.dao.artikel.MimerArtikelDao;
+import com.boerpiet.dao.artikel.MySqlArtikelDao;
 import com.boerpiet.dao.artikel.SuperArtikelDao;
 
 /**
