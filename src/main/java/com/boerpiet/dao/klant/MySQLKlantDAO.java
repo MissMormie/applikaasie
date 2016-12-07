@@ -21,7 +21,7 @@ public class MySQLKlantDAO extends KlantDAO {
     
     @Override
     protected String getAllKlantenSQL() {
-        return "SELECT * FROM Klant WHERE Deleted = 0";
+        return "SELECT * FROM Klant WHERE Deleted = 0 ORDER BY Voornaam";
     }
       
     @Override
@@ -38,6 +38,6 @@ public class MySQLKlantDAO extends KlantDAO {
 
     @Override
     protected String getDeleteKlantByIdSQL() {
-        return "Update Klant SET Deleted = 1 WHERE KlantID = ?";
+        return "Update Klant SET Deleted = 1 WHERE idKlant = ?";
     }
 }

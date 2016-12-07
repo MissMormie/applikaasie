@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,9 +86,6 @@ public abstract class AccountDAO {
 
             pstmt.setInt(1, id); 
             int insertId = pstmt.executeUpdate();
-            
-            if(insertId == 0)
-                throw new Exception("Delete account failed.");
             
             return true;            
         } catch (Exception ex) {
@@ -215,7 +211,7 @@ public abstract class AccountDAO {
             fillPojo(result, accountPojo);
             return true; 
         } catch (SQLException ex) { 
-            logger.error("AccountDAO.tryFillPojo() failed:" + ex);
+            logger.error("Onjuiste login poging");
             return false;
         }
     }

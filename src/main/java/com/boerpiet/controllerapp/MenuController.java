@@ -48,6 +48,7 @@ public class MenuController {
         if(Validator.isValidInt(number))
             return Integer.parseInt(number);
         
+        menuView.showValidNumber();
         return numberListener();
     }        
 }

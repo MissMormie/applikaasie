@@ -39,7 +39,7 @@ public class MySQLAccountDAO extends AccountDAO {
 
     @Override
     protected String getAllAccountsSQL() {
-        return "SELECT * FROM Account WHERE Deleted = 0";
+        return "SELECT * FROM Account WHERE Deleted = 0 ORDER BY Gebruikersnaam";
     }
 
     @Override

@@ -31,4 +31,8 @@ public class MenuView {
                              + "\n");
         }
     }
+
+    public void showValidNumber() {
+        System.out.println("De keuze die je gemaakt hebt zit niet in het menu, maak een nieuwe keuze..");
+    }
 }

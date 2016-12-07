@@ -11,7 +11,9 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +21,16 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author Sonja
+ * TODO: Split this into 3 classes with a factory in between. 
  */
 public class Connector {
                 
     private static DataSource dataSource;
 
     public static Connection getConnection() throws SQLException {
+        if(ConfigVars.getConnectionType().equals("jdbc"))
+            return getJDBCConnection();
+
         if(dataSource == null)
             setUpConnectionPool();
         
@@ -32,16 +38,32 @@ public class Connector {
     }
     
     private static void setUpConnectionPool() {
-        if(ConfigVars.getConnectionType().equals("JDBC"))
-            setUpJDBC();
-        else if (ConfigVars.getConnectionType().equals("c3po"))
+        if (ConfigVars.getConnectionType().equals("c3po"))
             setUpC3p0();
         else if (ConfigVars.getConnectionType().equals("HikariCP"))
             setUpHikariCP();
     }
 
-    private static void setUpJDBC()  {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static Connection getJDBCConnection()  {
+        Logger logger = LoggerFactory.getLogger(Connector.class);
+
+            String url = ConfigVars.getDbLocation();
+            String username = ConfigVars.getDbUsername();
+            String password = ConfigVars.getDbPassword();
+
+        try {
+            Class.forName(ConfigVars.getDriver());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        try {
+            return DriverManager.getConnection(url, username, password);
+        } catch (SQLException ex) {
+            logger.error("fatal exception in getting connection." + ex);
+            System.exit(0);
+            return null;
+        }
     }
 
     private static void setUpC3p0() {
