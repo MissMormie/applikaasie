@@ -21,7 +21,7 @@ public class Validator {
             return true;
         }
         catch (NumberFormatException ex) {
-            System.out.println("Invoer is geen heel getal: "+ ex);
+//            System.out.println("Invoer is geen heel getal: "+ ex);
             return false;
         }
     }
