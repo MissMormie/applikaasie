@@ -74,16 +74,21 @@ public class Validator {
         return postcode.matches(regex);
     }
     
-    public static boolean doubleHasMaxTwoDecimals (String input) {
-        
+public static boolean doubleHasMaxTwoDecimals (String input) {
         try {
-            DecimalFormat df = new DecimalFormat ("#.00");
-            int decimals = (df.format(df.parse(input)).length() -1);
+            DecimalFormat df = new DecimalFormat ("00");
+            String [] parts = input.split("\\.");
+            if (parts == null) {
+                return false;
+            }
+            String part2 = parts [1];
+            int decimals = (df.format(df.parse(part2)).length());
+            
             if (decimals >= 0 && decimals <=2) {
                 return true;
             }
-        }
-        catch (ParseException ex) {
+            }
+            catch (ParseException ex) {
             ex.printStackTrace();
         }
         return false;
