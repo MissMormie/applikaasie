@@ -230,14 +230,8 @@ public abstract class AccountDAO {
         accountPojo.setAccountStatus(result.getString("Accountstatus"));
         accountPojo.setKlantId(result.getInt("KlantId"));
         accountPojo.setDeleted(result.getBoolean("Deleted"));    
-    //    accountPojo.setDatum_aanmaak(convertDateToGregorian(result.getDate("Datum_Aanmaak")));       
+        accountPojo.setDatum_aanmaak(result.getDate("Datum_Aanmaak"));       
     }
-    
-    protected GregorianCalendar convertDateToGregorian(Date date) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        return cal;
-    }    
     
     protected String createCalendarString(GregorianCalendar cal) {
         int month = cal.get(Calendar.MONTH) +1;

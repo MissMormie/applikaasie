@@ -19,7 +19,6 @@ public class AccountPojo {
     private String wachtwoord; 
     private String accountStatus = "customer";
     private Date datum_aanmaak;
-    // private GregorianCalendar datum_aanmaak = new GregorianCalendar();
     private int klantId = 0;
     private boolean deleted = false;
 
