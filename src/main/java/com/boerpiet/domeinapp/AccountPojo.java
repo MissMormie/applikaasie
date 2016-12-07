@@ -33,7 +33,7 @@ public class AccountPojo implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column (name = "Datum_Aanmaak", nullable = false)
-    private Date datum_aanmaak;
+    private Date datum_aanmaak = new Date();
     
     @Column (name = "KlantId", nullable = true)
     private Integer klant;

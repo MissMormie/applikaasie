@@ -20,23 +20,26 @@ public class AdresTypePojo implements Serializable {
     private int idAdres_type = 0;
     
     @Column (name = "soort")
-    private String Soort;
+    @Enumerated (EnumType.STRING)
+    private AdresType Soort;
 
     public int getIdAdres_type() {
         return idAdres_type;
     }
 
-    public String getSoort() {
+    public AdresType getSoort() {
         return Soort;
+    }
+    
+    // No setters because immutable class. 
+
+    public void setSoort(AdresType Soort) {
+        this.Soort = Soort;
     }
     
     // TODO Remove setters
     public void setIdAdres_type(int idAdres_type) {
         this.idAdres_type = idAdres_type;
-    }
-
-    public void setSoort(String Soort) {
-        this.Soort = Soort;
     }
 
 }

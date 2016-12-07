@@ -6,6 +6,7 @@
 package com.boerpiet.viewapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
+import com.boerpiet.domeinapp.AdresType;
 import com.boerpiet.domeinapp.KlantHeeftAdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantPojo;
@@ -212,8 +213,8 @@ public class KlantView {
         
     }
 
-    public void showAdres(String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, String type) {
-        System.out.println("Adres:" + straat + " " + huisnummer + " " + toevoeging + " " + postcode + " " + woonplaats);
+    public void showAdres(String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, AdresType type) {
+        System.out.println(type + ": " + straat + " " + huisnummer + " " + toevoeging + " " + postcode + " " + woonplaats);
     }
 
 }

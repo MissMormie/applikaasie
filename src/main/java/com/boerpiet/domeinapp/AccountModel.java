@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.JDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public class AccountModel {
         try {
             if(ad.userExists(username))
                 return "user exists";
-        } catch (SQLException ex) {
+        } catch (JDBCException ex) {
             return "exception";
         }
         
@@ -80,7 +81,7 @@ public class AccountModel {
     public boolean updateAccountById(AccountPojo account) {
         if(account.getIdAccount()== 0) 
             return false;
-        return AccountDAOFactory.getAccountDAO().updateAccountById(account);
+        return AccountDAOFactory.getAccountDAO().updateAccount(account);
     }
     
     public List<AccountPojo> fetchAccountList() {

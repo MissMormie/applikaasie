@@ -6,9 +6,9 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.dao.account.AccountDAOFactory;
 import com.boerpiet.dao.adres.AdresDAOFactory;
 import com.boerpiet.dao.klant.KlantDAOFactory;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,27 +58,27 @@ public class KlantModel {
     }
 
     public AdresPojo getFactuurAdresPojo() {
-        return getAdresPojo("Factuuradres");
+        return getAdresPojo(AdresType.FACTUURADRES);
     }
 
     public void setFactuurAdresPojo(AdresPojo factuurAdresPojo) {
-        setAdres(factuurAdresPojo, "Factuuradres");
+        setAdres(factuurAdresPojo, AdresType.FACTUURADRES);
     }
 
     public AdresPojo getPostAdresPojo() {
-        return getAdresPojo("Postadres");
+        return getAdresPojo(AdresType.POSTADRES);
     }
     
     public void setPostAdresPojo(AdresPojo postAdresPojo) {
-        setAdres(postAdresPojo, "Postadres");
+        setAdres(postAdresPojo, AdresType.POSTADRES);
     }
 
     public AdresPojo getBezorgAdresPojo() {
-        return getAdresPojo("Postadres");
+        return getAdresPojo(AdresType.BEZORGADRES);
     }
     
     public void setBezorgAdresPojo(AdresPojo bezorgAdresPojo) {
-        setAdres(bezorgAdresPojo, "Bezorgadres");
+        setAdres(bezorgAdresPojo, AdresType.BEZORGADRES);
     }
 
     // ------------ PUBLIC FUNCTIONS ---------------------------------
@@ -157,8 +157,9 @@ public class KlantModel {
      * adrestypes. ie. all klant addresses are now clones of adresPojo.
      * 
      * @param adresPojo 
+     * @param adresType 
      */
-    public void setAdres(AdresPojo adresPojo, String adresType) {
+    public void setAdres(AdresPojo adresPojo, AdresType adresType) {
         // Check if adrestype already exists, if so replace, but copy id.
         for (KlantHeeftAdresPojo khAdres : klantPojo.getAdressen()) {
             if(khAdres.getAdres_type().getSoort().equals(adresType)) {
@@ -179,12 +180,12 @@ public class KlantModel {
     }
     
     public void setAllAdresses(AdresPojo adresPojo) {
-        cloneAndSetAdress(adresPojo, "Bezorgadres");
-        cloneAndSetAdress(adresPojo, "Factuuradres");
-        cloneAndSetAdress(adresPojo, "Postadres");
+        cloneAndSetAdress(adresPojo, AdresType.BEZORGADRES);
+        cloneAndSetAdress(adresPojo, AdresType.FACTUURADRES);
+        cloneAndSetAdress(adresPojo, AdresType.POSTADRES);
     }
     
-    public void cloneAndSetAdress(AdresPojo adresPojo, String adresType) {
+    public void cloneAndSetAdress(AdresPojo adresPojo, AdresType adresType) {
         try {
             AdresPojo adres = adresPojo.clone();
             setAdres(adres, adresType);
@@ -196,10 +197,10 @@ public class KlantModel {
     /**
      * Gets the id for the type of adres
      * 
-     * @param type String (Postadres, Factuuradres, Bezorgadres)
+     * @param adresType String (Postadres, Factuuradres, Bezorgadres)
      * @return int the adresid
      */    
-    public int getAdresId(String adresType) {
+    public int getAdresId(AdresType adresType) {
         for (KlantHeeftAdresPojo adres : klantPojo.getAdressen()) {
             if(adres.getAdres_type().getSoort().equals(adresType)) {
                 return adres.getAdres().getIdAdres();
@@ -214,9 +215,24 @@ public class KlantModel {
      * @return boolean true on succesfull delete
      */
     public boolean delete() {
-        if(klantPojo.getIdKlant() != 0)
-            return KlantDAOFactory.getKlantDAO().deleteKlantAndAdressesAndAccounts(klantPojo);
-        return false;
+        if(klantPojo.getIdKlant() == 0)
+            return false;
+
+        KlantPojo kp = klantPojo;
+        // Start by deleting accounts.
+        if (!AccountDAOFactory.getAccountDAO().deleteAccountsByKlantId(kp.getIdKlant()))
+            return false;
+        
+        // Get klant information, set in all pojo deleted to true;
+        for(KlantHeeftAdresPojo khap : kp.getAdressen()) {
+            khap.getAdres().setDeleted(true);
+            khap.setDeleted(true);
+        }
+        kp.setDeleted(true);
+        
+        // Save deletion
+        return KlantDAOFactory.getKlantDAO().updateKlantById(kp);
+
     }
 
     /**
@@ -227,10 +243,10 @@ public class KlantModel {
      * @return boolean true on succesfull update
      * 
      */
-    public boolean updateAdres(String adresType) {
+    public boolean updateAdres(AdresType adresType) {
         boolean success = false;
         for (KlantHeeftAdresPojo adres : klantPojo.getAdressen()) {
-            if(adres.getAdres_type().getSoort().equals(adresType) || adresType.equalsIgnoreCase("same")) {
+            if(adres.getAdres_type().getSoort().equals(adresType) || adresType.equals(null)) {
                 success = AdresDAOFactory.getAdresDAO().updateAdres(adres.getAdres());
             }
         }
@@ -251,7 +267,7 @@ public class KlantModel {
         return "KlantModel{" + "klantPojo=" + klantPojo + "}";
     }
     
-    private AdresPojo getAdresPojo(String adresType) {
+    private AdresPojo getAdresPojo(AdresType adresType) {
         for (KlantHeeftAdresPojo adres : klantPojo.getAdressen()) {
             if(adres.getAdres_type().getSoort().equals(adresType))
                 return adres.getAdres();
@@ -260,14 +276,14 @@ public class KlantModel {
     }
 
     // TODO get this from the database instead.
-    private AdresTypePojo getAdresTypePojo(String adresType) {
+    private AdresTypePojo getAdresTypePojo(AdresType adresType) {
         AdresTypePojo atp = new AdresTypePojo();
         atp.setSoort(adresType);
-        if(adresType.equals("Bezorgadres"))
+        if(adresType.equals(AdresType.BEZORGADRES))
             atp.setIdAdres_type(3);
-        if(adresType.equals("Factuuradres"))
+        if(adresType.equals(AdresType.FACTUURADRES))
             atp.setIdAdres_type(2);
-        if(adresType.equals("Postadres"))
+        if(adresType.equals(AdresType.POSTADRES))
             atp.setIdAdres_type(1);
         return atp;
     }

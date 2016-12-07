@@ -6,6 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
+import com.boerpiet.domeinapp.AdresType;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.utility.AdresByPostcode;
@@ -103,20 +104,20 @@ public class KlantController {
         String sameAdres = ConsoleInput.textInput();
         if(sameAdres.equalsIgnoreCase("j")) {
             klantView.showSameAdres();
-            setAdres("Same");
+            setAdres(null);
         } else if (sameAdres.equalsIgnoreCase("n")) {
             klantView.showPostAdres();
-            setAdres("Postadres");
+            setAdres(AdresType.POSTADRES);
             klantView.showFactuurAdres();
-            setAdres("Factuuradres");
+            setAdres(AdresType.FACTUURADRES);
             klantView.showBezorgAdres();
-            setAdres("Bezorgadres");
+            setAdres(AdresType.BEZORGADRES);
         } else {
             setAdresses();
         }
     }
     
-    private void setAdres(String type) {
+    private void setAdres(AdresType type) {
         klantView.showPostcode();
         String postcode = postcodeListener();
 
@@ -138,7 +139,7 @@ public class KlantController {
         
         klantView.showAdres(straat, huisnummer, toevoeging, postcode, woonplaats, type);
 
-        if(type.equalsIgnoreCase("same")) {
+        if(type == null) {
             AdresPojo adres = new AdresPojo(klantModel.getAdresId(type), 
                     straat, huisnummer, toevoeging, postcode, woonplaats, false);
             klantModel.setAllAdresses(adres);
@@ -182,19 +183,19 @@ public class KlantController {
                 break;
             case 6: 
                 klantView.showPostAdres();
-                modifyAdresListener("Postadres");
+                modifyAdresListener(AdresType.POSTADRES);
                 break;
             case 7: 
                 klantView.showBezorgAdres();
-                modifyAdresListener("Bezorgadres");
+                modifyAdresListener(AdresType.BEZORGADRES);
                 break;
             case 8: 
                 klantView.showFactuurAdres();
-                modifyAdresListener("Factuuradres");
+                modifyAdresListener(AdresType.FACTUURADRES);
                 break;
             case 9: 
                 klantView.showSameAdres();
-                modifyAdresListener("Same");
+                modifyAdresListener(null);
                 break;
                 
             default:
@@ -203,7 +204,7 @@ public class KlantController {
         }
     }
 
-    private void modifyAdresListener(String type) {
+    private void modifyAdresListener(AdresType type) {
         setAdres(type);
         if(klantModel.updateAdres(type)) 
             klantView.showUpdateSuccess(klantModel); 
