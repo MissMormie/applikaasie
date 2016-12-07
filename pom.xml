@@ -61,11 +61,11 @@
             <artifactId>c3p0</artifactId>
             <version>0.9.1.2</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>com.mimer.jdbc</groupId>
             <artifactId>mimjdbc</artifactId>
             <version>3</version>
-        </dependency>
+        </dependency>-->
     </dependencies>    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

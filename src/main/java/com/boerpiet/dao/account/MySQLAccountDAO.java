@@ -54,5 +54,5 @@ public class MySQLAccountDAO extends AccountDAO {
 
     @Override
     protected String getUserExistsSQL() {
-        return "SELECT * FROM Account WHERE DELETED = 0 AND username = ?;";    }
+        return "SELECT * FROM Account WHERE DELETED = 0 AND Gebruikersnaam = ?;";    }
     }
