@@ -24,7 +24,7 @@ public class ArtikelView {
     }
     
     private void showArticleProperties (ArtikelPojo ap) {
-        
+
         System.out.printf("%-3s %-25s %-10s %s \n", 
                 ap.getId(), 
                 ap.getNaam(), 

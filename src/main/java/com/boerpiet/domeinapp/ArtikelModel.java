@@ -127,7 +127,7 @@ public class ArtikelModel {
     }
     
     public ArtikelPojo getArtikel (int artId) {
-        return ArtikelDaoFactory.getArtikelDAO().getArtikel(artId);
+        return ArtikelDaoFactory.getArtikelDAO().getArtikelById(artId);
     }
     
     public ArrayList<ArtikelPojo> getAllArticles () {

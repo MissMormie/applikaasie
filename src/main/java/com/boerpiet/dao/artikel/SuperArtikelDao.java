@@ -87,7 +87,7 @@ public abstract class SuperArtikelDao {
         return max;
     }
     
-    public ArtikelPojo getArtikel (int id) {
+    public ArtikelPojo getArtikelById (int id) {
         ArtikelPojo ap  = new ArtikelPojo ();
         
         try (Connection conn = Connector.getConnection()) {
@@ -132,7 +132,7 @@ public abstract class SuperArtikelDao {
         return list;
     }
     
-    private void fillPojo (ResultSet result, ArtikelPojo artikelPojo) throws SQLException {
+    private void fillPojo (ResultSet result, ArtikelPojo artikelPojo) throws SQLException {        
         artikelPojo.setId (result.getInt ("idArtikel"));
         artikelPojo.setNaam (result.getString ("Naam"));
         artikelPojo.setPrijs (result.getDouble ("Prijs"));
