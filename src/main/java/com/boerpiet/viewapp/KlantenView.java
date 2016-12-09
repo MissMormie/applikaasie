@@ -40,7 +40,7 @@ public class KlantenView {
 
     private void showKlantListItem(KlantPojo kp, int num) {
         String naam;
-        if(kp.getTussenvoegsel().equals(""))
+        if(kp.getTussenvoegsel()==null || kp.getTussenvoegsel().equals(""))
             naam = kp.getVoornaam() + " " + kp.getAchternaam();
         else 
             naam = kp.getVoornaam() + " " + kp.getTussenvoegsel() + " " + kp.getAchternaam();
