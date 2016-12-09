@@ -39,7 +39,7 @@ public class BestelArtikelController {
             return Integer.parseInt(string);
         } else {
             bav.showGiveNumber ();
-            return inputIntCheck (string);
+            return inputIntCheck (input.nextLine());
         }
     }
     

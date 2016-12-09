@@ -70,11 +70,10 @@ public class BestellingView {
         if (bList.isEmpty()) {
             return;
         }
-        BestellingView bvList = new BestellingView();
-        bvList.showBestellingListByKlantId(bList);
+        showBestellingListByKlantId(bList);
     }
     
-    private void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
+    public void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
         showDivider();
         showBestelLijstByBestelIdHeader ();
         for (BestelArtikelPojo ba : bestelList) {
@@ -158,6 +157,11 @@ public class BestellingView {
         System.out.println("Er zijn geen bestelregels bij dit bestelid.");
         System.out.println("Probeer het opnieuw.");
     }
+    
+    public void showNoBestellingByKlant() {
+        System.out.println("Er zijn geen bestellingen bij deze klant.");
+    }
+    
     public void showNoOrderIdByKlantId(int klantId) {
         System.out.println("Bestelid hoort niet bij klantid "+klantId);
     }
@@ -165,7 +169,7 @@ public class BestellingView {
         System.out.println("Er zijn geen bestellingen bij klantid "+klantId);
     }   
     public void showOrderListByKlantId(int klantId) {
-        System.out.println("Dit zijn de bestellingen bij klantid " + klantId);
+        System.out.println("Dit zijn de bestellingen bij klantid " + klantId + "\n");
     }
     private void showOAIdByOrderId(int bestelId) {
         System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);

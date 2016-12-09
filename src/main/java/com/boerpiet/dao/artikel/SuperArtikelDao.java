@@ -60,9 +60,9 @@ public abstract class SuperArtikelDao {
             
             pstmt.executeQuery();
             
-            if (pstmt.executeQuery() != null) {
-                return true;
-            } 
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+            
         } catch (Exception ex) {
             logger.warn ("Article not found: "+ ex);
         }

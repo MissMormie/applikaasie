@@ -163,6 +163,8 @@ public class BestellingModel {
     }
     
     public boolean checkOrderIdByKlantId (int klantId, int bestelId) {
+        return BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(bestelId, klantId);
+        /*
         ArrayList<BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").
                 getAllByKlantId(klantId);
         for (BestellingPojo bp  : bList) {
@@ -170,7 +172,7 @@ public class BestellingModel {
                 return true;
             }
         }
-        return false;
+        return false; */
     }
     
     //check bestellingid adhv klantid

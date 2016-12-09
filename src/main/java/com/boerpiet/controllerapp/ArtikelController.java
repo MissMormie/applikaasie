@@ -265,7 +265,7 @@ public class ArtikelController {
             return Integer.parseInt(string);
         } else {
             av.showGiveNumber();
-            return inputIntCheck (string);
+            return inputIntCheck (input.nextLine());
         }
     }
     

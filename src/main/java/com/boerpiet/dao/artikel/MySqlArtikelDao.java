@@ -14,7 +14,7 @@ public class MySqlArtikelDao extends SuperArtikelDao {
     //utility strings
     @Override
     protected String getIsArtikelInDatabaseSQL () {
-        return "SELECT idArtikel FROM Artikel WHERE idArtikel = ?;";
+        return "SELECT idArtikel FROM Artikel WHERE Deleted = 0 AND idArtikel = ?;";
     }
     
     @Override

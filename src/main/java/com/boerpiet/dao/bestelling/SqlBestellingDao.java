@@ -87,11 +87,12 @@ public class SqlBestellingDao extends SuperBestellingDao {
     @Override
     public boolean findBestellingId (int bestelId, int klantId) {
         String sql = "SELECT idBestelling FROM Bestelling WHERE Deleted = 0 "
-                + " AND idBestelling = "+bestelId
-                + " AND KlantKey = "+klantId;
+                + " AND idBestelling = " + bestelId
+                + " AND KlantKey = " + klantId
+                + " AND Afgehandeld = 0";
         try {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
-            return rs != null;
+            return rs.next(); 
         } catch (Exception ex) {
             logger.error ("Geen bestelling gevonden met dit id: "+ex +sql);
                 return false;

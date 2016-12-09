@@ -5,8 +5,10 @@
  */
 package com.boerpiet.controllerapp;
 
+import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.LoginManager;
@@ -18,6 +20,7 @@ import com.boerpiet.viewapp.KlantenView;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -317,6 +320,8 @@ public class BestellingController {
         av = new ArtikelView ();
          
         int klantId = selectKlantFromList();
+        if (klantId == 0)
+            return;
         
         Date sqlDatum = inputDateCheck();
         
@@ -361,6 +366,14 @@ public class BestellingController {
         }        
     }
     
+    private ArrayList<BestellingPojo> getAllBestellingenFromKlant(int klantId) {
+        ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
+        if (bList.isEmpty()) {
+            return null;
+        }
+        return bList;
+    }
+    
     private void addArticleToOrder () {
         
         bv = new BestellingView ();
@@ -370,18 +383,23 @@ public class BestellingController {
         bac = new BestelArtikelController ();
         
         int klantId = selectKlantFromList();
+        if (klantId == 0)
+            return;
         
         bv.showOrderListByKlantId(klantId);
-        bv.orderListByKlantId(klantId);
-        bv.showOrderIdToAddArticle();
-        int bestelId = inputOrderIdInDatabaseCheck(klantId);
         
-        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
-            addArticleToOrder ();
+        ArrayList<BestellingPojo> bestellingen = getAllBestellingenFromKlant(klantId);
+        if(getAllBestellingenFromKlant(klantId) == null) {
+            bv.showNoBestellingByKlant();
+            addArticleToOrder();
+            return;
         }
-        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
-            addArticleToOrder ();
-        }
+        
+        bv.showBestellingListByKlantId(bestellingen);
+        bv.showOrderIdToAddArticle();
+        
+        
+        int bestelId = inputOrderIdInDatabaseCheck(klantId);
         
         av.showAllArticles();
         av.showInputArticleIdToAddToOrder();
@@ -410,8 +428,11 @@ public class BestellingController {
         av = new ArtikelView ();
         
         int klantId = selectKlantFromList();
+        if(klantId == 0) 
+            return;
         
         bv.orderListByKlantId(klantId);
+        
         bv.showOrderIdToModify();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
@@ -483,6 +504,9 @@ public class BestellingController {
         bac = new BestelArtikelController ();
         
         int klantId = selectKlantFromList();
+        if (klantId ==0 )
+            return;
+        
 
         bv.showOrderListByKlantId(klantId);
         bv.orderListByKlantId(klantId);
@@ -510,13 +534,15 @@ public class BestellingController {
                     + bestelId + "door " + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
-            deleteOAIdFromOrderId ();
+            deleteOrderOptions ();
         }
     }
 
     private void deleteTotalOrder() {
         
         int klantId = selectKlantFromList();
+        if (klantId == 0)
+            return;
         
         bv.showOrderListByKlantId(klantId);
         bv.orderListByKlantId(klantId);
@@ -536,7 +562,7 @@ public class BestellingController {
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
-            deleteTotalOrder ();
+            deleteOrderOptions ();
         }
     }
     
@@ -544,8 +570,13 @@ public class BestellingController {
         bv = new BestellingView ();
         av = new ArtikelView ();
         bv.showAskSureToDelete();
-        
-        return input.nextLine().equalsIgnoreCase("J");
+
+        String answer = input.nextLine();
+        while (!answer.equalsIgnoreCase("J") && !answer.equalsIgnoreCase("N")) {
+            bv.showAskSureToDelete();
+            answer = input.nextLine();        
+        }
+        return answer.equalsIgnoreCase("J") ;
     }
     
     //methods to check input for validity
@@ -579,7 +610,7 @@ public class BestellingController {
             return Integer.parseInt(string);
         } else {
             bv.showGiveNumber ();
-            return inputIntCheck (string);
+            return inputIntCheck (input.nextLine());
         }
     }
     

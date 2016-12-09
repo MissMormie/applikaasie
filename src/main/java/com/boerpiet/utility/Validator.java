@@ -56,6 +56,7 @@ public class Validator {
             return false;
         }
     }
+    
     public static boolean isValidDate (String input) {
         
        try {
@@ -64,7 +65,7 @@ public class Validator {
                 return false;
           }
         } catch (ParseException ex) {
-            ex.printStackTrace();
+            return false;
         }
     return true;
     }
