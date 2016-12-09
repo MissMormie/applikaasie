@@ -404,10 +404,6 @@ public class BestellingController {
         if (klantId == 0)
             return;
         
-        if (klantId == 0) {
-            return;
-        }
-        
         bv.showOrderListByKlantId(klantId);
         
         ArrayList<BestellingPojo> bestellingen = getAllBestellingenFromKlant(klantId);
@@ -450,11 +446,16 @@ public class BestellingController {
         if(klantId == 0) 
             return;
         
-        if (klantId == 0) {
+        bv.showOrderListByKlantId(klantId);
+        
+        ArrayList<BestellingPojo> bestellingen = getAllBestellingenFromKlant(klantId);
+        if(getAllBestellingenFromKlant(klantId) == null) {
+            bv.showNoBestellingByKlant();
+            modifyArticleFromOrder ();
             return;
         }
         
-        bv.orderListByKlantId(klantId);
+        bv.showBestellingListByKlantId(bestellingen);
         
         bv.showOrderIdToModify();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
@@ -525,7 +526,6 @@ public class BestellingController {
         if (klantId ==0 )
             return;
         
-
         bv.showOrderListByKlantId(klantId);
         bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
