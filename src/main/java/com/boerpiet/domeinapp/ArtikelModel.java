@@ -115,13 +115,9 @@ public class ArtikelModel {
     }
     
     public boolean checkArticleIdInDatabase (int inputArtikelId) {
-        return (ArtikelDaoFactory.getArtikelDAO().isArtikelInDatabase(inputArtikelId));
+            return (ArtikelDaoFactory.getArtikelDAO().isArtikelInDatabase(inputArtikelId));
     }
-    
-    private boolean inputArtikelIdSmallerMaxId (int id) {
-        return (id<=ArtikelDaoFactory.getArtikelDAO().getMaxIdArtikel());
-    }
-    
+        
     public ArtikelPojo getArtikel (int artId) {
         return ArtikelDaoFactory.getArtikelDAO().getArtikelById(artId);
     }

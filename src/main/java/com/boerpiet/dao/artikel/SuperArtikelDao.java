@@ -54,15 +54,12 @@ public abstract class SuperArtikelDao {
         
         try (Connection conn = Connector.getConnection()) {
             
-            String sql = getIsArtikelInDatabaseSQL();
+            String sql = getArtikelByIdSQL();
             PreparedStatement pstmt = conn.prepareStatement(sql);            
             pstmt.setInt (1, artikelId);
             
-            pstmt.executeQuery();
-            
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
-            
+            ResultSet result = pstmt.executeQuery();
+            return result.next();
         } catch (Exception ex) {
             logger.warn ("Article not found: "+ ex);
         }

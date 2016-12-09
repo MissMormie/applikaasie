@@ -51,7 +51,7 @@ public class BestelArtikelController {
         String bId = input.nextLine();
         int id = inputIntCheck(bId);
         
-        if (bm.checkOAIdByOrderId(bestelId, id)) {
+        if (bm.checkOAIdBelongsToOrderId(bestelId, id)) {
             return id;
         } else {
             bav.showOAIdNotBelongingToBestelId ();

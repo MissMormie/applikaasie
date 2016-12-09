@@ -95,7 +95,7 @@ public class ArtikelView {
         System.out.println("Geef prijs voor artikel:");
     }
     public void showInputVoorraad () {
-        System.out.println("Geef voorraad van dit artikel:");
+        System.out.println("Voer voorraad voor dit artikel in:");
     }
     public void showInputArticleIdToAddToOrder () {
         System.out.println("Geef artikelid voor toevoeging:");
@@ -110,16 +110,16 @@ public class ArtikelView {
         System.out.println("Geef artikelid voor verwijdering:");
     }
     public void showGiveNumber() {
-        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen).");
     }
     public void showGivePrijs() {
-        System.out.println("Geef een geldige prijs (twee decimalen):");
+        System.out.println("Geef een geldige prijs (max twee decimalen):");
     }
     public void showMenuKeuze() {
         System.out.println("Geef menu-keuze (getal):");
     }
     public void showAddSuccess () {
-        System.out.println("Artikel is toegevoegd aan database.");
+        System.out.println("Artikel is toegevoegd aan database. \n");
     }
     public void showModifySuccess () {
         System.out.println("Artikel is gewijzigd");
@@ -128,12 +128,15 @@ public class ArtikelView {
         System.out.println("Artikel is verwijderd uit database.");
     }
     public void showErrorMessage () {
-        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+        System.out.println("Er is iets misgegaan, probeer het opnieuw. \n");
     }
     public void showAskSureToDelete() {
         System.out.println("Weet je zeker dat je dit artikel wilt verwijderen? J/N");
     }
     public void showInputArticleId() {
         System.out.println("Geef artikel id:");
+    }
+    public void showArticleIdNotInDatabase() {
+        System.out.println("Artikelid staat niet in database, probeer het opnieuw.");
     }
 }

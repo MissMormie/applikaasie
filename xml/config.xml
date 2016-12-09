@@ -25,11 +25,11 @@ and open the template in the editor.
         </database>
     </databases>
     <connections>
-        <connection default="true" type="jdbc">
+        <connection default="false" type="jdbc">
         </connection>
         <connection default="false" type="c3po">
         </connection>
-        <connection default="false" type="HikariCP">
+        <connection default="true" type="HikariCP">
         </connection>
     </connections>
 </root>

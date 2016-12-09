@@ -5,7 +5,6 @@
  */
 package com.boerpiet.dao.bestelling;
 
-import com.boerpiet.dao.Connector;
 import com.boerpiet.dao.MySQLConnection;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;

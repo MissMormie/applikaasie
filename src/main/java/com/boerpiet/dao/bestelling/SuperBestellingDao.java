@@ -30,8 +30,5 @@ public abstract class SuperBestellingDao {
 
     public abstract boolean deleteBestelling (int bestelId);
     
-    public abstract ArrayList <BestellingPojo> getAllByKlantId (int klantId);
-
-    //public abstract boolean isValidLogin(BestellingPojo bestelling);
-    
+    public abstract ArrayList <BestellingPojo> getAllByKlantId (int klantId);    
 }

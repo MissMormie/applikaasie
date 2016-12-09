@@ -5,8 +5,10 @@
  */
 package com.boerpiet.controllerapp;
 
+import com.boerpiet.dao.bestelartikel.BestelArtikelDaoFactory;
 import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.ArtikelModel;
+import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.domeinapp.KlantModel;
@@ -84,16 +86,15 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.addNewOrder (klantId, sqlDatum, accountId, artikelId, aantal);
-            logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
-                    +" "+klantId);
+        while (aantal < 1) {
+            aantal = inputNumberToOrderCheck();
+        }
+        
+        bm.addNewOrder (klantId, sqlDatum, accountId, artikelId, aantal);
+        logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+klantId);
             //dit is voor klanten met een (inlog) account
             //bestellingen voor klanten zonder account worden ingevoerd door medewerker/admin
-        } else {
-            av.showErrorMessage();
-            makeNewOrderByKlant (klantId, accountId);
-        }
     }
     
     public void modifyOrderByKlant () {
@@ -143,22 +144,22 @@ public class BestellingController {
         if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
             addArticleToOrderByKlant (klantId);
         }
-                
+        
+        bv.showAllBestelRegelsByBestelId(bestelId);
+        
         av.showAllArticles();
         av.showInputArticleIdToAddToOrder();
         int artikelId = ac.inputArtikelIdInDatabaseCheck();
         
         int aantal = inputNumberToOrderCheck();
         
-        if
-        (aantal >0) {
-            bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
-            logger.info (" Artikelen toegevoegd aan bestelling door "
-                    + lm.getAccountPojo().getGebruikersnaam() + " "+ klantId);
-        } else {
-            av.showGiveNumber();
-            addArticleToOrderByKlant (klantId);
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck ();
         }
+
+        bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
+        logger.info (" Artikelen toegevoegd aan bestelling door "
+                + lm.getAccountPojo().getGebruikersnaam() + " "+ klantId);
     }
     
     private void modifyArticleFromOrderByKlant (int klantId) {
@@ -187,21 +188,23 @@ public class BestellingController {
         if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
             modifyArticleFromOrderByKlant(klantId);
         }
-        
+        if (!bm.checkOAIdBelongsToOrderId(bestelId, regelId)) {
+            modifyArticleFromOrder ();
+        }
+    
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
         int modifiedArtikelId = ac.inputArtikelIdInDatabaseCheck();
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
-            logger.info (" Bestelregel gewijzigd door "
-                + lm.getAccountPojo().getGebruikersnaam() +" " + klantId);
-            } else {
-                av.showGiveNumber();
-                modifyArticleFromOrderByKlant (klantId);
-            }
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck ();
+        }
+        
+        bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+        logger.info (" Bestelregel gewijzigd door "
+            + lm.getAccountPojo().getGebruikersnaam() +" " + klantId);
         }
     
     public void deleteOrderByKlant () {
@@ -244,19 +247,23 @@ public class BestellingController {
         
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
-        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
-            deleteOAFromOrderByKlant (klantId);
-        }
-        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
-            deleteOAFromOrderByKlant (klantId);
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId) &&
+                !bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteOAIdFromOrderId ();
         }
         
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();
         int brId = bac.inputOAIdInDatabaseCheck(bestelId);
         
-        if (!bm.checkOAIdByOrderId(bestelId, brId)) {
+        if (!bm.checkOAIdBelongsToOrderId(bestelId, brId)) {
             deleteOAFromOrderByKlant (klantId);
+        }
+
+        while (!checkEmptyOAIdListByOrderId(bestelId)) {
+            bv.showNoOAIdByOrderId(bestelId);
+            bv.showOrderIdToDelete();
+            bestelId = inputOrderIdInDatabaseCheck (klantId);
         }
 
         if (deleteConfirmed()) {
@@ -323,6 +330,10 @@ public class BestellingController {
         if (klantId == 0)
             return;
         
+        if (klantId ==0) {
+            return;
+        }
+        
         Date sqlDatum = inputDateCheck();
         
         av.showAllArticles();
@@ -331,14 +342,13 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
-            logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
-                    +" "+ lm.getAccountPojo().getIdAccount());
-        } else {
-            av.showGiveNumber();
-            makeNewOrder (accountId);
+        while (aantal < 1) {
+            aantal = inputNumberToOrderCheck();
         }
+        
+        bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
+        logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
+               +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     public void modifyOrder () {
@@ -386,6 +396,10 @@ public class BestellingController {
         if (klantId == 0)
             return;
         
+        if (klantId == 0) {
+            return;
+        }
+        
         bv.showOrderListByKlantId(klantId);
         
         ArrayList<BestellingPojo> bestellingen = getAllBestellingenFromKlant(klantId);
@@ -407,16 +421,13 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
-            logger.info (" Artikel " + artikelId + " toegevoegd aan bestelling door " 
-                    + lm.getAccountPojo().getGebruikersnaam()
-                    +" "+ lm.getAccountPojo().getIdAccount());
-            
-        } else {
-            av.showGiveNumber();
-            addArticleToOrder ();
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck();
         }
+        bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
+        logger.info (" Artikel " + artikelId + " toegevoegd aan bestelling door " 
+                + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     private void modifyArticleFromOrder () {
@@ -430,6 +441,10 @@ public class BestellingController {
         int klantId = selectKlantFromList();
         if(klantId == 0) 
             return;
+        
+        if (klantId == 0) {
+            return;
+        }
         
         bv.orderListByKlantId(klantId);
         
@@ -450,7 +465,7 @@ public class BestellingController {
         if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
             modifyArticleFromOrder ();
         }
-        if (!bm.checkOAIdByOrderId(bestelId, regelId)) {
+        if (!bm.checkOAIdBelongsToOrderId(bestelId, regelId)) {
             modifyArticleFromOrder ();
         }
         
@@ -460,15 +475,13 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
-            logger.info (" Bestelregel " + regelId + " gewijzigd in bestelling "+bestelId
-                    + " door "+ lm.getAccountPojo().getGebruikersnaam()
-                    +" "+ lm.getAccountPojo().getIdAccount());
-        } else {
-            av.showGiveNumber();
-            modifyArticleFromOrder ();
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck();
         }
+        bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+        logger.info (" Bestelregel " + regelId + " gewijzigd in bestelling "+bestelId
+                + " door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     public void deleteOrderOptions () {
@@ -511,38 +524,47 @@ public class BestellingController {
         bv.showOrderListByKlantId(klantId);
         bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
-        int bestelId = inputOrderIdInDatabaseCheck (klantId);
+        int bestelId = inputOrderIdInDatabaseCheck (klantId);//invoer negatief getal
         
-        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId) &&
+                !bm.checkOrderIdByKlantId(klantId, bestelId)) {
             deleteOAIdFromOrderId ();
         }
-        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
-            deleteOAIdFromOrderId ();
+        
+        while (!checkEmptyOAIdListByOrderId(bestelId)) {
+            bv.showNoOAIdByOrderId(bestelId);
+            bv.showOrderIdToDelete();
+            bestelId = inputOrderIdInDatabaseCheck (klantId);
         }
         
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();        
         int brId = bac.inputOAIdInDatabaseCheck(bestelId);
         
-        if (!bm.checkOAIdByOrderId(bestelId, brId)) {
-            deleteOAIdFromOrderId ();
+        while (!bm.checkOAIdBelongsToOrderId(bestelId, brId)) {
+            bv.showNoOAIdByOrderId(bestelId);
+            brId = bac.inputOAIdInDatabaseCheck(bestelId);
         }
         
         if (deleteConfirmed ()) {
             bm.deleteOA(klantId, brId, bestelId); 
-            logger.info (" Bestelregel " + brId + "verwijderd van bestelling "
-                    + bestelId + "door " + lm.getAccountPojo().getGebruikersnaam()
+            logger.info (" Bestelregel " + brId + " verwijderd van bestelling "
+                    + bestelId + " door " + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
             deleteOrderOptions ();
         }
     }
-
+    
     private void deleteTotalOrder() {
         
         int klantId = selectKlantFromList();
         if (klantId == 0)
             return;
+        
+        if (klantId ==0) {
+            return;
+        }
         
         bv.showOrderListByKlantId(klantId);
         bv.orderListByKlantId(klantId);
@@ -580,17 +602,29 @@ public class BestellingController {
     }
     
     //methods to check input for validity
+    private boolean checkEmptyOAIdListByOrderId (int bestelId) {
+        
+        bv = new BestellingView ();
+        
+        ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId(bestelId);
+        if (!baList.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     private Date inputDateCheck () {
         
         bv = new BestellingView ();
-        bv.showInputDate();
+        bv.showGiveDate();
         
         String dateInput = input.nextLine();
         if (Validator.isValidDate(dateInput)) {
             LocalDate bDatum = LocalDate.parse(dateInput, format);
             return java.sql.Date.valueOf(bDatum);
         } else {
-            bv.showGiveDate ();
             return inputDateCheck ();
         }
     }
