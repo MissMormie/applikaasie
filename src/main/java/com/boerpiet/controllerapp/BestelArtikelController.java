@@ -48,11 +48,11 @@ public class BestelArtikelController {
         bam = new BestelArtikelModel ();
         bm = new BestellingModel ();
                 
-        String bId = input.nextLine();
-        int id = inputIntCheck(bId);
+        String stringBestelRegellId = input.nextLine();
+        int bestelregelId = inputIntCheck(stringBestelRegellId);
         
-        if (bm.checkOAIdBelongsToOrderId(bestelId, id)) {
-            return id;
+        if (bm.checkOAIdBelongsToOrderId(bestelId, bestelregelId)) {
+            return bestelregelId;
         } else {
             bav.showOAIdNotBelongingToBestelId ();
             return inputOAIdInDatabaseCheck (bestelId);
