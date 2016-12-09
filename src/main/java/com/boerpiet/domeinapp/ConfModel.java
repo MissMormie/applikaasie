@@ -5,6 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.dao.Connector;
 import java.io.*;
 
 import javax.xml.parsers.*;
@@ -27,12 +28,6 @@ public class ConfModel {
     Document doc;
     private final String xmlFile = "xml/config.xml";
     
-    public static void main(String args[]) {
-        ConfModel configurationModel = new ConfModel();
-        configurationModel.setDefaultDatabase(1);
-        //configurationModel.setDefaultConnection(4);
-    }
-
     public ConfModel() {
         readXML();
     }
@@ -109,6 +104,7 @@ public class ConfModel {
                 return false;
         if(!changeDefault(itemNr, "connections"))
             return false;
+        Connector.resetConnection();
         return writeXML();
     }
     

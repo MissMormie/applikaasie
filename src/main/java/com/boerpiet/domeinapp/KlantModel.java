@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,9 +6,8 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.adres.AdresDAOFactory;
-import com.boerpiet.cheeseapp.klant.KlantDAOFactory;
-import java.util.logging.Level;
+import com.boerpiet.dao.adres.AdresDAOFactory;
+import com.boerpiet.dao.klant.KlantDAOFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
  * @author Sonja
  */
 
-// TODO: Possibly rename Klant Model to klantRepositoryModel? Then change this to Klant 
 public class KlantModel {
     // ------------ VARIABLES ---------------------------------
 

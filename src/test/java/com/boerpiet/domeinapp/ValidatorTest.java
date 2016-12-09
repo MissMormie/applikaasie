@@ -5,6 +5,7 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.utility.Validator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -120,9 +121,8 @@ public class ValidatorTest {
     public void testIsValidEmailadres() {
         System.out.println("isValidEmailadres");
         String email = "sonja@sonja.nl";
-        boolean expResult = true;
         boolean result = Validator.isValidEmailadres(email);
-        assertEquals(expResult, result);
+        assertEquals(true, result);
     }
     
     @Test

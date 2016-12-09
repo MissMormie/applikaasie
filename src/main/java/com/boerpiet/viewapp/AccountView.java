@@ -8,6 +8,7 @@ package com.boerpiet.viewapp;
 import com.boerpiet.domeinapp.AccountPojo;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -41,8 +42,8 @@ public class AccountView {
     public void showAccountList(ArrayList<AccountPojo> accountList) {
         showDivider();
         showAccountListHeader();
-        for (AccountPojo ap : accountList) {
-            showAccountListItem(ap); 
+        for (int i= 0; i < accountList.size(); i ++) {
+            showAccountListItem(accountList.get(i), i+1);
         }
         System.out.println();
     }
@@ -51,14 +52,16 @@ public class AccountView {
          System.out.println("id  gebruikersnaam  accountStatus datum      klant");
     }
     
-    private void showAccountListItem(AccountPojo ap) {
-        System.out.printf("%-3s %-15s %-13s %s-%s-%s %s \n", 
-                ap.getIdAccount(), 
+    private void showAccountListItem(AccountPojo ap, int num) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(ap.getDatum_aanmaak());
+        System.out.printf("%-3s %-15s %-13s %s-%s-%s %3s \n", 
+                num, 
                 ap.getGebruikersnaam(), 
-                ap.getAccountStatus(),
-                ap.getDatum_aanmaak().get(Calendar.YEAR),
-                ap.getDatum_aanmaak().get(Calendar.MONTH),
-                ap.getDatum_aanmaak().get(Calendar.DAY_OF_MONTH),
+                ap.getAccountStatus(),                
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH),
                 ap.getKlantId());       
     }
     
@@ -97,7 +100,7 @@ public class AccountView {
     public void showModifyAccount(AccountPojo account) {
         showDivider();
         showAccountListHeader();
-        showAccountListItem(account);
+        showAccountListItem(account, 1);
 
         System.out.println("\nWat wil je wijzigen aan dit account?\n"
                          + "1 Gebruikersnaam\n"
@@ -108,7 +111,7 @@ public class AccountView {
     public void showModifyUsername(AccountPojo account) {
         showDivider();
         showAccountListHeader();
-        showAccountListItem(account);
+        showAccountListItem(account, 1);
         System.out.println("\nType de nieuwe gebruikersnaam gevolgd door Enter\n"
                          + "Of type N om terug te gaan naar het menu.");        
     }
@@ -122,7 +125,7 @@ public class AccountView {
     public void showModifyPassword(AccountPojo account) {
         showDivider();
         showAccountListHeader();
-        showAccountListItem(account);
+        showAccountListItem(account, 1);
         System.out.println("\nType het nieuwe paswoord gevolgd door Enter\n"
                          + "Of type N om terug te gaan naar het menu.");        
     }
@@ -136,7 +139,7 @@ public class AccountView {
     public void showModifyAccountStatus(AccountPojo account) {
         showDivider();
         showAccountListHeader();
-        showAccountListItem(account);
+        showAccountListItem(account, 1);
         System.out.println("\nType de nieuwe accountStatus gevolgd door Enter\n"
                          + "Accounttype is medewerker of klant\n"       
                          + "Of type N om terug te gaan naar het menu.");        
@@ -145,7 +148,7 @@ public class AccountView {
     public void showModifyKlantId(AccountPojo account) {
         showDivider();
         showAccountListHeader();
-        showAccountListItem(account);
+        showAccountListItem(account, 1);
         System.out.println("\nType het nieuwe klantId gevolgd door Enter\n"
                          + "KlantID is 0 indien er geen klant bij het account hoort"       
                          + "Of type N om terug te gaan naar het menu.");        
@@ -166,5 +169,9 @@ public class AccountView {
         showDivider();
         System.out.println("Account maken mislukt: Deze gebruikersnaam bestaat al.");
 
+    }
+
+    public void showSelectAccountFailed() {
+        System.out.println("Het gekozen account bestaat niet. Kies een bestaand account.");            
     }
 }

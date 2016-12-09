@@ -7,7 +7,6 @@ package com.boerpiet.viewapp;
 
 import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.KlantPojo;
 
 /**
  *
@@ -59,8 +58,9 @@ public class KlantView {
     public void showModifyKlant(KlantModel klant) {
         showDivider();
         showKlant(klant);
+        showAdressen(klant);
 
-        System.out.println("\nWat wil je wijzigen aan dit account?\n"
+        System.out.println("Wat wil je wijzigen aan dit account?\n"
                          + "1 Voornaam\n"
                          + "2 Tussenvoegsel\n"
                          + "3 Achternaam\n"
@@ -116,6 +116,7 @@ public class KlantView {
     public void showUpdateFailed(KlantModel klant) {
         showDivider();
         showKlant(klant);
+        showAdressen(klant);
         System.out.println("Het updaten is niet goed gegaan, "
                          + "probeer het nog eens");                
     }
@@ -123,30 +124,39 @@ public class KlantView {
     public void showUpdateSuccess(KlantModel klant) {
         showDivider();
         showKlant(klant);
+        showAdressen(klant);
         System.out.println("Update is geslaagd.");
     }
 
     public void showDeleteSure(KlantModel klant) {
         showDivider();
         showKlant(klant);
-        System.out.println("\nWeet je zeker dat je deze klant wilt verwijderen?\n"
+        showAdressen(klant);
+        System.out.println("Weet je zeker dat je deze klant wilt verwijderen?\n"
                 + "Type J voor ja of N voor nee.");
     }
     
     private void showKlant(KlantModel klant) {
         
-        System.out.println(klant.getKlantPojo().getId() + " " + klant.getKlantPojo().getVoornaam() + " " +  
+        System.out.println(klant.getKlantPojo().getVoornaam() + " " +  
                 klant.getKlantPojo().getTussenvoegsel() + " " + klant.getKlantPojo().getAchternaam() + " " +
                 klant.getKlantPojo().getTelefoonnummer() + " " + klant.getKlantPojo().getEmailadres());
+
+        System.out.println("");
+    }
+    
+    private void showAdressen(KlantModel klant) {
         showAdres(klant.getBezorgAdresPojo());
         showAdres(klant.getFactuurAdresPojo());
-        showAdres(klant.getPostAdresPojo());
+        showAdres(klant.getPostAdresPojo());        
+        System.out.println("");
+
     }
     
     private void showAdres(AdresPojo adres) {
         if(adres != null)
         System.out.println( adres.getAdresType() + ": " + adres.getStraat() + " " + adres.getHuisnummer() +
-                            adres.getToevoeging() + " " + adres.getWoonplaats());
+                            adres.getToevoeging() + " " + adres.getPostcode()+ " " + adres.getWoonplaats());
     }
     
     public void showPostAdres() {
@@ -202,6 +212,15 @@ public class KlantView {
 
     public void showValidNumber() {
         System.out.println("Geef een juist nummer op.");
+    }
+
+    public void showHuisnummerPostcodeKloptNiet() {
+        System.out.println("De combinatie van postcode en huisnummer klopt niet.");
+        
+    }
+
+    public void showAdres(String straat, int huisnummer, String toevoeging, String postcode, String woonplaats, String type) {
+        System.out.println("Adres:" + straat + " " + huisnummer + " " + toevoeging + " " + postcode + " " + woonplaats);
     }
 
 }

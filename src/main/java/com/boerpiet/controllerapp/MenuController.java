@@ -5,10 +5,9 @@
  */
 package com.boerpiet.controllerapp;
 
-import com.boerpiet.*;
 import com.boerpiet.domeinapp.MenuModel;
-import com.boerpiet.domeinapp.Validator;
-import java.util.Scanner;
+import com.boerpiet.utility.ConsoleInput;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.MenuView;
 
 /**
@@ -21,7 +20,6 @@ public class MenuController {
 
     MenuModel menuModel;
     MenuView menuView;
-    Scanner input = new Scanner(System.in);
 
     // ------------ CONSTRUCTORS ---------------------------------
 
@@ -40,17 +38,21 @@ public class MenuController {
     private void listenForXMLMenuInput() {
         int menu = numberListener();
         
-        menuModel.chooseMenuItem(menu);
+        while (!menuModel.chooseMenuItem(menu)) {
+            menuView.showValidNumber();
+            menu = numberListener();
+        }
+            
         if (menuModel.isLoggedIn() == true)
             showMenu();
     }
 
     private int numberListener() {
-        String number = input.nextLine();
+        String number = ConsoleInput.textInput();
         if(Validator.isValidInt(number))
             return Integer.parseInt(number);
         
+        menuView.showValidNumber();
         return numberListener();
     }        
-    
 }

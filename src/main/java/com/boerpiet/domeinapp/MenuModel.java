@@ -26,7 +26,6 @@ public class MenuModel {
     private int menuId;
     private LoginManager loginManager;
 
-
     // ------------ CONSTRUCTORS ---------------------------------
 
     /**
@@ -131,6 +130,7 @@ public class MenuModel {
      * @param action the action attribute
      * @param id the node id
      */
+    
     private void doAction(String action, int id) {
         switch(action){
             // CHANGE MENU
@@ -185,41 +185,52 @@ public class MenuModel {
                 break;
                 
                 //Bestellingen en Artikelen ingevoerd door Jung, voorlopig werkende versie.
-                //Moet nog een scheiding tussen controller en model gemaakt worden,
-                //en misschien tussen klant- en medewerkeropties.
                 
                 //BESTELLINGEN:
-            case "Nieuwe bestelling": //nieuwe bestelling
-                BestellingController bcTest1 = new BestellingController (new BestellingModel (),
-                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
-                        new ArtikelView());
-                bcTest1.startNewOrder();
+            case "Nieuwe bestelling door klant": //nieuwe bestelling
+                BestellingController bc1 = new BestellingController (new BestellingModel (), loginManager);
+                //medewerkers en admins hebben klantId = 0 als het goed is
+                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                    bc1.startNewOrderByKlant();
+                }
                 break;
-            case "Bestelling wijzigen": //artikelen toevoegen aan of wijzigen in een bestelling
-                BestellingController bcTest2 = new BestellingController (new BestellingModel (),
-                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
-                        new ArtikelView());
-                bcTest2.modifyOrder();
+            case "Bestelling wijzigen door klant": //artikelen toevoegen aan of wijzigen in een bestelling
+                BestellingController bc2 = new BestellingController (new BestellingModel (), loginManager);
+                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                    bc2.modifyOrderByKlant();
+                }
                 break;
-            case "Bestelling verwijderen": //artikelen verwijderen van bestelling of totale bestelling verwijderen
-                BestellingController bcTest3 = new BestellingController (new BestellingModel (),
-                        new BestellingPojo(), new BestellingView(), new BestelArtikelPojo(),
-                        new ArtikelView());
-                bcTest3.deleteOrderOptions();
+            case "Bestelling verwijderen door klant": //artikelen verwijderen van bestelling of totale bestelling verwijderen
+                BestellingController bc3 = new BestellingController (new BestellingModel (), loginManager);
+                if (loginManager.getAccountPojo().getKlantId() !=0) {
+                    bc3.deleteOrderByKlant();
+                }
+                break;
+            case "Nieuwe bestelling door medewerker of admin":
+                BestellingController bc4 = new BestellingController (new BestellingModel (), loginManager);
+                bc4.startNewOrder();
+                break;
+            case "Bestelling wijzigen door medewerker of admin":
+                BestellingController bc5 = new BestellingController (new BestellingModel (), loginManager);
+                bc5.modifyOrder();
+                break;
+            case "Bestelling verwijderen door medewerker of admin":
+                BestellingController bc6 = new BestellingController (new BestellingModel (), loginManager);
+                bc6.deleteOrderOptions();
                 break;
                 
             //ARTIKELEN:
             case "Nieuw artikel":
-                ArtikelController artC1 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC1 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC1.createArticle();
                 break;
             case "Wijzig artikel":
-                ArtikelController artC2 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
+                ArtikelController artC2 = new ArtikelController (new ArtikelModel (), loginManager);
                 artC2.modifyArticle();
                 break;
             case "Verwijder artikel":
-                ArtikelController artC3 = new ArtikelController (new ArtikelPojo (), new ArtikelView ());
-                artC3.deleteArticle();
+                ArtikelController artC3 = new ArtikelController (new ArtikelModel (), loginManager);
+                artC3.deleteArticleMenu();
                 break;
                 
             // CONFIGURATIE
@@ -232,7 +243,7 @@ public class MenuModel {
                 ConfController cc2 = new ConfController(new ConfModel(), new ConfView(), loginManager);
                 cc2.modifyConnectionPoolSetting();
 
-                break;
+                break;                
                 
             // LOGOUT
             case "logout": logout(); break;

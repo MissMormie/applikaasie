@@ -5,10 +5,12 @@
  */
 package com.boerpiet.domeinapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
-import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
-import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.dao.artikel.ArtikelDaoFactory;
+import com.boerpiet.dao.bestelartikel.BestelArtikelDaoFactory;
+import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.viewapp.BestellingView;
+import com.boerpiet.viewapp.ArtikelView;
+import com.boerpiet.viewapp.BestelArtikelView;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -23,108 +25,158 @@ public class BestellingModel {
     private BestellingPojo bp;
     private BestelArtikelPojo ba;
     private ArtikelPojo ap;
+    private ArtikelView av;
+    private BestelArtikelView bav;
     
-    public BestellingModel () {
-        
+    public BestellingModel () {  
     }
-        
+    
     public BestellingModel (BestellingModel bm, BestellingView bv, BestellingPojo bp,
-            BestelArtikelPojo ba, ArtikelPojo ap) {
+            BestelArtikelPojo ba, ArtikelPojo ap, ArtikelView av, BestelArtikelView bav) {
         this.bm = bm;
         this.bv = bv;
         this.bp = bp;
         this.ba = ba; 
         this.ap = ap;
+        this.av = av;
+        this.bav = bav;
     }
-    
+    //Methoden voor menu-opties
     public void addNewOrder (int klantId, Date sqlDatum, int accountKey, int artikelId, int aantal) {
         bp = new BestellingPojo ();
         bv = new BestellingView ();
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").findArtikelId(klantId)) {
-        bp.setKlantKey (klantId);
-        bp.setBestelDatum (sqlDatum);
-        bp.setAccountKey (accountKey);
         
-        int id = BestellingDaoFactory.getBestellingDAO("MySQL").createBestellingWithReturnId(bp);
-        
-        BestelArtikelPojo bestelregel = new BestelArtikelPojo (id, artikelId, aantal);
-        
-        BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel);
-        bv.showNewBestellingSucces();
+        if (ArtikelDaoFactory.getArtikelDAO().isArtikelInDatabase(artikelId)) {
+            bp.setKlantKey (klantId);
+            bp.setBestelDatum (sqlDatum);
+            bp.setAccountKey (accountKey);
+         
+            int id = BestellingDaoFactory.getBestellingDAO("MySQL").createBestellingWithReturnId(bp);
+            
+            BestelArtikelPojo bestelregel = new BestelArtikelPojo (id, artikelId, aantal);
+            
+            BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel);
+            
+            bv.showAddOrderSuccess();
         } else {
-            bv.showNewBestellingFailure ();
+            bv.showErrorMessage();
         }
     }
     
-    public void createArticleToAdd (int bestelId, int artikelId, int aantal) {
+    public void createArticleToAddToOrder (int bestelId, int artikelId, int aantal) {
         bv = new BestellingView();
+        bav = new BestelArtikelView ();
+        
         BestelArtikelPojo bestelregel = new BestelArtikelPojo (bestelId, artikelId, aantal);
+        
         if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").createBestelArtikel(bestelregel)) {
-            System.out.println("Artikel is toegevoegd aan bestelling met id: "+bestelId);
-            
+            bav.showAddOASuccess();
+            bv.showAllBestelRegelsByBestelId(bestelId);  
         }else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            return;
-        }
-        System.out.println("Dit is de gewijzigde bestelling.");
-        bv.showAllBestelRegelsByBestelId(bestelId);
+            bv.showErrorMessage();
+        }        
     }
     
     public void modifyArticleInOrder (int bestelId, int regelId, int artikelId, int aantal) {
         bv = new BestellingView();
         ba = new BestelArtikelPojo();
+        
         ba.setBestelId(bestelId);
         ba.setArtikelId(artikelId);
         ba.setAantal(aantal);
         
         if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").updateBestelArtikel(ba, regelId)) {
-            System.out.println("Bestelling is nu gewijzigd.");
+            bv.showModifySuccess();
+            bv.showAllBestelRegelsByBestelId(bestelId);  
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            return;
-        }
-        System.out.println("Dit is de gewijzigde bestelling.");
-        bv.showAllBestelRegelsByBestelId(bestelId);
+            bv.showErrorMessage();
+        }        
     }
     
-    public void deleteOneTupel (int klantId, int brId, int bestelId) {
+    public void deleteOA (int klantId, int brId, int bestelId) {
         bv = new BestellingView();
+        bav = new BestelArtikelView ();
         ba = new BestelArtikelPojo ();
         ba.setId(brId);
         
         if (BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteBestelArtikel(brId)) {
-            System.out.println("Artikel is verwijderd van bestelling.");
-            System.out.println("Dit is de gewijzigde bestelling.");
+            bav.showDeleteOASuccess();
             bv.showAllBestelRegelsByBestelId(bestelId);
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+            bv.showErrorMessage();
         }
     }
     
     public void deleteOrder (int klantId, int bestelId) {
         bv = new BestellingView ();
         bp = new BestellingPojo ();
-        bp.setId(bestelId);
-        //bp.setKlantKey(klantId);
+        //bp.setId(bestelId);
         
         deleteArticlesFromOrder(bestelId);
         
         if (BestellingDaoFactory.getBestellingDAO("MySQL").deleteBestelling(bestelId)) {
-            System.out.println("Bestelling is verwijderd.");
-            bv.showAllOrdersByKlantId(klantId);            
+            bv.showDeleteOrderSuccess();
+            bv.orderListByKlantId(klantId);            
+        } else {
+            bv.showErrorMessage();
         }
     }
     
     private void deleteArticlesFromOrder (int bestelId) {
         ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
+        
         for (BestelArtikelPojo baPojo : baList) {
-            BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
+                BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").deleteArticleFromOrder(bestelId);
             }
+        }
+    
+    public boolean checkNotEmptyOAListByOrderId (int bestelId) {
+        ArrayList<BestelArtikelPojo>baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId(bestelId);
+        return baList.isEmpty ();
     }
     
+    public boolean checkOAIdBelongsToOrderId (int bestelId, int OAId) {
+        ArrayList<BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId (bestelId);
+        for (BestelArtikelPojo bp : baList) {
+            if (bp.getId() == OAId) {
+            return true;                
+        }
+    }
+        return false;
+    }
     
+    public boolean checkNotEmptyOrderListByKlantId (int klantId) {
+        ArrayList<BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").
+                getAllByKlantId(klantId);
+        if (bList.isEmpty()) {
+            bv.showEmptyOrderListByKlantId (klantId);
+            return false;
+        }
+        return true;
+    }
     
+    public boolean checkOrderIdByKlantId (int klantId, int bestelId) {
+        return BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(bestelId, klantId);
+        /*
+        ArrayList<BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").
+                getAllByKlantId(klantId);
+        for (BestellingPojo bp  : bList) {
+            if (bp.getId() == bestelId) {
+                return true;
+            }
+        }
+        return false; */
+    }
+    
+    //check bestellingid adhv klantid
+    public boolean checkOrderIdInDatabase (int inputOrderId, int klantId) {
+            return (BestellingDaoFactory.getBestellingDAO("MySQL").findBestellingId(inputOrderId, klantId));    
+    }
+        
+    //getters and setters
     public BestellingModel getBestellingModel () {
         return bm;
     }

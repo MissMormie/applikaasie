@@ -38,6 +38,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.21</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
@@ -49,7 +50,22 @@
             <artifactId>HikariCP</artifactId>
             <version>2.4.7</version>
             <scope>compile</scope>
-        </dependency>        
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
+<!--        <dependency>
+            <groupId>com.mimer.jdbc</groupId>
+            <artifactId>mimjdbc</artifactId>
+            <version>3</version>
+        </dependency>-->
     </dependencies>    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

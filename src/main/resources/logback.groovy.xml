@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-    
+    <!-- TODO look at what logback.groovy is -->
     <!-- logged directly to console because of consoleappender -->
-    <!-- todo change to log to file -->
  <!--
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> 
     <encoder>

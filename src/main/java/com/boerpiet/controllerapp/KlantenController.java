@@ -8,9 +8,12 @@ package com.boerpiet.controllerapp;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.KlantPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.ConsoleInput;
+import com.boerpiet.utility.Validator;
+import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.KlantenView;
 import com.boerpiet.viewapp.KlantView;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -20,7 +23,6 @@ import java.util.Scanner;
 public class KlantenController {
     private final KlantenModel klantModel;
     private final KlantenView klantView;
-    private final Scanner input = new Scanner(System.in);
     
     public KlantenController(KlantenModel klantModel, KlantenView klantView) {
         this.klantModel = klantModel;
@@ -28,25 +30,38 @@ public class KlantenController {
     }
 
     public void selectKlantToModify() {
-        klantView.showKlantList(klantModel.fetchKlantList());
+        ArrayList klantList = klantModel.fetchKlantList();
+        klantView.showKlantList(klantList);
         klantView.showSelectKlantToModify();
-        selectKlantToModifyListener();
+        KlantModel klant = selectKlantListener(klantList);
+        if(klant == null)
+            return;
+
+        KlantController skc = new KlantController(klant, new KlantView());
+        skc.modifyKlant();        
+
     }
 
     public void selectKlantToDelete() {
-        klantView.showKlantList(klantModel.fetchKlantList());
+        ArrayList klantList = klantModel.fetchKlantList();
+        klantView.showKlantList(klantList);
         klantView.showSelectKlantToDelete();
-        selectKlantToDeleteListener();
+        KlantModel klant = selectKlantListener(klantList);
+        if(klant == null)
+            return;
+        KlantController skc = new KlantController(klant, new KlantView());
+        skc.deleteKlant();
     }
     
     public KlantModel selectKlant() {
-        klantView.showKlantList(klantModel.fetchKlantList());
+        ArrayList klantList = klantModel.fetchKlantList();
+        klantView.showKlantList(klantList);
         klantView.showSelectKlant();        
-        return selectKlantListener();
+        return selectKlantListener(klantList);
     }
-
+/*
     private void selectKlantToModifyListener() {
-        String in = textListener();
+        String in = ConsoleInput.notEmptyTextInput();
 
         if (in.equalsIgnoreCase("n")) 
             return;
@@ -66,30 +81,34 @@ public class KlantenController {
                 skc.modifyKlant();        
             }
         }
-    }
+    }*/
     
-    private KlantModel selectKlantListener() {
-        String in = textListener();
+    private KlantModel selectKlantListener(ArrayList<KlantPojo> klantList) {
+        String in = ConsoleInput.notEmptyTextInput();
         if (in.equalsIgnoreCase("n")) 
             return null;
+        
         if(!Validator.isValidInt(in)) {
             klantView.showSelectKlantfailed();
-            return selectKlantListener();
+            return selectKlantListener(klantList);
         } else {
-            int id = Integer.parseInt(in);
+            int id = Integer.parseInt(in) -1;
+            KlantModel klant = null;
+            if(klantList.size() >= id ) {
+                klant = klantModel.getKlantById(klantList.get(id).getId());
+            }
 
-            KlantModel klant = klantModel.getKlantById(id);
             if (klant == null ) {
                 klantView.showSelectKlantfailed();
-                return selectKlantListener();
+                return selectKlantListener(klantList);
             } else {
                 return klant;            
             }
         }
     }
-
+/*
     private void selectKlantToDeleteListener() {
-        String in = textListener();
+        String in = ConsoleInput.notEmptyTextInput();
         if (in.equalsIgnoreCase("n")) 
             return;
         
@@ -100,28 +119,14 @@ public class KlantenController {
 
             KlantModel klant = klantModel.getKlantById(id);
             if (klant == null) {
-                selectKlantToDelete();
+                klantView.showValidNumber();
+                selectKlantToDeleteListener();
+                //selectKlantToDelete();
             } else {
                 KlantController skc = new KlantController(klant, new KlantView());
                 skc.deleteKlant();
             }
         }
-    }
-
-    private String textListener() {
-        String text = input.nextLine();
-        if(text.isEmpty())
-            return textListener();
-        return text;
     }    
-    
-    private int numberListener() {
-        String number = input.nextLine();
-        if(Validator.isValidInt(number))
-            return Integer.parseInt(number);
-        
-        klantView.showValidNumber();
-        return numberListener();
-    }        
-
+    */
 }

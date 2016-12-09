@@ -7,9 +7,9 @@ package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.ConfModel;
 import com.boerpiet.domeinapp.LoginManager;
-import com.boerpiet.domeinapp.Validator;
+import com.boerpiet.utility.ConsoleInput;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.ConfView;
-import java.util.Scanner;
 
 /**
  *
@@ -29,8 +29,7 @@ public class ConfController {
     public void modifyDatabaseSetting() {
         cv.showPickDatabase(cm.getDatabaseNodes());
 
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+        String input = ConsoleInput.textInput();
         
         if (input.equalsIgnoreCase("n"))
             return;
@@ -44,7 +43,6 @@ public class ConfController {
         int database = Integer.parseInt(input);
         
         // -1 omdat er voor de view gewerkt wordt vanaf 1, maar de xml werkt vanaf 0
-        
         if(!cm.setDefaultDatabase(database - 1)) {
             cv.showModifyDatabaseFailed();
             modifyDatabaseSetting();      
@@ -53,14 +51,12 @@ public class ConfController {
         
         cv.showDatabaseChanged();
         lm.logout();
-        
     }
 
     public void modifyConnectionPoolSetting() {
         cv.showPickConnectionPool(cm.getConnectionPoolNodes());
 
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+        String input = ConsoleInput.textInput();
         
         if (input.equalsIgnoreCase("n"))
             return;
@@ -82,16 +78,6 @@ public class ConfController {
         }
         
         cv.showConnectionPoolChanged();
-        System.exit(0);
+        // System.exit(0);
     }
-
-    private int numberListener() {
-        Scanner input = new Scanner(System.in);
-        String number = input.nextLine();
-        if(Validator.isValidInt(number))
-            return Integer.parseInt(number);
-        
-        return numberListener();
-    }
-        
 }

@@ -5,8 +5,8 @@
  */
 package com.boerpiet.viewapp;
 
-import com.boerpiet.cheeseapp.BestelArtikel.BestelArtikelDaoFactory;
-import com.boerpiet.cheeseapp.Bestelling.BestellingDaoFactory;
+import com.boerpiet.dao.bestelartikel.BestelArtikelDaoFactory;
+import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.util.ArrayList;
@@ -24,14 +24,6 @@ public class BestellingView {
                 +"2. Terug naar het menu \n");
     }
     
-    public void showNewBestellingSucces () {
-        System.out.println("Nieuwe bestelling is aangemaakt.");
-    }
-    
-    public void showNewBestellingFailure () {
-        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-    }
-
     public void startModifyOrder() {
         System.out.println("Je bent nu in het bestelling-wijzigingsmenu.");
         System.out.println("Wat wil je doen? \n"
@@ -71,15 +63,17 @@ public class BestellingView {
     private void showBestelListItem(BestellingPojo bp) {
         System.out.printf("%-3s %-15s \n", 
                 bp.getId(),
-                bp.getBestelDatum() +"\n");
+                bp.getBestelDatum());
     }
-    public void showAllOrdersByKlantId (int klantId) {
+    public void orderListByKlantId (int klantId) {
         ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
-        BestellingView bvList = new BestellingView();
-        bvList.showBestellingListByKlantId(bList);
+        if (bList.isEmpty()) {
+            return;
+        }
+        showBestellingListByKlantId(bList);
     }
     
-    private void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
+    public void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
         showDivider();
         showBestelLijstByBestelIdHeader ();
         for (BestelArtikelPojo ba : bestelList) {
@@ -99,14 +93,85 @@ public class BestellingView {
         System.out.printf("%-15s %-15s %-13s \n",
                 ba.getId(),
                 ba.getArtikelId(),
-                ba.getAantal()+"\n");
+                ba.getAantal());
     }
     
     public void showAllBestelRegelsByBestelId (int bestelId) {
         ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
-        BestellingView bvList = new BestellingView();
-        bvList.showBestelLijstByBestelId(baList);
-
-    }       
+        if (!baList.isEmpty()) {
+            BestellingView bvList = new BestellingView();
+            showOAIdByOrderId (bestelId);
+            bvList.showBestelLijstByBestelId(baList);
+        } else {
+            showNoOAIdByOrderId(bestelId);
+        }
+    }
+    
+    //input messages
+    public void showInputDate () {
+        System.out.println("Geef besteldatum (yyyy-mm-dd):");
+    }
+    public void showInputNumberToOrder () {
+        System.out.println("Hoeveel wil je bestellen? Geef aantal:");
+    }
+    public void showOrderIdToModify () {
+        System.out.println("Geef bestelid voor wijziging:");
+    }
+    public void showOrderIdToAddArticle () {
+        System.out.println("Geef bestelid om artikelen aan toe te voegen:");
+    }
+    public void showOrderIdToDelete() {
+        System.out.println("Geef bestelid voor verwijdering:");
+    }
+    public void showInputKlantId () {
+        System.out.println("Geef klantid:");
+    }
+    public void showGiveNumber() {
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
+    }
+    public void showGiveDate() {
+        System.out.println("Geef een geldige datum (yyyy-MM-dd):");
+    }
+    public void showInputOrderId() {
+        System.out.println("Geef bestelid:");
+    }
+    public void showMenuKeuze() {
+        System.out.println("Geef menu-keuze (getal):");
+    }
+    public void showAddOrderSuccess () {
+        System.out.println("Bestelling is toegevoegd.");
+    }
+    public void showModifySuccess () {
+        System.out.println("Bestelling is gewijzigd");
+    }
+    public void showDeleteOrderSuccess () {
+        System.out.println("Bestelling is verwijderd uit database.");
+    }
+    public void showErrorMessage () {
+        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+    }
+    public void showAskSureToDelete() {
+        System.out.println("Weet je zeker dat je dit wilt verwijderen? J/N");
+    }
+    public void showNoOAIdByOrderId(int bestelId) {
+        System.out.println("Er zijn geen bestelregels (meer) bij dit bestelid.");
+    }
+    
+    public void showNoBestellingByKlant() {
+        System.out.println("Er zijn geen bestellingen bij deze klant.");
+    }
+    
+    public void showNoOrderIdByKlantId(int klantId) {
+        System.out.println("Bestelid hoort niet bij klantid "+klantId);
+    }
+    public void showEmptyOrderListByKlantId (int klantId) {
+        System.out.println("Er zijn geen bestellingen bij klantid "+klantId);
+    }   
+    public void showOrderListByKlantId(int klantId) {
+        System.out.println("Dit zijn de bestellingen bij klantid " + klantId + "\n");
+    }
+    public void showOAIdByOrderId(int bestelId) {
+        System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
+    }
 }

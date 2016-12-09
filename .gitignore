@@ -1,6 +1,8 @@
 /target/
 /src/main/java/com/boerpiet/mainTest.java
+/src/main/java/com/boerpiet/viewapp/TestClass.java
 /nbproject/
 debug.log
 /logs/rollingfile.log
 /logs/
+/src/main/java/com/boerpiet/viewapp/MimerConnTest.java

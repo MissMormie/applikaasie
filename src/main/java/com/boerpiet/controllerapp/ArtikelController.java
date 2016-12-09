@@ -5,10 +5,14 @@
  */
 package com.boerpiet.controllerapp;
 
-import com.boerpiet.cheeseapp.Artikel.ArtikelDaoFactory;
-import com.boerpiet.domeinapp.ArtikelPojo;
+import com.boerpiet.domeinapp.ArtikelModel;
+import com.boerpiet.domeinapp.LoginManager;
+import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.ArtikelView;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -16,49 +20,72 @@ import java.util.Scanner;
  */
 public class ArtikelController {
     private final Scanner input = new Scanner (System.in);
-    private final ArtikelPojo artikelPojo;
-    private final ArtikelView artikelView;
+    private ArtikelModel am;
+    private ArtikelView av;
+    private final LoginManager lm;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    public ArtikelController (ArtikelPojo artikelPojo, ArtikelView artikelView) {
-        this.artikelPojo = artikelPojo;
-        this.artikelView = artikelView;
+    public ArtikelController (ArtikelModel am, LoginManager lm) {
+        this.am = am;
+        this.lm = lm;
         }
-    
+
     public void createArticle () {
-        artikelView.startCreateArticle ();
-        addArticleToDatabase ();
+        av = new ArtikelView ();
         
+        av.startCreateArticle ();
+        av.showMenuKeuze();
+        
+        String intKeuze = input.nextLine ();
+        if (!Validator.isValidInt(intKeuze)) {
+            av.showGiveNumber();
+            createArticle();
+        }
+        int keuze = Integer.parseInt(intKeuze);
+        
+        switch (keuze) {
+            case 1: addArticleToDatabase ();
+                    createArticle ();
+                break;
+            case 2:
+                return;
+            default: createArticle ();
+                break;
+        }        
     }
     
     private void addArticleToDatabase () {
-        String begin = input.nextLine();
-        if (begin.equalsIgnoreCase("N")) {
-            return;
-        }
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        System.out.println("Geef naam voor artikel:");
-        String naam = input.nextLine();
-        System.out.println("Geef prijs voor artikel:");
-        Double prijs = Double.parseDouble(input.nextLine());
-        System.out.println("Geef huidige voorraad van dit artikel:");
-        int voorraad = Integer.parseInt(input.nextLine());
+        String naam = inputNameCheck();
         
-        artikelPojo.setNaam(naam);
-        artikelPojo.setPrijs(prijs);
-        artikelPojo.setVoorraad(voorraad);
+        double prijs = inputPrijsCheck();
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").createArtikel(artikelPojo)) {
-            System.out.println("Artikel is toegevoegd aan de database.");
-            artikelView.showAllArticles();
+        int voorraad = inputVoorraadCheck();
+        
+        if (prijs >=0 && voorraad >=0) {
+            am.addArticle(naam, prijs, voorraad);
+            logger.info (" Artikel toegevoegd door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount() + "\n");
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            createArticle();
+            av.showGiveNumber();
+            addArticleToDatabase ();
         }
     }
     
     public void modifyArticle () {
-        artikelView.articleModifyOptions();
-        int keuze = Integer.parseInt(input.nextLine());
+        av = new ArtikelView ();
+
+        av.articleModifyOptions();
+        av.showMenuKeuze();
+        String intKeuze = input.nextLine ();
+        if (!Validator.isValidInt(intKeuze)) {
+            av.showGiveNumber();
+            modifyArticle();
+        }
+        
+        int keuze = Integer.parseInt(intKeuze);
         
         switch (keuze) {
             case 1: modifyArticleNaam ();
@@ -70,7 +97,10 @@ public class ArtikelController {
             case 3: modifyArticleVoorraad ();
                     modifyArticle ();
                 break;
-            case 4:
+            case 4: modifyArticleNPV ();
+                    modifyArticle ();
+                break;
+            case 5:
                 return;
             default: modifyArticle ();
                 break;
@@ -78,69 +108,209 @@ public class ArtikelController {
     }
     
     private void modifyArticleNaam () {
-        artikelView.showAllArticles();
-        System.out.println("Geef artikelid voor wijziging:");
-        int id = Integer.parseInt(input.nextLine());
-        System.out.println("Geef de nieuwe naam:");
-        String naam = input.nextLine();
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelNaam(naam, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            modifyArticle ();
-        }
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        String naam = inputNameCheck();
+        
+        am.modifyNaam(id, naam);
+        logger.info (" Naam artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+            +" "+ lm.getAccountPojo().getIdAccount() + "\n");
     }
     
     private void modifyArticlePrijs () {
-        artikelView.showAllArticles();
-        System.out.println("Geef artikelid voor wijziging:");
-        int id = Integer.parseInt(input.nextLine());
-        System.out.println("Geef de nieuwe prijs:");
-        double prijs = Double.parseDouble(input.nextLine());
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelPrijs(prijs, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            artikelView.showAllArticles();
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        double prijs = inputPrijsCheck();
+        
+        if (prijs >=0) {
+            am.modifyPrijs(id, prijs);
+            logger.info (" Prijs artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount()+ "\n");
         } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            modifyArticle ();
+            av.showErrorMessage();
+            modifyArticlePrijs();
         }
     }
     
     private void modifyArticleVoorraad () {
-        artikelView.showAllArticles();
-        System.out.println("Geef artikelid voor wijziging:");
-        int id = Integer.parseInt(input.nextLine());
-        System.out.println("Geef de nieuwe voorraad:");
-        int voorraad = Integer.parseInt(input.nextLine());
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
         
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").updateArtikelVoorraad(voorraad, id)) {
-            System.out.println("Artikel is gewijzigd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            modifyArticle ();
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        int voorraad = inputVoorraadCheck();
+        
+        if (voorraad >= 0) {
+            am.modifyVoorraad(id, voorraad);
+            logger.info (" Voorraad artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount()+ "\n");
         }
     }
     
-    public void deleteArticle () {
-        artikelView.startDeleteArticle();
-        artikelView.showAllArticles();
-        System.out.println("Geef id van artikel voor verwijdering:");
-        int id = Integer.parseInt(input.nextLine());
-        if (ArtikelDaoFactory.getArtikelDAO("MySQL").deleteArtikel(id)) {
-            System.out.println("Artikel is nu verwijderd.");
-            artikelView.showAllArticles();
-        } else {
-            System.out.println("Er is iets misgegaan, probeer het opnieuw.");
-            return;
+    private void modifyArticleNPV() {
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
+       
+        av.showAllArticles();
+        av.showInputArticleIdToModify();
+        int id = inputArtikelIdInDatabaseCheck ();
+        
+        String naam = inputNameCheck ();
+        double prijs = inputPrijsCheck ();
+        int voorraad = inputVoorraadCheck ();
+        
+        
+        if (prijs >=0 && voorraad>=0) {
+            am.modifyNPV (id, naam, prijs, voorraad);
+            logger.info (" Naam/prijs/voorraad artikel "+id+" gewijzigd door "
+                    + lm.getAccountPojo().getGebruikersnaam()+" "
+                    + lm.getAccountPojo().getIdAccount() + "\n");
         }
-        System.out.println("Wil je nog meer artikelen verwijderen? (J/N)");
-        String jaNee = input.nextLine();
-        if (jaNee.equalsIgnoreCase("j")) {
-            deleteArticle ();
+    }
+    
+    public void deleteArticleMenu () {
+        av = new ArtikelView ();
+        
+        av.startDeleteArticle();
+        
+        av.showMenuKeuze();        
+        String intKeuze = input.nextLine ();
+        if (!Validator.isValidInt(intKeuze)) {
+            av.showGiveNumber();
+            deleteArticleMenu();
+        }
+        int keuze = Integer.parseInt(intKeuze);
+        
+        switch (keuze) {
+            case 1: deleteArticleFromDatabase ();
+                    deleteArticleMenu ();
+                break;
+            case 2:
+                return;
+            default: deleteArticleMenu ();
+                break;
+        }
+    }
+    
+    private void deleteArticleFromDatabase () {
+        av = new ArtikelView ();
+        am = new ArtikelModel ();
+        
+        av.showAllArticles();
+        av.showInputArticleIdToDelete();
+        int id = inputArtikelIdInDatabaseCheck ();
+
+        if (deleteConfirmed() ) {
+        am.deleteArticle(id);
+        logger.info (" Artikel "+id+" verwijderd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount() + "\n");
+        }
+    }
+    
+    private boolean deleteConfirmed () {
+        av = new ArtikelView ();
+        av.showAskSureToDelete();
+        
+        return input.nextLine().equalsIgnoreCase("J");
+    }
+    
+    //methods to check input for validity   
+    private String inputNameCheck () {
+        av = new ArtikelView ();
+        av.showInputName();
+        
+        String naam = notEmptyNameInput ();
+        return naam;
+    }
+    
+    private double inputPrijsCheck () {
+        av = new ArtikelView ();
+        
+        av.showGivePrijs();
+        String prijsString = (input.nextLine());
+        
+        if (Validator.inputIsIntOrHasMaxTwoDecimals(prijsString)) {
+            double prijs = Double.parseDouble(prijsString);
+            while (prijs < 0) {
+                return inputPrijsCheck ();
+            }
+            return prijs;
+        }
+        else {
+            return inputPrijsCheck ();
+        }
+    }
+
+    private int inputVoorraadCheck () {
+        av = new ArtikelView ();
+        
+        av.showInputVoorraad();
+        String voorraadInput = input.nextLine();
+        
+        if (inputIntCheck (voorraadInput)) {
+            int voorraad = Integer.parseInt(voorraadInput);
+            while (voorraad <0){
+                av.showGiveNumber();
+                return inputVoorraadCheck ();
+            }
+            return voorraad;
+        } else {
+            return inputVoorraadCheck ();
+        }
+    }
+    
+    public int inputArtikelIdInDatabaseCheck () {
+        av = new ArtikelView();
+        am = new ArtikelModel ();
+        
+        String aId = input.nextLine();
+        int id = 0;
+        while (!Validator.isValidInt(aId)) {
+            av.showGiveNumber();
+            aId = input.nextLine();
+        }
+
+        id = Integer.parseInt(aId);
+        
+        if (!am.checkArticleIdInDatabase(id)) {
+            av.showArticleIdNotInDatabase();
+            av.showInputArticleId();
+            return inputArtikelIdInDatabaseCheck();
+        } else {
+            return id;
+        }
+    }
+
+    private boolean inputIntCheck (String string) {
+        av = new ArtikelView ();
+        
+        if (Validator.isValidInt(string)) {
+            return true; //Integer.parseInt(string);
+        } else {
+            av.showGiveNumber();
+            return inputIntCheck (input.nextLine());
+        }
+    }
+    
+    private String notEmptyNameInput () {
+        String text = input.nextLine();
+        if(text.isEmpty()) {
+            return inputNameCheck ();
+        } else {
+        return text;
         }
     }
 }
