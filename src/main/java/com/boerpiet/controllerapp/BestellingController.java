@@ -60,6 +60,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine();
         int keuze = inputIntCheck (intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1:
@@ -107,6 +111,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch(keuze){
             case 1:
@@ -184,13 +192,6 @@ public class BestellingController {
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToModify();        
         int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
-        
-        if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
-            modifyArticleFromOrderByKlant(klantId);
-        }
-        if (!bm.checkOAIdBelongsToOrderId(bestelId, regelId)) {
-            modifyArticleFromOrder ();
-        }
     
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
@@ -218,6 +219,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine ();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1:
@@ -251,21 +256,16 @@ public class BestellingController {
                 !bm.checkOrderIdByKlantId(klantId, bestelId)) {
             deleteOAIdFromOrderId ();
         }
-        
-        bv.showAllBestelRegelsByBestelId(bestelId);
-        bav.showInputOAIdToDelete();
-        int brId = bac.inputOAIdInDatabaseCheck(bestelId);
-        
-        if (!bm.checkOAIdBelongsToOrderId(bestelId, brId)) {
-            deleteOAFromOrderByKlant (klantId);
-        }
-
         while (!checkEmptyOAIdListByOrderId(bestelId)) {
             bv.showNoOAIdByOrderId(bestelId);
             bv.showOrderIdToDelete();
             bestelId = inputOrderIdInDatabaseCheck (klantId);
         }
-
+        
+        bv.showAllBestelRegelsByBestelId(bestelId);
+        bav.showInputOAIdToDelete();
+        int brId = bac.inputOAIdInDatabaseCheck(bestelId);
+        
         if (deleteConfirmed()) {
             bm.deleteOA (klantId, brId, bestelId);
             logger.info (" Bestelregel " + brId + " verwijderd van bestelling door " 
@@ -308,6 +308,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine ();
         int keuze  = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=2)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1: makeNewOrder(accountId);
@@ -360,6 +364,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch(keuze){
             case 1: addArticleToOrder();
@@ -461,14 +469,7 @@ public class BestellingController {
         bv.showAllBestelRegelsByBestelId(bestelId);        
         bav.showInputOAIdToModify();
         int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
-        
-        if (!bm.checkNotEmptyOAListByOrderId(bestelId)) {
-            modifyArticleFromOrder ();
-        }
-        if (!bm.checkOAIdBelongsToOrderId(bestelId, regelId)) {
-            modifyArticleFromOrder ();
-        }
-        
+                
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
         int modifiedArtikelId = ac.inputArtikelIdInDatabaseCheck();
@@ -492,6 +493,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine ();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1:
