@@ -5,7 +5,6 @@
  */
 package com.boerpiet.dao.bestelling;
 
-import com.boerpiet.dao.Connector;
 import com.boerpiet.dao.MySQLConnection;
 import com.boerpiet.domeinapp.BestellingPojo;
 import java.sql.*;
@@ -88,7 +87,7 @@ public class SqlBestellingDao extends SuperBestellingDao {
     public boolean findBestellingId (int bestelId, int klantId) {
         String sql = "SELECT idBestelling FROM Bestelling WHERE Deleted = 0 "
                 + " AND idBestelling = "+bestelId
-                + " AND KlantKey = "+klantId;
+                + " AND KlantKey = "+klantId+";";
         try {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             return rs != null;

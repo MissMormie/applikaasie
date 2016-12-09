@@ -74,7 +74,7 @@ public class BestellingView {
         bvList.showBestellingListByKlantId(bList);
     }
     
-    private void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
+    public void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
         showDivider();
         showBestelLijstByBestelIdHeader ();
         for (BestelArtikelPojo ba : bestelList) {
@@ -100,12 +100,13 @@ public class BestellingView {
     public void showAllBestelRegelsByBestelId (int bestelId) {
         ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
-        if (baList.isEmpty()) {
-            return;
+        if (!baList.isEmpty()) {
+            BestellingView bvList = new BestellingView();
+            showOAIdByOrderId (bestelId);
+            bvList.showBestelLijstByBestelId(baList);
+        } else {
+            showNoOAIdByOrderId(bestelId);
         }
-        BestellingView bvList = new BestellingView();
-        bvList.showBestelLijstByBestelId(baList);
-        showOAIdByOrderId (bestelId);
     }
     
     //input messages
@@ -155,8 +156,7 @@ public class BestellingView {
         System.out.println("Weet je zeker dat je dit wilt verwijderen? J/N");
     }
     public void showNoOAIdByOrderId(int bestelId) {
-        System.out.println("Er zijn geen bestelregels bij dit bestelid.");
-        System.out.println("Probeer het opnieuw.");
+        System.out.println("Er zijn geen bestelregels (meer) bij dit bestelid.");
     }
     public void showNoOrderIdByKlantId(int klantId) {
         System.out.println("Bestelid hoort niet bij klantid "+klantId);
@@ -167,7 +167,7 @@ public class BestellingView {
     public void showOrderListByKlantId(int klantId) {
         System.out.println("Dit zijn de bestellingen bij klantid " + klantId);
     }
-    private void showOAIdByOrderId(int bestelId) {
+    public void showOAIdByOrderId(int bestelId) {
         System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
     }
 }

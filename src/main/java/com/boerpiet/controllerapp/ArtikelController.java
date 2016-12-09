@@ -37,7 +37,11 @@ public class ArtikelController {
         av.showMenuKeuze();
         
         String intKeuze = input.nextLine ();
-        int keuze  = inputIntCheck(intKeuze);
+        if (!Validator.isValidInt(intKeuze)) {
+            av.showGiveNumber();
+            createArticle();
+        }
+        int keuze = Integer.parseInt(intKeuze);
         
         switch (keuze) {
             case 1: addArticleToDatabase ();
@@ -45,7 +49,7 @@ public class ArtikelController {
                 break;
             case 2:
                 return;
-            default: addArticleToDatabase ();
+            default: createArticle ();
                 break;
         }        
     }
@@ -60,10 +64,10 @@ public class ArtikelController {
         
         int voorraad = inputVoorraadCheck();
         
-        if (prijs >0 && voorraad >0) {
+        if (prijs >=0 && voorraad >=0) {
             am.addArticle(naam, prijs, voorraad);
             logger.info (" Artikel toegevoegd door "+ lm.getAccountPojo().getGebruikersnaam()
-                +" "+lm.getAccountPojo().getIdAccount());
+                +" "+lm.getAccountPojo().getIdAccount() + "\n");
         } else {
             av.showGiveNumber();
             addArticleToDatabase ();
@@ -72,11 +76,16 @@ public class ArtikelController {
     
     public void modifyArticle () {
         av = new ArtikelView ();
-        
+
         av.articleModifyOptions();
         av.showMenuKeuze();
         String intKeuze = input.nextLine ();
-        int keuze  = inputIntCheck(intKeuze);
+        if (!Validator.isValidInt(intKeuze)) {
+            av.showGiveNumber();
+            modifyArticle();
+        }
+        
+        int keuze = Integer.parseInt(intKeuze);
         
         switch (keuze) {
             case 1: modifyArticleNaam ();
@@ -104,13 +113,14 @@ public class ArtikelController {
         
         av.showAllArticles();
         av.showInputArticleIdToModify();
+        
         int id = inputArtikelIdInDatabaseCheck ();
         
         String naam = inputNameCheck();
         
         am.modifyNaam(id, naam);
-        logger.info (" Naam artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
-            +" "+ lm.getAccountPojo().getIdAccount());
+        logger.info (" Naam artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+            +" "+ lm.getAccountPojo().getIdAccount() + "\n");
     }
     
     private void modifyArticlePrijs () {
@@ -123,10 +133,10 @@ public class ArtikelController {
         
         double prijs = inputPrijsCheck();
         
-        if (prijs >0) {
+        if (prijs >=0) {
             am.modifyPrijs(id, prijs);
-            logger.info (" Prijs artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
-                +" "+ lm.getAccountPojo().getIdAccount());
+            logger.info (" Prijs artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount()+ "\n");
         } else {
             av.showErrorMessage();
             modifyArticlePrijs();
@@ -143,20 +153,17 @@ public class ArtikelController {
         
         int voorraad = inputVoorraadCheck();
         
-        if (voorraad > 0) {
+        if (voorraad >= 0) {
             am.modifyVoorraad(id, voorraad);
-            logger.info (" Voorraad artikel "+id+"gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
-                    +" "+ lm.getAccountPojo().getIdAccount());
-        } else {
-            av.showErrorMessage();
-            modifyArticleVoorraad ();
+            logger.info (" Voorraad artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount()+ "\n");
         }
     }
     
     private void modifyArticleNPV() {
         av = new ArtikelView ();
         am = new ArtikelModel ();
-        
+       
         av.showAllArticles();
         av.showInputArticleIdToModify();
         int id = inputArtikelIdInDatabaseCheck ();
@@ -166,13 +173,11 @@ public class ArtikelController {
         int voorraad = inputVoorraadCheck ();
         
         
-        if (prijs >0 && voorraad>0) {
+        if (prijs >=0 && voorraad>=0) {
             am.modifyNPV (id, naam, prijs, voorraad);
-            logger.info (" Naam/prijs/voorraad artikel "+id+"gewijzigd door "
-                    + lm.getAccountPojo().getGebruikersnaam()+" "+ lm.getAccountPojo().getIdAccount());
-        } else {
-            av.showErrorMessage();
-            modifyArticleNPV ();
+            logger.info (" Naam/prijs/voorraad artikel "+id+" gewijzigd door "
+                    + lm.getAccountPojo().getGebruikersnaam()+" "
+                    + lm.getAccountPojo().getIdAccount() + "\n");
         }
     }
     
@@ -180,10 +185,14 @@ public class ArtikelController {
         av = new ArtikelView ();
         
         av.startDeleteArticle();
-        av.showMenuKeuze();
         
+        av.showMenuKeuze();        
         String intKeuze = input.nextLine ();
-        int keuze = inputIntCheck (intKeuze);
+        if (!Validator.isValidInt(intKeuze)) {
+            av.showGiveNumber();
+            deleteArticleMenu();
+        }
+        int keuze = Integer.parseInt(intKeuze);
         
         switch (keuze) {
             case 1: deleteArticleFromDatabase ();
@@ -202,13 +211,12 @@ public class ArtikelController {
         
         av.showAllArticles();
         av.showInputArticleIdToDelete();
-        
         int id = inputArtikelIdInDatabaseCheck ();
-        
+
         if (deleteConfirmed() ) {
         am.deleteArticle(id);
-        logger.info (" Artikel "+id+"verwijderd door " + lm.getAccountPojo().getGebruikersnaam()
-                +" "+lm.getAccountPojo().getIdAccount());
+        logger.info (" Artikel "+id+" verwijderd door " + lm.getAccountPojo().getGebruikersnaam()
+                +" "+lm.getAccountPojo().getIdAccount() + "\n");
         }
     }
     
@@ -230,18 +238,38 @@ public class ArtikelController {
     
     private double inputPrijsCheck () {
         av = new ArtikelView ();
-        av.showInputPrijs();
         
-        double prijs = inputDoubleCheck (input.nextLine());
-        return prijs;
+        av.showGivePrijs();
+        String prijsString = (input.nextLine());
+        
+        if (Validator.inputIsIntOrHasMaxTwoDecimals(prijsString)) {
+            double prijs = Double.parseDouble(prijsString);
+            while (prijs < 0) {
+                return inputPrijsCheck ();
+            }
+            return prijs;
+        }
+        else {
+            return inputPrijsCheck ();
+        }
     }
-    
+
     private int inputVoorraadCheck () {
         av = new ArtikelView ();
+        
         av.showInputVoorraad();
-
-        int voorraad = inputIntCheck(input.nextLine());
-        return voorraad;
+        String voorraadInput = input.nextLine();
+        
+        if (inputIntCheck (voorraadInput)) {
+            int voorraad = Integer.parseInt(voorraadInput);
+            while (voorraad <0){
+                av.showGiveNumber();
+                return inputVoorraadCheck ();
+            }
+            return voorraad;
+        } else {
+            return inputVoorraadCheck ();
+        }
     }
     
     public int inputArtikelIdInDatabaseCheck () {
@@ -249,34 +277,31 @@ public class ArtikelController {
         am = new ArtikelModel ();
         
         String aId = input.nextLine();
-        int id = inputIntCheck(aId);
+        int id = 0;
+        while (!Validator.isValidInt(aId)) {
+            av.showGiveNumber();
+            aId = input.nextLine();
+        }
+
+        id = Integer.parseInt(aId);
         
-        if (am.checkArticleIdInDatabase(id)) {
-            return id;
-        } else {
+        if (!am.checkArticleIdInDatabase(id)) {
+            av.showArticleIdNotInDatabase();
             av.showInputArticleId();
             return inputArtikelIdInDatabaseCheck();
+        } else {
+            return id;
         }
     }
 
-    private int inputIntCheck (String string) {
-        av = new ArtikelView ();
-        if (Validator.isValidInt(string)) {
-            return Integer.parseInt(string);
-        } else {
-            av.showGiveNumber();
-            return inputIntCheck (string);
-        }
-    }
-    
-    private double inputDoubleCheck (String string) {
+    private boolean inputIntCheck (String string) {
         av = new ArtikelView ();
         
-        if (Validator.isValidDouble(string) && Validator.doubleHasMaxTwoDecimals(string)) {
-            return Double.parseDouble(string);
+        if (Validator.isValidInt(string)) {
+            return true; //Integer.parseInt(string);
         } else {
-            av.showGivePrijs ();
-            return inputDoubleCheck (string);
+            av.showGiveNumber();
+            return false; //inputIntCheck (string);
         }
     }
     
