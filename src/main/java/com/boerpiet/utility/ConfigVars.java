@@ -38,6 +38,10 @@ public class ConfigVars {
     
     private final Logger logger = LoggerFactory.getLogger(ConfigVars.class);
 
+    public static void reset() {
+        new ConfigVars();
+    }    
+    
     public static String getDbType() {
         if(dbType == null)
             new ConfigVars();
@@ -176,4 +180,5 @@ public class ConfigVars {
         }
         return true;
     }
+
 }

@@ -5,11 +5,13 @@
     <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/> 
     <timestamp key="timestamp-by-day" datePattern="yyyymmdd"/>
     
+    <!--
     <appender name="Console-Appender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{HH:mm:ss.SSS} %M %msg%n</pattern>
         </encoder>
     </appender>
+    -->
     
     <!-- File makes a single debug file -->
     <!-- 
@@ -35,7 +37,9 @@
         </encoder>
     </appender>  
   
+  
     <!-- Sets logging level for specific packages. -->
+    <!-- Turn this on for development debugging -->
 <!--    <logger name="com.boerpiet" level="trace" >
         <appender-ref ref="Console-Appender"/>
     </logger>-->
