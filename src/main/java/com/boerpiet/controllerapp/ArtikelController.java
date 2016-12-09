@@ -132,7 +132,6 @@ public class ArtikelController {
         int id = inputArtikelIdInDatabaseCheck ();
         
         double prijs = inputPrijsCheck();
-        
         if (prijs >=0) {
             am.modifyPrijs(id, prijs);
             logger.info (" Prijs artikel "+id+" gewijzigd door " + lm.getAccountPojo().getGebruikersnaam()
