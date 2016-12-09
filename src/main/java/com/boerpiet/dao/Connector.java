@@ -120,5 +120,9 @@ public class Connector {
 
             dataSource = new HikariDataSource(config);
     }
+
+    public static void resetConnection() {
+        dataSource = null;
+    }
     
 }

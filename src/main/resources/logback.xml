@@ -36,12 +36,12 @@
     </appender>  
   
     <!-- Sets logging level for specific packages. -->
-    <logger name="com.boerpiet" level="trace" >
+<!--    <logger name="com.boerpiet" level="trace" >
         <appender-ref ref="Console-Appender"/>
-    </logger>
+    </logger>-->
 
     <!-- Set logging for complete project --> 
-    <root level="warn">
+    <root level="info">
         <!-- <appender-ref ref="FILE" /> -->
         <appender-ref ref="RollingFile-Appender"/>
     </root>
