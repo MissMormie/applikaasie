@@ -78,6 +78,6 @@ public class ConfController {
         }
         
         cv.showConnectionPoolChanged();
-        System.exit(0);
+        // System.exit(0);
     }
 }

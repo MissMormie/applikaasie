@@ -56,6 +56,16 @@
             <artifactId>jsoup</artifactId>
             <version>1.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
+<!--        <dependency>
+            <groupId>com.mimer.jdbc</groupId>
+            <artifactId>mimjdbc</artifactId>
+            <version>3</version>
+        </dependency>-->
 <!--    TODO omzetten naar hibernate 5. Configuratie is anders, lukt nog niet.  -->
 <!--        <dependency>
             <groupId>org.hibernate</groupId>

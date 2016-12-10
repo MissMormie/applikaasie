@@ -5,9 +5,8 @@
  */
 package com.boerpiet.viewapp;
 
-import com.boerpiet.dao.artikel.ArtikelDaoFactory;
+import com.boerpiet.domeinapp.ArtikelModel;
 import com.boerpiet.domeinapp.ArtikelPojo;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,33 +16,30 @@ public class ArtikelView {
     
     //show list of articles or just one article
     public void showArticle (int artikelId) {
-        ArtikelPojo ap = ArtikelDaoFactory.getArtikelDAO("MySQL").getArtikelById(artikelId);
+        ArtikelModel am = new ArtikelModel();
         
+        ArtikelPojo ap = am.getArtikel(artikelId);
         showArtikelListHeader ();
         showArticleProperties (ap);  
     }
     
     private void showArticleProperties (ArtikelPojo ap) {
-        showDivider ();
-        showArtikelListHeader ();        
-        
+
         System.out.printf("%-3s %-25s %-10s %s \n", 
                 ap.getId(), 
                 ap.getNaam(), 
                 ap.getPrijs(),
                 ap.getVoorraad());
     }
-    
+
     public void showAllArticles () {
-        ArrayList <ArtikelPojo> aList = ArtikelDaoFactory.getArtikelDAO("MySQL").getAllArticles();
-        showAllArticlesList(aList);
-    }
-    
-    private void showAllArticlesList (ArrayList<ArtikelPojo> artikelList) {
+        ArtikelModel am = new ArtikelModel ();
+        
         showDivider();
         showArtikelListHeader();
-        for (ArtikelPojo ap : artikelList) {
-            showPropertiesOfArticles(ap);
+       
+        for (ArtikelPojo ap : am.getAllArticles()) {
+            showPropertiesOfArticles (ap);
         }
         System.out.println();
     }
@@ -91,22 +87,19 @@ public class ArtikelView {
                 + "2. Terug naar menu \n");
     }
     
+    //inputmessages
     public void showInputName () {
         System.out.println("Geef naam voor artikel:");
     }
-    
     public void showInputPrijs () {
         System.out.println("Geef prijs voor artikel:");
     }
-    
     public void showInputVoorraad () {
-        System.out.println("Geef voorraad van dit artikel:");
+        System.out.println("Voer voorraad voor dit artikel in:");
     }
-    
     public void showInputArticleIdToAddToOrder () {
         System.out.println("Geef artikelid voor toevoeging:");
     }
-    
     public void showInputArticleIdToModifyInOrder () {
         System.out.println("Geef artikelid om te bestellen in plaats van getoond artikel:");
     }
@@ -116,20 +109,17 @@ public class ArtikelView {
     public void showInputArticleIdToDelete () {
         System.out.println("Geef artikelid voor verwijdering:");
     }
-
     public void showGiveNumber() {
-        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen)");
+        System.out.println("Geef een geldig nummer of aantal (hele, positieve getallen).");
     }
-
     public void showGivePrijs() {
-        System.out.println("Geef een geldige prijs (twee decimalen):");
+        System.out.println("Geef een geldige prijs (max twee decimalen):");
     }
-
     public void showMenuKeuze() {
         System.out.println("Geef menu-keuze (getal):");
     }
     public void showAddSuccess () {
-        System.out.println("Artikel is toegevoegd aan database.");
+        System.out.println("Artikel is toegevoegd aan database. \n");
     }
     public void showModifySuccess () {
         System.out.println("Artikel is gewijzigd");
@@ -138,12 +128,15 @@ public class ArtikelView {
         System.out.println("Artikel is verwijderd uit database.");
     }
     public void showErrorMessage () {
-        System.out.println("Er is iets misgegaan, probeer het opnieuw.");
+        System.out.println("Er is iets misgegaan, probeer het opnieuw. \n");
     }
     public void showAskSureToDelete() {
         System.out.println("Weet je zeker dat je dit artikel wilt verwijderen? J/N");
     }
     public void showInputArticleId() {
         System.out.println("Geef artikel id:");
+    }
+    public void showArticleIdNotInDatabase() {
+        System.out.println("Artikelid staat niet in database, probeer het opnieuw.");
     }
 }

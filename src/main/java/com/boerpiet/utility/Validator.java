@@ -5,6 +5,7 @@
  */
 package com.boerpiet.utility;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -19,8 +20,7 @@ public class Validator {
             Integer.parseInt(input);
             return true;
         }
-        catch (NumberFormatException ex) {
-            System.out.println("Invoer is geen heel getal: "+ ex);
+        catch (Exception ex) {
             return false;
         }
     }
@@ -50,26 +50,47 @@ public class Validator {
             Double.parseDouble (input);
             return true;
             }
-        catch (NumberFormatException ex) {
-            
+        catch (Exception ex) {
             return false;
         }
     }
+    
     public static boolean isValidDate (String input) {
         
        try {
             SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd");
-            if (!input.equals(sdf.format(sdf.parse(input)))) {
-                return false;
-          }
+            return input.equals(sdf.format(sdf.parse(input)));
         } catch (ParseException ex) {
-            ex.printStackTrace();
+            return false;
         }
-    return true;
     }
     
     public static boolean isValidPostcode(String postcode) {
         String regex ="[1-9][0-9]{3}\\s?\\w\\w";
         return postcode.matches(regex);
-    }    
+    }
+    
+public static boolean inputIsIntOrHasMaxTwoDecimals (String input) {
+    //I wrote this method to make two checks because only checking for double and
+    //splitting it gave issues when input was an integer.
+        try {
+            if (isValidInt (input)) {
+                return true;
+            } else {
+                DecimalFormat df = new DecimalFormat ("00");
+                String [] parts = input.split("\\.");
+                if (parts != null && parts.length == 2) {
+                String part2 = parts [1];
+                int decimals = (df.format(df.parse(part2)).length());
+                if (decimals <=2) {
+                    return true;
+                }
+            } return false;
+        }
+    }
+        catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }

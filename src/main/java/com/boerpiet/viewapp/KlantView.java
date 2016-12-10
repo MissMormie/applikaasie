@@ -9,7 +9,6 @@ import com.boerpiet.domeinapp.AdresPojo;
 import com.boerpiet.domeinapp.AdresType;
 import com.boerpiet.domeinapp.KlantHeeftAdresPojo;
 import com.boerpiet.domeinapp.KlantModel;
-import com.boerpiet.domeinapp.KlantPojo;
 
 /**
  *
@@ -62,7 +61,7 @@ public class KlantView {
         showDivider();
         showKlant(klant);
 
-        System.out.println("\nWat wil je wijzigen aan dit account?\n"
+        System.out.println("Wat wil je wijzigen aan dit account?\n"
                          + "1 Voornaam\n"
                          + "2 Tussenvoegsel\n"
                          + "3 Achternaam\n"
@@ -124,13 +123,14 @@ public class KlantView {
 
     public void showUpdateSuccess(KlantModel klant) {
         showDivider();
+        showKlant(klant);
         System.out.println("Update is geslaagd.");
     }
 
     public void showDeleteSure(KlantModel klant) {
         showDivider();
         showKlant(klant);
-        System.out.println("\nWeet je zeker dat je deze klant wilt verwijderen?\n"
+        System.out.println("Weet je zeker dat je deze klant wilt verwijderen?\n"
                 + "Type J voor ja of N voor nee.");
     }
     

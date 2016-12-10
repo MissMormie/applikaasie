@@ -112,6 +112,14 @@ public class ValidatorJungTest {
         String date = " 16";
         System.out.println("Expecting parseexception: " + Validator.isValidDate(date));        
     }
+    
+    @Test
+    public void testIsValidDate2 () {
+        String date = "-15*48-12";
+        boolean expResult = false;
+        boolean result = Validator.isValidDate(date);
+        assertEquals (expResult, result);
+    }
 
     /**
      * Test of isValidPostcode method, of class Validator.

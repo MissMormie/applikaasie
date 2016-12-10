@@ -13,6 +13,8 @@ import com.boerpiet.utility.ConsoleInput;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.AccountView;
 import com.boerpiet.viewapp.KlantenView;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -76,13 +78,14 @@ public class AccountController {
     }
 
     public void selectAccountToModify() {
-        accountView.showAccountList(accountModel.fetchAccountList());
+        List accountList = accountModel.fetchAccountList();
+        accountView.showAccountList(accountList);
         accountView.showSelectAccountToModify();
-        selectAccountToModifyListener();
+        selectAccountToModifyListener(accountList);
     }
 
-    private void selectAccountToModifyListener() {
-        String in = ConsoleInput.textInput();
+    private void selectAccountToModifyListener(List<AccountPojo> accountList) {
+        String in = ConsoleInput.notEmptyTextInput();
 
         // Check if back to menu.
         if (in.equalsIgnoreCase("n")) 
@@ -90,14 +93,20 @@ public class AccountController {
         
         // Check if valid input.
         if (!Validator.isValidInt(in)) {
-            selectAccountToModify();        
+            accountView.showSelectAccountFailed();
+            selectAccountToModifyListener(accountList);        
         } else {
-            int id = Integer.parseInt(in);
-            AccountPojo account = accountModel.getAccountById(id);
+            int id = Integer.parseInt(in) -1;
+            AccountPojo account = null;
+            if(accountList.size() >= id) {
+                account = accountModel.getAccountById(accountList.get(id).getIdAccount());
+            }
             
             // If no account exists with that id
-            if (account == null)
-                selectAccountToModify();
+            if (account == null) {
+                accountView.showSelectAccountFailed();
+                selectAccountToModifyListener(accountList);        
+            }
             else 
                 modifyAccount(account);
         }

@@ -5,6 +5,8 @@
  */
 package com.boerpiet.domeinapp;
 
+import com.boerpiet.dao.Connector;
+import com.boerpiet.utility.ConfigVars;
 import java.io.*;
 
 import javax.xml.parsers.*;
@@ -103,7 +105,14 @@ public class ConfModel {
                 return false;
         if(!changeDefault(itemNr, "connections"))
             return false;
-        return writeXML();
+        
+        // Reset old connection and old configVars.
+        if(!writeXML())
+            return false;
+
+        ConfigVars.reset();
+        Connector.resetConnection();
+        return true;
     }
     
     public boolean setDefaultDatabase(int itemNr) {

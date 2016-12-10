@@ -5,6 +5,7 @@
  */
 package com.boerpiet.dao.bestelartikel;
 
+import com.boerpiet.dao.Connector;
 import com.boerpiet.dao.MySQLConnection;
 import com.boerpiet.domeinapp.BestelArtikelPojo;
 import java.sql.*;
@@ -67,19 +68,26 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
         }
         return ba;
     }
-    
+
     @Override
-    public boolean findBestelArtikel (int baId) {
-        String sql = "SELECT idBestelArtikel FROM BestelArtikel "+
-                "WHERE Deleted = 0 AND Bezorgd = 0 AND idBestelArtikel = "+ baId;
-        //System.out.println(sql);
-        try { ResultSet rs = MySQLConnection.getMySQLConnection().read (sql);
-            return rs != null;
+    public boolean findOAIdByOrderId (int bestelId, int baId) {
+        
+        try (Connection conn = Connector.getConnection()) {
+            String sql = "SELECT idBestelArtikel FROM BestelArtikel "+
+                "WHERE Deleted = 0 AND Bezorgd = 0 AND BestellingId = "+ bestelId;
+            Statement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery(sql);
+            
+            while (rs.next()) {
+            if (rs.getInt(1) == baId) {
+                return true;
+                }
+            }
         } catch (Exception ex) {
             logger.warn ("Kon bestelregel niet vinden: "+ex);
-                return false;
-            }        
-    }
+            }
+            return false;
+        }
     
     @Override
     public int getMaxBestelArtikelId() {
@@ -112,6 +120,9 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                 BestelArtikelPojo ba = new BestelArtikelPojo();
                 fillModelBestelId (result, ba);
                 list.add(ba);
+                if (list.isEmpty()) {
+                    return null;
+                }
             }
         } catch (SQLException ex) {
             logger.error ("Kon geen lijst van bestelregels maken met dit bestelid: "+ex);
@@ -122,8 +133,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     private void fillModelBestelId (ResultSet rs, BestelArtikelPojo ba) throws SQLException {
         ba.setId(rs.getInt("idBestelArtikel"));
         ba.setArtikelId(rs.getInt("ArtikelId"));
-        ba.setAantal(rs.getInt("Aantal"));
-        
+        ba.setAantal(rs.getInt("Aantal")); 
     }
 
     @Override
@@ -147,7 +157,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
                 //als deleted op 1 staat dan is bezorgd =1 noodzakelijk voor het
                 //laten zien van actuele lijst in view, maar het is niet noodzakelijk
                 //daadwerkelijk bezorgd
-                    + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
+                    + "WHERE idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             logger.error ("Verwijderen van bestelregel is mislukt: "+ex);
@@ -159,7 +169,7 @@ public class SqlBestelArtikelDao extends SuperBestelArtikelDao {
     @Override
     public void deleteArticleFromOrder (int brId) {
         String sql = "UPDATE BestelArtikel SET Deleted = 1, Bezorgd = 1 "
-                    + "WHERE Deleted = 0 AND idBestelArtikel = "+brId;
+                    + "WHERE idBestelArtikel = "+brId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete (sql);
         } catch (Exception ex) {
             logger.error ("Verwijderen van bestelregel (void methode) is mislukt: "+ex);

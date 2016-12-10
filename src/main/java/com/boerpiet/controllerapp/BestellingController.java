@@ -5,8 +5,12 @@
  */
 package com.boerpiet.controllerapp;
 
+import com.boerpiet.dao.bestelartikel.BestelArtikelDaoFactory;
+import com.boerpiet.dao.bestelling.BestellingDaoFactory;
 import com.boerpiet.domeinapp.ArtikelModel;
+import com.boerpiet.domeinapp.BestelArtikelPojo;
 import com.boerpiet.domeinapp.BestellingModel;
+import com.boerpiet.domeinapp.BestellingPojo;
 import com.boerpiet.domeinapp.KlantModel;
 import com.boerpiet.domeinapp.KlantenModel;
 import com.boerpiet.domeinapp.LoginManager;
@@ -16,9 +20,9 @@ import com.boerpiet.viewapp.BestelArtikelView;
 import com.boerpiet.viewapp.BestellingView;
 import com.boerpiet.viewapp.KlantenView;
 import java.sql.Date;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +60,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine();
         int keuze = inputIntCheck (intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1:
@@ -82,16 +90,15 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.addNewOrder (klantId, sqlDatum, accountId, artikelId, aantal);
-            logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
-                    +" "+klantId);
+        while (aantal < 1) {
+            aantal = inputNumberToOrderCheck();
+        }
+        
+        bm.addNewOrder (klantId, sqlDatum, accountId, artikelId, aantal);
+        logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+klantId);
             //dit is voor klanten met een (inlog) account
             //bestellingen voor klanten zonder account worden ingevoerd door medewerker/admin
-        } else {
-            av.showErrorMessage();
-            makeNewOrderByKlant (klantId, accountId);
-        }
     }
     
     public void modifyOrderByKlant () {
@@ -104,6 +111,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch(keuze){
             case 1:
@@ -128,9 +139,21 @@ public class BestellingController {
         ac = new ArtikelController (new ArtikelModel(), lm);
         av = new ArtikelView ();
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId (klantId);
+        bv.orderListByKlantId(klantId);
+
         bv.showOrderIdToAddArticle();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
+        
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            addArticleToOrderByKlant (klantId);
+        }
+        
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            addArticleToOrderByKlant (klantId);
+        }
+        
+        bv.showAllBestelRegelsByBestelId(bestelId);
         
         av.showAllArticles();
         av.showInputArticleIdToAddToOrder();
@@ -138,15 +161,13 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if
-        (aantal >0) {
-            bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
-            logger.info (" Artikelen toegevoegd aan bestelling door "
-                    + lm.getAccountPojo().getGebruikersnaam() + " "+ klantId);
-        } else {
-            av.showGiveNumber();
-            addArticleToOrderByKlant (klantId);
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck ();
         }
+
+        bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
+        logger.info (" Artikelen toegevoegd aan bestelling door "
+                + lm.getAccountPojo().getGebruikersnaam() + " "+ klantId);
     }
     
     private void modifyArticleFromOrderByKlant (int klantId) {
@@ -156,29 +177,36 @@ public class BestellingController {
         bac = new BestelArtikelController ();
         ac = new ArtikelController (new ArtikelModel(), lm);
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToModify();
         int bestelId = inputOrderIdInDatabaseCheck(klantId);
         
-        bv.showAllBestelRegelsByBestelId(bestelId);
-        bav.showInputOAIdToModify();
-        int regelId = bac.inputOAIdInDatabaseCheck();
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            modifyArticleFromOrderByKlant (klantId);
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            modifyArticleFromOrderByKlant (klantId);
+        }
         
+        bv.showAllBestelRegelsByBestelId(bestelId);
+        bav.showInputOAIdToModify();        
+        int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
+    
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
         int modifiedArtikelId = ac.inputArtikelIdInDatabaseCheck();
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
-            logger.info (" Bestelregel gewijzigd door "
-                    + lm.getAccountPojo().getGebruikersnaam() +" " + klantId);
-        } else {
-            av.showGiveNumber();
-            modifyArticleFromOrderByKlant (klantId);
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck ();
         }
-    }
+        
+        bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+        logger.info (" Bestelregel gewijzigd door "
+            + lm.getAccountPojo().getGebruikersnaam() +" " + klantId);
+        }
     
     public void deleteOrderByKlant () {
         
@@ -191,6 +219,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine ();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1:
@@ -215,17 +247,28 @@ public class BestellingController {
         av = new ArtikelView ();
         bav = new BestelArtikelView ();
         
-        bv.showAllOrdersByKlantId(klantId);
-        bv.showOrderIdToDelete();        
+        bv.orderListByKlantId(klantId);
+        bv.showOrderIdToDelete();
+        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
+        
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId) &&
+                !bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteOAIdFromOrderId ();
+        }
+        while (!checkEmptyOAIdListByOrderId(bestelId)) {
+            bv.showNoOAIdByOrderId(bestelId);
+            bv.showOrderIdToDelete();
+            bestelId = inputOrderIdInDatabaseCheck (klantId);
+        }
         
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();
-        int brId = bac.inputOAIdInDatabaseCheck();
+        int brId = bac.inputOAIdInDatabaseCheck(bestelId);
         
         if (deleteConfirmed()) {
             bm.deleteOA (klantId, brId, bestelId);
-            logger.info (" Bestelregel " + brId + "verwijderd van bestelling door " 
+            logger.info (" Bestelregel " + brId + " verwijderd van bestelling door " 
                     + klantId + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         }
@@ -234,13 +277,21 @@ public class BestellingController {
     private void deleteTotalOrderByKlant (int klantId) {
         bv = new BestellingView ();
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            deleteTotalOrderByKlant (klantId);
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteTotalOrderByKlant (klantId);
+        }
+        
         if (deleteConfirmed()) {
             bm.deleteOrder (klantId, bestelId);
-            logger.info (" Bestelling " + bestelId + "verwijderd door "
+            logger.info (" Bestelling " + bestelId + " verwijderd door "
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         }
@@ -257,6 +308,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine ();
         int keuze  = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=2)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1: makeNewOrder(accountId);
@@ -275,7 +330,13 @@ public class BestellingController {
         ac = new ArtikelController (new ArtikelModel(), lm);
         av = new ArtikelView ();
          
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
+        if (klantId == 0)
+            return;
+        
+        if (klantId ==0) {
+            return;
+        }
         
         Date sqlDatum = inputDateCheck();
         
@@ -285,12 +346,13 @@ public class BestellingController {
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
-        } else {
-            av.showGiveNumber();
-            makeNewOrder (accountId);
+        while (aantal < 1) {
+            aantal = inputNumberToOrderCheck();
         }
+        
+        bm.addNewOrder(klantId, sqlDatum, accountId, artikelId, aantal);
+        logger.info (" Bestelling ingevoerd door "+ lm.getAccountPojo().getGebruikersnaam()
+               +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     public void modifyOrder () {
@@ -302,6 +364,10 @@ public class BestellingController {
         
         String intKeuze = input.nextLine();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch(keuze){
             case 1: addArticleToOrder();
@@ -318,6 +384,14 @@ public class BestellingController {
         }        
     }
     
+    private ArrayList<BestellingPojo> getAllBestellingenFromKlant(int klantId) {
+        ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
+        if (bList.isEmpty()) {
+            return null;
+        }
+        return bList;
+    }
+    
     private void addArticleToOrder () {
         
         bv = new BestellingView ();
@@ -326,28 +400,38 @@ public class BestellingController {
         bav = new BestelArtikelView ();
         bac = new BestelArtikelController ();
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
+        if (klantId == 0)
+            return;
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        
+        ArrayList<BestellingPojo> bestellingen = getAllBestellingenFromKlant(klantId);
+        if(getAllBestellingenFromKlant(klantId) == null) {
+            bv.showNoBestellingByKlant();
+            addArticleToOrder();
+            return;
+        }
+        
+        bv.showBestellingListByKlantId(bestellingen);
         bv.showOrderIdToAddArticle();
+        
+        
         int bestelId = inputOrderIdInDatabaseCheck(klantId);
-                
+        
         av.showAllArticles();
         av.showInputArticleIdToAddToOrder();
         int artikelId = ac.inputArtikelIdInDatabaseCheck();
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
-            logger.info (" Bestelregel " + bestelId + "toegevoegd aan bestelling door " 
-                    + lm.getAccountPojo().getGebruikersnaam()
-                    +" "+ lm.getAccountPojo().getIdAccount());
-            
-        } else {
-            av.showGiveNumber();
-            addArticleToOrder ();
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck();
         }
+        bm.createArticleToAddToOrder(bestelId, artikelId, aantal);
+        logger.info (" Artikel " + artikelId + " toegevoegd aan bestelling door " 
+                + lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     private void modifyArticleFromOrder () {
@@ -358,31 +442,48 @@ public class BestellingController {
         bav = new BestelArtikelView ();
         av = new ArtikelView ();
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
+        if(klantId == 0) 
+            return;
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        
+        ArrayList<BestellingPojo> bestellingen = getAllBestellingenFromKlant(klantId);
+        if(getAllBestellingenFromKlant(klantId) == null) {
+            bv.showNoBestellingByKlant();
+            modifyArticleFromOrder ();
+            return;
+        }
+        
+        bv.showBestellingListByKlantId(bestellingen);
+        
         bv.showOrderIdToModify();        
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            modifyArticleFromOrder ();
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            modifyArticleFromOrder ();
+        }
+        
         bv.showAllBestelRegelsByBestelId(bestelId);        
         bav.showInputOAIdToModify();
-        int regelId = bac.inputOAIdInDatabaseCheck();
-        
+        int regelId = bac.inputOAIdInDatabaseCheck(bestelId);
+                
         av.showAllArticles();
         av.showInputArticleIdToModifyInOrder();
         int modifiedArtikelId = ac.inputArtikelIdInDatabaseCheck();
         
         int aantal = inputNumberToOrderCheck();
         
-        if (aantal >0) {
-            bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
-            logger.info (" Bestelregel " + bestelId + "gewijzigd in bestelling door " 
-                    + lm.getAccountPojo().getGebruikersnaam()
-                    +" "+ lm.getAccountPojo().getIdAccount());
-        } else {
-            av.showGiveNumber();
-            modifyArticleFromOrder ();
+        while (aantal <1) {
+            aantal = inputNumberToOrderCheck();
         }
+        bm.modifyArticleInOrder (bestelId, regelId, modifiedArtikelId, aantal);
+        logger.info (" Bestelregel " + regelId + " gewijzigd in bestelling "+bestelId
+                + " door "+ lm.getAccountPojo().getGebruikersnaam()
+                +" "+ lm.getAccountPojo().getIdAccount());
     }
     
     public void deleteOrderOptions () {
@@ -393,10 +494,14 @@ public class BestellingController {
         
         String intKeuze = input.nextLine ();
         int keuze = inputIntCheck(intKeuze);
+        while (!(keuze >=1 && keuze <=3)) {
+            bv.showGiveNumber();
+            keuze = inputIntCheck (input.nextLine());
+        }
         
         switch (keuze) {
             case 1:
-                deleteOneTupelFromOrder ();
+                deleteOAIdFromOrderId ();
                 deleteOrderOptions ();
                 break;
             case 2:
@@ -411,47 +516,80 @@ public class BestellingController {
         }
     }
     
-    private void deleteOneTupelFromOrder () {
+    private void deleteOAIdFromOrderId () {
         
         bv = new BestellingView ();
         bav = new BestelArtikelView ();
         bac = new BestelArtikelController ();
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
+        if (klantId ==0 )
+            return;
         
-        bv.showAllOrdersByKlantId(klantId);
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
-        int bestelId = inputOrderIdInDatabaseCheck (klantId);
+        int bestelId = inputOrderIdInDatabaseCheck (klantId);//invoer negatief getal
+        
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId) &&
+                !bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteOAIdFromOrderId ();
+        }
+        
+        while (!checkEmptyOAIdListByOrderId(bestelId)) {
+            bv.showNoOAIdByOrderId(bestelId);
+            bv.showOrderIdToDelete();
+            bestelId = inputOrderIdInDatabaseCheck (klantId);
+        }
         
         bv.showAllBestelRegelsByBestelId(bestelId);
         bav.showInputOAIdToDelete();        
-        int brId = bac.inputOAIdInDatabaseCheck();
+        int brId = bac.inputOAIdInDatabaseCheck(bestelId);
+        
+        while (!bm.checkOAIdBelongsToOrderId(bestelId, brId)) {
+            bv.showNoOAIdByOrderId(bestelId);
+            brId = bac.inputOAIdInDatabaseCheck(bestelId);
+        }
         
         if (deleteConfirmed ()) {
             bm.deleteOA(klantId, brId, bestelId); 
-            logger.info (" Bestelregel " + bestelId + "verwijderd van bestelling door " 
-                    + lm.getAccountPojo().getGebruikersnaam()
+            logger.info (" Bestelregel " + brId + " verwijderd van bestelling "
+                    + bestelId + " door " + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
-            deleteOneTupelFromOrder ();
+            deleteOrderOptions ();
         }
     }
-
+    
     private void deleteTotalOrder() {
         
-        int klantId = klantLijst();
+        int klantId = selectKlantFromList();
+        if (klantId == 0)
+            return;
         
-        bv.showAllOrdersByKlantId(klantId);
+        if (klantId ==0) {
+            return;
+        }
+        
+        bv.showOrderListByKlantId(klantId);
+        bv.orderListByKlantId(klantId);
         bv.showOrderIdToDelete();
         int bestelId = inputOrderIdInDatabaseCheck (klantId);
         
+        if (!bm.checkNotEmptyOrderListByKlantId(klantId)) {
+            deleteTotalOrder ();
+        }
+        if (!bm.checkOrderIdByKlantId(klantId, bestelId)) {
+            deleteTotalOrder ();
+        }
+
         if (deleteConfirmed()) {
             bm.deleteOrder(klantId, bestelId);
-            logger.info (" Bestelling " + bestelId + "verwijderd door " 
+            logger.info (" Bestelling " + bestelId + " verwijderd door " 
                     + lm.getAccountPojo().getGebruikersnaam()
                     +" "+ lm.getAccountPojo().getIdAccount());
         } else {
-            deleteTotalOrder ();
+            deleteOrderOptions ();
         }
     }
     
@@ -459,22 +597,39 @@ public class BestellingController {
         bv = new BestellingView ();
         av = new ArtikelView ();
         bv.showAskSureToDelete();
-        
-        return input.nextLine().equalsIgnoreCase("J");
+
+        String answer = input.nextLine();
+        while (!answer.equalsIgnoreCase("J") && !answer.equalsIgnoreCase("N")) {
+            bv.showAskSureToDelete();
+            answer = input.nextLine();        
+        }
+        return answer.equalsIgnoreCase("J") ;
     }
     
     //methods to check input for validity
+    private boolean checkEmptyOAIdListByOrderId (int bestelId) {
+        
+        bv = new BestellingView ();
+        
+        ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
+                getBestelLijstByBestelId(bestelId);
+        if (!baList.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     private Date inputDateCheck () {
         
         bv = new BestellingView ();
-        bv.showInputDate();
+        bv.showGiveDate();
         
         String dateInput = input.nextLine();
         if (Validator.isValidDate(dateInput)) {
             LocalDate bDatum = LocalDate.parse(dateInput, format);
             return java.sql.Date.valueOf(bDatum);
         } else {
-            bv.showGiveDate ();
             return inputDateCheck ();
         }
     }
@@ -494,7 +649,7 @@ public class BestellingController {
             return Integer.parseInt(string);
         } else {
             bv.showGiveNumber ();
-            return inputIntCheck (string);
+            return inputIntCheck (input.nextLine());
         }
     }
     
@@ -514,7 +669,7 @@ public class BestellingController {
     }
     
     //show list of clients and check klantidinput
-    private int klantLijst () {
+    private int selectKlantFromList () {
         KlantenController kc = new KlantenController(new KlantenModel(), new KlantenView());
         KlantModel klant = kc.selectKlant();
         if(klant == null)

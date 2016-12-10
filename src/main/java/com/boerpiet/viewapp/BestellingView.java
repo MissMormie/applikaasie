@@ -65,13 +65,15 @@ public class BestellingView {
                 bp.getId(),
                 bp.getBestelDatum());
     }
-    public void showAllOrdersByKlantId (int klantId) {
+    public void orderListByKlantId (int klantId) {
         ArrayList <BestellingPojo> bList = BestellingDaoFactory.getBestellingDAO("MySQL").getAllByKlantId(klantId);
-        BestellingView bvList = new BestellingView();
-        bvList.showBestellingListByKlantId(bList);
+        if (bList.isEmpty()) {
+            return;
+        }
+        showBestellingListByKlantId(bList);
     }
     
-    private void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
+    public void showBestelLijstByBestelId (ArrayList<BestelArtikelPojo>bestelList) {
         showDivider();
         showBestelLijstByBestelIdHeader ();
         for (BestelArtikelPojo ba : bestelList) {
@@ -97,10 +99,13 @@ public class BestellingView {
     public void showAllBestelRegelsByBestelId (int bestelId) {
         ArrayList <BestelArtikelPojo> baList = BestelArtikelDaoFactory.getBestelArtikelDAO("MySQL").
                 getBestelLijstByBestelId(bestelId);
-        BestellingView bvList = new BestellingView();
-        bvList.showBestelLijstByBestelId(baList);
-        System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
-
+        if (!baList.isEmpty()) {
+            BestellingView bvList = new BestellingView();
+            showOAIdByOrderId (bestelId);
+            bvList.showBestelLijstByBestelId(baList);
+        } else {
+            showNoOAIdByOrderId(bestelId);
+        }
     }
     
     //input messages
@@ -148,5 +153,25 @@ public class BestellingView {
     }
     public void showAskSureToDelete() {
         System.out.println("Weet je zeker dat je dit wilt verwijderen? J/N");
+    }
+    public void showNoOAIdByOrderId(int bestelId) {
+        System.out.println("Er zijn geen bestelregels (meer) bij dit bestelid.");
+    }
+    
+    public void showNoBestellingByKlant() {
+        System.out.println("Er zijn geen bestellingen bij deze klant.");
+    }
+    
+    public void showNoOrderIdByKlantId(int klantId) {
+        System.out.println("Bestelid hoort niet bij klantid "+klantId);
+    }
+    public void showEmptyOrderListByKlantId (int klantId) {
+        System.out.println("Er zijn geen bestellingen bij klantid "+klantId);
+    }   
+    public void showOrderListByKlantId(int klantId) {
+        System.out.println("Dit zijn de bestellingen bij klantid " + klantId + "\n");
+    }
+    public void showOAIdByOrderId(int bestelId) {
+        System.out.println("Dit zijn de bestelregels van bestelling: "+bestelId);
     }
 }

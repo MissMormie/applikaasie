@@ -23,22 +23,31 @@ public class KlantenView {
     public void showKlantList(List<KlantPojo> klantList) {
         showDivider();
         showKlantListHeader();
+        for (int i = 0; i <klantList.size(); i ++) {
+            showKlantListItem(klantList.get(i), i+1);
+        }
+    /*
         for(KlantPojo kp : klantList) {
             showKlantListItem(kp);
-        }
+        }*/
         System.out.println();
     }
 
     private void showKlantListHeader() {
-        System.out.println("id voornaam tussenvoegsel achternaam telefoonnummer emailadres");
+        System.out.printf("%-3s %-34s  %-15s %s \n", 
+        "id", "naam", "telefoonnummer", "emailadres");
     }
 
-    private void showKlantListItem(KlantPojo kp) {
-        System.out.printf("%-3d %-15s %-13s %s %s %s \n", 
-                kp.getIdKlant(),
-                kp.getVoornaam(), 
-                kp.getTussenvoegsel(),
-                kp.getAchternaam(),
+    private void showKlantListItem(KlantPojo kp, int num) {
+        String naam;
+        if(kp.getTussenvoegsel()==null || kp.getTussenvoegsel().equals(""))
+            naam = kp.getVoornaam() + " " + kp.getAchternaam();
+        else 
+            naam = kp.getVoornaam() + " " + kp.getTussenvoegsel() + " " + kp.getAchternaam();
+
+        System.out.printf("%-3d %-35s %-15s %s \n", 
+                num,
+                naam,
                 kp.getTelefoonnummer(),
                 kp.getEmailadres());
     }

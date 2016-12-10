@@ -53,7 +53,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
     @Override
     public BestellingPojo getBestellingById (int idBestelling) {
         BestellingPojo b = new BestellingPojo ();
-        String sql = "SELECT * FROM Bestelling" + " WHERE Deleted = 0 AND Bezorgd = 0 AND idBestelling = "+idBestelling;
+        String sql = "SELECT * FROM Bestelling" + " WHERE Deleted = 0 AND "
+                + "Afgehandeld = 0 AND idBestelling = "+idBestelling;
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
         b.setId (rs.getInt(1));
         b.setKlantKey (rs.getInt(2));
@@ -85,11 +86,12 @@ public class SqlBestellingDao extends SuperBestellingDao {
     @Override
     public boolean findBestellingId (int bestelId, int klantId) {
         String sql = "SELECT idBestelling FROM Bestelling WHERE Deleted = 0 "
-                + " AND idBestelling = "+bestelId
-                + " AND KlantKey = "+klantId;
+                + " AND idBestelling = " + bestelId
+                + " AND KlantKey = " + klantId
+                + " AND Afgehandeld = 0";
         try {
             ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
-            return rs != null;
+            return rs.next(); 
         } catch (Exception ex) {
             logger.error ("Geen bestelling gevonden met dit id: "+ex +sql);
                 return false;
@@ -98,7 +100,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
     
     @Override
     public int getMaxBestellingId () {
-        String sql = "SELECT idBestelling FROM Bestelling WHERE idBestelling  = (SELECT MAX(idBestelling) FROM Bestelling)";
+        String sql = "SELECT idBestelling FROM Bestelling WHERE idBestelling  = "
+                + "(SELECT MAX(idBestelling) FROM Bestelling)";
         try { ResultSet rs = MySQLConnection.getMySQLConnection().read(sql);
             int max  = 0;
             if (rs.next()) {
@@ -130,8 +133,8 @@ public class SqlBestellingDao extends SuperBestellingDao {
 
     @Override
     public boolean deleteBestelling(int bestelId) {
-        String sql = "UPDATE Bestelling SET Deleted = 1 "
-                + " WHERE Deleted = 0 AND idBestelling = " + bestelId;
+        String sql = "UPDATE Bestelling SET Deleted = 1, Afgehandeld = 1"
+                + " WHERE idBestelling = " + bestelId;
         try { MySQLConnection.getMySQLConnection().createUpdateDelete(sql);
         } catch (Exception ex) {
             logger.error ("Verwijderen van bestelling is mislukt: "+ex);
@@ -144,19 +147,25 @@ public class SqlBestellingDao extends SuperBestellingDao {
     public ArrayList <BestellingPojo> getAllByKlantId (int klantId) {
         String sql = "SELECT idBestelling, BestelDatum FROM Bestelling "
                    + "WHERE Deleted = 0 AND Afgehandeld = 0 AND KlantKey = "+klantId;
-        ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
+            
         ArrayList<BestellingPojo> list = new ArrayList<>();
-        if (result == null) {
+       
+        try {
+            ResultSet result = MySQLConnection.getMySQLConnection().read(sql);
+            if (result == null) {
             System.out.println("Geen bestelling gevonden voor dit klantid.");
-        }
-        try { while (result.next()) {
+            }            
+            while (result.next()) {
             BestellingPojo bp = new BestellingPojo();
             fillPojoKlantId (result, bp);
             list.add(bp);
-        }
-        }   catch (SQLException ex) {
-            logger.error("Kon geen bestellingslijst maken: "+ex);
+            if (list.isEmpty()) {
+                return null;
             }
+        }
+    }   catch (SQLException ex) {
+            logger.error("Kon geen bestellingslijst maken: "+ex);
+        }
         return list;       
     }
 

@@ -52,8 +52,8 @@ public class ConfView {
 
     public void showPickConnectionPool(NodeList nodeList) {
         showDivider();
-        System.out.println("LET OP! Na het wijzigen van de connectionpool wordt "
-                         + "de applicatie afgesloten en moet je deze opnieuw opstarten.");
+//        System.out.println("LET OP! Na het wijzigen van de connectionpool wordt "
+//                         + "de applicatie afgesloten en moet je deze opnieuw opstarten.");
         System.out.println("Kies de connectionpool die je wil gebruiken. Druk op N om terug te gaan.\n");
         showNodes(nodeList);    
     }
@@ -66,6 +66,6 @@ public class ConfView {
 
     public void showConnectionPoolChanged() {
         showDivider();
-        System.out.println("De connectionpool is gewijzigd. Het programma wordt nu beeindigd.");
+        System.out.println("De connectionpool is gewijzigd.");
     }
 }

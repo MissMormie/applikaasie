@@ -38,7 +38,11 @@ public class MenuController {
     private void listenForXMLMenuInput() {
         int menu = numberListener();
         
-        menuModel.chooseMenuItem(menu);
+        while (!menuModel.chooseMenuItem(menu)) {
+            menuView.showValidNumber();
+            menu = numberListener();
+        }
+            
         if (menuModel.isLoggedIn() == true)
             showMenu();
     }
@@ -48,6 +52,7 @@ public class MenuController {
         if(Validator.isValidInt(number))
             return Integer.parseInt(number);
         
+        menuView.showValidNumber();
         return numberListener();
     }        
 }

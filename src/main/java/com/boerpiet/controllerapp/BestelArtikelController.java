@@ -6,6 +6,7 @@
 package com.boerpiet.controllerapp;
 
 import com.boerpiet.domeinapp.BestelArtikelModel;
+import com.boerpiet.domeinapp.BestellingModel;
 import com.boerpiet.utility.Validator;
 import com.boerpiet.viewapp.BestelArtikelView;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public class BestelArtikelController {
     
     private BestelArtikelModel bam;
     private BestelArtikelView bav;
+    private BestellingModel bm;
     private final Scanner input = new Scanner (System.in);
     
     public BestelArtikelController (BestelArtikelModel bam) {
@@ -37,22 +39,23 @@ public class BestelArtikelController {
             return Integer.parseInt(string);
         } else {
             bav.showGiveNumber ();
-            return inputIntCheck (string);
+            return inputIntCheck (input.nextLine());
         }
     }
     
-    public int inputOAIdInDatabaseCheck () {
+    public int inputOAIdInDatabaseCheck (int bestelId) {
         bav = new BestelArtikelView ();
         bam = new BestelArtikelModel ();
+        bm = new BestellingModel ();
                 
-        String bId = input.nextLine();
-        int id = inputIntCheck(bId);
+        String stringBestelRegellId = input.nextLine();
+        int bestelregelId = inputIntCheck(stringBestelRegellId);
         
-        if (bam.checkOAIdInDataBase(id)) {
-            return id;
+        if (bm.checkOAIdBelongsToOrderId(bestelId, bestelregelId)) {
+            return bestelregelId;
         } else {
-            bav.showGiveNumber();
-            return inputOAIdInDatabaseCheck ();
+            bav.showOAIdNotBelongingToBestelId ();
+            return inputOAIdInDatabaseCheck (bestelId);
         }
     }
 }
